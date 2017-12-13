@@ -1,33 +1,17 @@
-# TiddlyWikiFormula
-Functional Formulas for TiddlyWiki, in the style of Excel and Google Sheets.
+# Formula for TiddlyWiki
 
-## >> [Docs, demos and plugin here](http://evanbalster.com/tiddlywiki/formulas.html)!
+A TiddlyWiki plugin for functional formulas, combining the power of Excel and Google Sheets with TiddlyWiki's processing idioms.
 
-This plugin is currently under development.  It might be buggy.  Feel free to open issues for any problems you encounter or any issues you manage to spot with the code.
+Created by Evan Balster <reidgould@gmail.com>
+
+* [Source on GitHub](https://github.com/EvanBalster/TiddlyWikiFormula).
+* [Demonstration Wiki](http://evanbalster.com/tiddlywiki/formulas.html).
+
+Get Formulas by opening the Demonstration Wiki and navigating to the plugin there.
 
 
-The MIT License (MIT)
-=====================
+# Contributing
 
-Copyright © 2017 Evan Balster
+This plugin is currently under development.  I've written compilers before, but this is my first in-depth project in JavaScript.  Please report any bugs you encounter, or any problems you spot in the code.
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the “Software”), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+The Formula plugin has not been tested under IE, Edge or other mobile browsers.
