@@ -1,7 +1,9 @@
 # TiddlyWikiFormula
 Functional Formulas for TiddlyWiki, in the style of Excel and Google Sheets.
 
-For now, [see the documentation here](http://evanbalster.com/tiddlywiki/formulas)!
+## >> [Docs, demos and plugin here](http://evanbalster.com/tiddlywiki/formulas.html)!
+
+This plugin is currently under development.  It might be buggy.  Feel free to open issues for any problems you encounter or any issues you manage to spot with the code.
 
 
 The MIT License (MIT)
