@@ -10,7 +10,7 @@ Created by Evan Balster <reidgould@gmail.com>
 Get Formulas by opening the Demonstration Wiki and navigating to the plugin there.
 
 
-# Contributing
+## Contributing
 
 This plugin is currently under development.  I've written compilers before, but this is my first in-depth project in JavaScript.  Please report any bugs you encounter, or any problems you spot in the code.
 
