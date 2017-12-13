@@ -1,0 +1,42 @@
+created: 20171213021420297
+modified: 20171213021901878
+tags: 
+title: Extending Formulas
+type: text/vnd.tiddlywiki
+
+<<<
+This part of the documentation is incomplete.  Good luck, kid!
+<<<
+
+!Defining new functions
+
+Functions are loaded from tiddlers with `module-type: formula-function` at startup.
+
+See the existing function tiddlers for a starting point:
+
+<$list filter="[prefix[$:/plugins/ebalster/formula/functions/]]">
+<$link>{{!!title}}</$link><br/>
+</$list>
+
+
+!Defining new operators
+
+Operators are defined as objects with a small number of properties, and are loaded from tiddlers with `module-type: formula-operator` at startup.
+
+Internally, all operators are converted to functions by the formula compiler.
+
+```
+10*3+4^2*2
+```
+
+is equivalent to
+
+```
+add(multiply(10,3), multiply(pow(4,2), 2))
+```
+
+See the existing operators for a starting point:
+
+<$list filter="[prefix[$:/plugins/ebalster/formula/operators/]]">
+<$link>{{!!title}}</$link><br/>
+</$list>

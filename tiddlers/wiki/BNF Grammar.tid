@@ -1,0 +1,11 @@
+bnf: 
+created: 20171211224604559
+modified: 20171212080303311
+tags: 
+title: BNF Grammar
+type: text/vnd.tiddlywiki
+
+<pre><code><$list filter="[has[bnf]!has[draft.of]]">
+<{{!!title}}> ::= <$text text={{!!bnf}}><br/>
+</$list>
+</code></pre>

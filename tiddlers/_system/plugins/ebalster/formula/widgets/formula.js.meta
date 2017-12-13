@@ -1,0 +1,8 @@
+created: 20171210232543292
+description: Evaluates a formula.
+modified: 20171212194059701
+module-type: widget
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/widgets/formula.js
+type: application/javascript

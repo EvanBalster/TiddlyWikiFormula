@@ -1,0 +1,27 @@
+created: 20171213015724889
+modified: 20171213021433282
+tags: 
+title: Operators
+type: text/vnd.tiddlywiki
+
+!Introduction
+
+''Operators'' let you write concise math functions with automatic prededence.  For example, the formula:
+
+`2+2`
+
+Evaluates to 4.
+
+
+!Operators
+
+|Operator|Result|Function|Sum|h
+|`+a`|number|Returns the argument.| yes |
+|`-a`|number|Negates the argument.| yes |
+|`a+b`|number|Adds numbers `a` and `b`.| yes |
+|`a-b`|number|Subtracts `b` from `a`.| yes |
+|`a*b`|number|Multiplies numbers `a` and `b`.| |
+|`a/b`|number|Divides `a` by `b`.| |
+|`a^b`|number|Raises base `a` to exponent `b`.| |
+|`a%`|number|Multiplies `a` by 100.| |
+|`a&b`|string|Appends `a` and `b` as strings.| |

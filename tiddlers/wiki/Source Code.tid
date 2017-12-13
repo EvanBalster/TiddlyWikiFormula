@@ -1,0 +1,24 @@
+created: 20171209232942077
+modified: 20171213021710619
+tags: 
+title: Source Code
+type: text/vnd.tiddlywiki
+
+<$list filter="[prefix[$:/plugins/eb]]">
+<$link>{{!!title}}</$link><br/>
+</$list>
+
+May need modifying:
+
+* $:/core/modules/utils/parseutils.js
+** `parseAttribute`
+** To allow formulas as attributes without wikify
+* $:/core/modules/filters.js
+** `parseFilterOperation`
+** To allow formulas as filter operands without wikify
+
+Reference:
+
+* [[$:/core/modules/widgets/count.js]]
+* [[$:/core/modules/widgets/set.js]]
+* [[$:/core/modules/widgets/vars.js]]

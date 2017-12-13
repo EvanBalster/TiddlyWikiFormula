@@ -1,0 +1,10 @@
+bnf: "(=" <Expression> "=)"
+created: 20171211225046860
+modified: 20171212034628656
+tags: Syntax
+title: Formula
+type: text/vnd.tiddlywiki
+
+A Formula is written as an [[Expression]] inside "mushroom brackets" `(= =)`.
+
+{{Expression}}

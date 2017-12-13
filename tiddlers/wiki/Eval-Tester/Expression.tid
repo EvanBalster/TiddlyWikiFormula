@@ -1,0 +1,6 @@
+created: 20171211021239925
+modified: 20171213052501933
+title: Eval-Tester/Expression
+type: text/vnd.tiddlywiki
+
+sum([tag[Expenses]get[value]])

@@ -1,0 +1,10 @@
+bnf: <Number> ::= <Digits> | <Digits> "." | <Digits> "." <Digits> | "." <Digits>
+created: 20171212073427107
+modified: 20171212073734287
+tags: Syntax
+title: Number Literal
+type: text/vnd.tiddlywiki
+
+A ''Number'' in Formulas may consists of at least one digit and an optional decimal point.  `12`, `.001`, `13.5`, `1` and `50000.` are all valid numbers.
+
+Exponential notation, NaN and infinities are not currently supported.

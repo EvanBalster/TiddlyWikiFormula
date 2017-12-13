@@ -1,0 +1,11 @@
+created: 20171212071049935
+modified: 20171212073053310
+tags: Syntax
+title: Filter Run
+type: text/vnd.tiddlywiki
+
+A ''Filter Run'' in a [[Formula]] follows the [[same rules and syntax as ordinary filters|https://tiddlywiki.com/#Filter%20Run:%5B%5BFilter%20Run%5D%5D]].  The result is treated as an array of [[Data|Datum]].
+
+The data array produced by a filter run is summed into a single number when supplied to [[a function|Functions]] with the "sum" property.  It cannot be used with non-summing math functions.  To work around this, use the `sum()` function itself.
+
+In the future, array-specific functions may be introduced.

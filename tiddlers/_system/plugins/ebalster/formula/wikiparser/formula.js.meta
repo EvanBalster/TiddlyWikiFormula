@@ -1,0 +1,8 @@
+created: 20171211033327565
+description: Wiki text inline rule for formulas.  Ex. `((=2+2))`
+modified: 20171211181716654
+module-type: wikirule
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/wikiparser/formula.js
+type: application/javascript

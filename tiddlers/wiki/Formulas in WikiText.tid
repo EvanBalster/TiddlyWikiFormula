@@ -1,0 +1,40 @@
+created: 20171212021257085
+modified: 20171212201719101
+title: Formulas in WikiText
+type: text/vnd.tiddlywiki
+
+Formulas are created with a "mushroom bracket" syntax:
+
+```
+(= 2 =)
+(= add(2, 3) =)
+(= "That's all, folks!" =)
+```
+
+Values in tiddler fields can be replaced by formulas using the same notation, allowing formulas to be [[transcluded|Transclusion]] into other formulas.
+
+See [[Syntax]] for more about this notation.
+
+
+!!Formatting Numbers
+
+The `<$formula>` widget includes attributes to control how numbers are formatted back into text.  The variables `<<formulaPrecision>>` and `<<formulaFixed>>` can be defined to control number formatting in WikiText formulas, as well as any `<$formula>` widgets where these are left unspecified.
+
+For example, an application calculating dollars and cents might define a fixed display precision of two decimal points:
+
+```
+\define formulaFixed() 2
+
+(= sum([tag[Expenses]get[value]]) =)
+```
+
+This will produce a nice round result, like 3.52, as opposed to the raw floating-point value which could be something like 3.5199999999999996.
+
+
+!Examples
+
+```
+(= sum([tag[Expenses]get[value]]) =)
+```
+
+(= multiply(2, sum([tag[Expenses]get[value]])) =)

@@ -1,0 +1,11 @@
+bnf: <Parenthesized> ::= "(" <Expression> ")"
+created: 20171213015115229
+modified: 20171213015508987
+title: Parenthesized Expression
+type: text/vnd.tiddlywiki
+
+A ''Parenthesized Expression'' is an [[Expression]] in parentheses:
+
+```
+(2^20 - 10^6)
+```

@@ -1,0 +1,10 @@
+bnf: <Transclusion> ::= "{{" <Tiddler> "}}" | "{{" <Tiddler> "!!" <Field> "}}" | "{{!!" <Field> "}}"
+created: 20171212040008526
+modified: 20171212210816950
+tags: Syntax
+title: Transclusion
+type: text/vnd.tiddlywiki
+
+''Transclusion'' in a Formula or Datum follows the [[same rules and syntax as in WikiText|https://tiddlywiki.com/#Transclusion%20in%20WikiText:%5B%5BTransclusion%20in%20WikiText%5D%5D]]*.  The transcluded text is treated as a [[Datum]], rather than WikiText.
+
+^^* Filtered Transclusion is not currently supported.^^

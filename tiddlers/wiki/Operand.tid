@@ -1,0 +1,17 @@
+bnf: <Transclusion> | <Parenthesized> | <FunctionCall> | <FilterRun> | <Variable> | <NumberLiteral> | <StringLiteral>
+created: 20171210081748019
+modified: 20171213015516238
+tags: Syntax
+title: Operand
+type: text/vnd.tiddlywiki
+
+An ''Operand'' may be:
+
+|Operand type|example|h
+|[[Parenthesized Expression]]|`(2+4)`|
+|[[Function Call]]|`add(2, 2)`|
+|[[Transclusion]]|`{{Apples!!count}}`|
+|[[Variable]]|`<<currentTiddler>>`|
+|[[Filter Run]]|`"[tag[Expenses]get[value]]"`|
+|[[Number Literal]]|`123.456`|
+|[[String Literal]]|`"kittens"`|

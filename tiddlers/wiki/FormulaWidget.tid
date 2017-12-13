@@ -1,0 +1,28 @@
+created: 20171212074056811
+modified: 20171213023256300
+title: FormulaWidget
+type: text/vnd.tiddlywiki
+
+!Introduction
+
+The `<$formula>` widget computes a formula and returns its result as WikiText.
+
+
+!Attributes
+
+|Attribute|Description|h
+|formula|The formula string to be evaluated.|
+|toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
+|toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
+|debug|Whether to include debug information in the output.  (Defaults to 0.)|
+
+
+!Examples
+
+```
+<$formula formula="2 * sum([tag[Expenses]get[value]])" toFixed=2/>
+```
+
+<<<
+<$formula formula="2 * sum([tag[Expenses]get[value]])" toFixed=2/>
+<<<

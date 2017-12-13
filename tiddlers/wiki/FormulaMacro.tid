@@ -1,0 +1,27 @@
+created: 20171213014257477
+modified: 20171213015033840
+title: FormulaMacro
+type: text/vnd.tiddlywiki
+
+!Introduction
+
+The ''Formula Macro'' is an alternative to the [[Formula Widget|FormulaWidget]] that can be [[used in tag attributes|Formulas as Tag Attributes]].
+
+The macro is somewhat less efficient than the widget because it can't store the compiled formula.  There are no formatting options at this time.
+
+
+!Parameters
+
+;formula
+:The formula to evaluate.  Same as in [[FormulaWidget]].
+
+
+!Examples
+
+```
+<<formula "(5*2+2^8)/3">>
+```
+
+<<<
+<<formula "(5*2+2^8)/3">>
+<<<

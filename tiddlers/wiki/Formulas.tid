@@ -1,0 +1,53 @@
+created: 20171212014005571
+modified: 20171213052716247
+tags: 
+title: Formulas
+type: text/vnd.tiddlywiki
+
+\define formulaFixed() 2
+
+\define example(what, code) <tr><th>$what$</th><td>`$code$`</td><td>$code$</td></tr>
+
+This wiki is a testbed for a TiddlyWiki plugin in development called ''Formulas''.
+
+''Formulas'' is designed to give TiddlyWiki the ability to process quantitative information as well as qualitative information.
+
+!Get the Plugin
+
+Drag this to your wiki:
+
+!! >> [[$:/plugins/ebalster/formula]]
+
+!Examples
+
+<table>
+<tr><th></th><th>code</th><th>result</th></tr>
+<<example numbers "(= 2 =)">>
+<<example math "(= 2+3*4 =)">>
+<<example functions "(= pow(2, 3) =)">>
+<<example transclusion "(= {{!!title}} =)">>
+<$macrocall $name=example what=variables code="(= <<now>> =)"/>
+<<example filters "(= [tag[Expenses]] =)">>
+<<example "complex<br/>formulas" "(= 5*sum([tag[Expenses]get[value]]) =)">>
+<<example strings """(= "hello" =)""">>
+<<example concatenation """(= '$' & 45.23*12 & " cost" =)""">>
+</table>
+
+!Try Me
+
+{{Try Me}}
+
+!Learn More
+
+* [[Formulas in WikiText]]
+* [[Formulas as Tag Attributes]]
+* [[Syntax]]
+* [[Functions]]
+* [[Operators]]
+* [[FormulaWidget]]
+* [[FormulaMacro]]
+* [[Extending Formulas]]
+* [[Plugin Design]]
+* [[Source Code]]
+
+This plugin is written by [[Evan Balster]].

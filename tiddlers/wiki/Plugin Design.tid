@@ -1,0 +1,40 @@
+created: 20171212015720773
+modified: 20171213045307711
+title: Plugin Design
+type: text/vnd.tiddlywiki
+
+These are some design decisions involved in ''Formulas''' development.
+
+First and foremost, this plugin is designed to follow the [[Philosophy of Tiddlers|https://tiddlywiki.com/#Philosophy%20of%20Tiddlers:%5B%5BPhilosophy%20of%20Tiddlers%5D%5D]] outlined on the TiddlyWiki homepage.
+
+
+!!Formulas are First-Class Entities
+
+Formulas are meant to be a first-class computation idiom on the level of transclusion, macros and variables.  For this reason, formulas are computed by a dedicated widget rather than a macro.
+
+In addition to being used in WikiText, formulas should be possible to use as attributes for widgets and tags.  This allows for dynamic generation of SVG images without relying on the `$wikify` widget.
+
+
+!!Compatibility with Existing Mechanisms
+
+Formulas support TiddlyWiki's major mechanisms for fetching information — Variables, Transclusion and Filters — in addition to other formulas.  Fields should be possible to transclude into both formulas and WikiText with the same result.
+
+Formulas ''do not'' support macros — yet.  This is a good candidate for later addition.
+
+Formulas ''do not'' support WikiText, because the result of WikiText processing is an HTML DOM (which is outside the scope of 
+
+
+!!Familiarity
+
+Formulas are designed to be as similar as possible to the familiar syntax used in TiddlyWiki.  [[Transclusion]]s, [[Variable]]s and [[Filter Run]]s follow TiddlyWiki's existing syntax and behaviors.  [[Datum]] values are interpreted using a subset of WikiText rules.
+
+Formulas are otherwise designed to look and behave similar to their analogs in popular spreadsheet software Microsoft Excel and Google Sheets.
+
+
+!!Extensibility
+
+New functions may be added to Formulas by defining modules of type `formula-function`.
+
+New operators may be added to Formulas by defining modules of type `formula-operator`.
+
+Formulas' internal Value type may encapsulate non-numeric data, and currently supports strings and arrays in a limited fashion.  The plugin could be extended for special use-cases like text processing, complex-number math or linear algebra.

@@ -1,0 +1,10 @@
+bnf: <Variable> = "<<" <VariableName> ">>"
+created: 20171212070706273
+modified: 20171212210944553
+tags: Syntax
+title: Variable
+type: text/vnd.tiddlywiki
+
+''Variables'' in a [[Formula]] or [[Datum]] follow the [[same rules and syntax as in WikiText|https://tiddlywiki.com/#Variables%20in%20WikiText:%5B%5BVariables%20in%20WikiText%5D%5D]]*.  The variable's value is interpreted as a [[Datum]], rather than WikiText.
+
+^^* Macros with arguments are not currently supported.^^

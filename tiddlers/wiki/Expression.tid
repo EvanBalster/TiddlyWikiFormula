@@ -1,0 +1,10 @@
+bnf: <Operand> | <Expression> <Operator> <Operand>
+created: 20171211224933273
+modified: 20171212034916617
+tags: Syntax
+title: Expression
+type: text/vnd.tiddlywiki
+
+An ''Expression'' consists of a single [[Operand]] (because operators haven't been implemented yet).
+
+{{Operand}}

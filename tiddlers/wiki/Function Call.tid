@@ -1,0 +1,12 @@
+bnf: <FunctionCall> ::= <Identifier> "(" <ArgumentList> ")"
+created: 20171212035346404
+modified: 20171212035523791
+tags: Syntax
+title: Function Call
+type: text/vnd.tiddlywiki
+
+A ''Function Call'' is written as a [[function name|Functions]] followed by a parenthesized list of parameters, each of which is an [[Expression]]:
+
+```
+multiply(2.5, {{Apples!!number}})
+```

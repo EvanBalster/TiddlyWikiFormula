@@ -1,0 +1,38 @@
+created: 20171210222937878
+modified: 20171213052728044
+title: Try Me
+type: text/vnd.tiddlywiki
+
+\define sumExpression() sum( $(sumFilter)$ )
+
+Use this area to try out some formulas.
+
+<<<
+Input:<br/>
+`(=` <$edit-text tag="input" size=32 tiddler="Eval-Tester/Expression"/> `=)`
+
+= <code><$formula formula={{Eval-Tester/Expression}} toFixed={{Eval-Tester/toFixed}} toPrecision={{Eval-Tester/toPrecision}}/></code>
+
+Try these:
+
+```
+sum([tag[Expenses]get[value]])
+{{Soda-Pop!!value}}*5
+20 + 3^3 * 1000
+"$" & {{Candy-Bar!!value}}
+```
+<<<
+
+<!--
+!!Sum Filter
+
+<<<
+<$edit-text tag="input" size=30 tiddler="Eval-Tester/SumFilter"/>
+<$vars sumFilter={{Eval-Tester/SumFilter}}>
+<pre><code><$list filter=<<sumFilter>> emptyMessage="(no items)">+ (= <<currentTiddler>> =)
+    "<$text text=<<currentTiddler>>/>"
+</$list>= <$formula formula=<<sumExpression>> toFixed={{Eval-Tester/toFixed}} toPrecision={{Eval-Tester/toPrecision}}/>
+    "<$text text=<<sumExpression>>/>"
+</code></pre>
+</$vars>
+<<< -->

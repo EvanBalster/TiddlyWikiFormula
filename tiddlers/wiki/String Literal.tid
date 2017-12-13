@@ -1,0 +1,12 @@
+bnf: <String> ::= '"' <Text> '"'
+created: 20171212073742019
+modified: 20171213015708330
+tags: Syntax
+title: String Literal
+type: text/vnd.tiddlywiki
+
+A ''String Literal'' in Formulas is a quoted piece of text.  `'single quotes'` or `"double quotes"` may be used.
+
+The current parsing is quite crude, and escape sequences are not properly supported.
+
+Strings may be concatenated with other values using the `&` [[operator|Operators]], resulting in a string.
