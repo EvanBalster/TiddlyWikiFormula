@@ -55,7 +55,7 @@ exports.V_Undefined = function() {
   this.name = "undefined";
 }
 exports.V_Undefined.prototype = new exports.Value();
-exports.V_Undefined.prototype.get = function()    {throw "undefined value";}
+exports.V_Undefined.prototype.get = function()    {return undefined;}
 
 
 // String value.

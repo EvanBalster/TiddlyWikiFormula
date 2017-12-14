@@ -8,8 +8,8 @@ var Val = require("$:/plugins/ebalster/formula/value.js");
 
 
 // Unary sign operators
-exports.uplus  = function(a)    {return new Val.V_Number(+a.asSum());};
-exports.uminus = function(a)    {return new Val.V_Number(-a.asSum());};
+exports.uplus  = function(a)    {return new a;};
+exports.uminus = function(a)    {return new Val.V_Number(-a.asNumber());};
 
 // Sum
 exports.sum = function(a)       {return new Val.V_Number(a.asSum());};
@@ -31,6 +31,7 @@ exports.percent = function(a, b)    {return new Val.V_Percent(a.asNumber() / 100
 
 // Aliases
 exports.subtract = exports.sub;
+exports.minus    = exports.sub;
 exports.multiply = exports.mul;
 exports.divide   = exports.div;
 

@@ -391,8 +391,10 @@ function buildOperand(parser) {
 
       var args = buildArguments(parser);
 
-      if (args.length > func.length) throw "too many arguments for " + term;
-      if (args.length < func.length) throw "too few arguments for " + term;
+      if (args.length > func.length && !func.variadic)
+        throw "too many arguments for " + term;
+      if (args.length < func.length)
+        throw "too few arguments for " + term;
 
       return new Operators.CallOperator(func, args);
     }

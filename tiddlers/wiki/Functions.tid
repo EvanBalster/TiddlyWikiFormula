@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171213021822021
+modified: 20171214065432974
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -13,22 +13,50 @@ function_name(<argument>, <argument>...)
 
 Note that function names are case-insensitive.
 
-Certain functions are ''summing'', meaning that if one of the arguments is a collection of numbers it will be summed into a single value.
-
 
 !Functions
 
-|Function|Result|Summary|Sum|h
-| `sum(a)   `|number|Sums the argument.| yes |
-| `uplus(a)   `|number|Returns the argument.| yes |
-| `uminus(a)   `|number|Negates the argument.| yes |
-| `add(a, b)`|number|Adds numbers `a` and `b`.| yes |
-| `subtract(a, b)`|number|Subtracts `b` from `a`.| yes |
-| `multiply(a, b)`|number|Multiplies numbers `a` and `b`.| |
-| `divide(a, b)`|number|Divides `a` by `b`.| |
-| `pow(a, b)`|number|Raises base `a` to exponent `b`.| |
-| `percent(a)   `|number|Multiplies `a` by 100.| |
-| `concatenate(a, b)`|string|Appends `a` and `b` as strings.| |
+|Function|Args|Result|Summary|h
+| `sum`|`(a)`|number|Sum the argument (eg, an array).|
+| `uplus`|`(a)`| * |Return `a`.|
+| `uminus`|`(a)`|number|Return `a` times negative one.|
+| `add`|`(a, b)`|number|Add numbers `a` and `b`.|
+| `sub`|`(a, b)`|number|Subtract `b` from `a`.|
+| `subtract`|~|~|~|
+| `minus`|~|~|~|
+| `mul`|`(a, b)`|number|Multiply numbers `a` and `b`.|
+| `multiply`|~|~|~|
+| `div`|`(a, b)`|number|Divide `a` by `b`.|
+| `divide`|~|~|~|
+| `pow`|`(a, b)`|number|Raise base `a` to exponent `b`.|
+|!Comparison|<|<|<|
+|  `eq`|`(a, b)`|boolean|Test whether `a` and `b` are equal.|
+| `equal`|~|~|~|
+|  `ne`|`(a, b)`|boolean|Test whether `a` and `b` are not equal.|
+| `not_equal`|~|~|~|
+|  `gt`|`(a, b)`|boolean|Test whether `a` is greater than `b`.|
+| `greater`|~|~|~|
+| `gte`|`(a, b)`|boolean|Test whether `a` is greater than or equal to `b`.|
+| <code>greater_<br>or_equal</code>|~|~|~|
+|  `lt`|`(a, b)`|boolean|Tests whether `a` is less than `b`.|
+| <code>less</code>|~|~|~|
+| `lte`|`(a, b)`|boolean|Tests whether `a` is less than or equal to `b`.|
+| <code>less_<br>or_equal</code>|~|~|~|
+|!Logic|<|<|<|
+| `true`|`()`|boolean|Return TRUE.|
+| `false`|`()`|boolean|Return FALSE.|
+| `not`|`(a)`|boolean|Test if `a` is FALSE.|
+| `and`|`(a, b)`|boolean|Test if `a` and `b` are both TRUE.|
+| `or`|`(a, b)`|boolean|Test if one or both of `a` and `b` is TRUE.|
+| `xor`|`(a, b)`|boolean|Test if just one of `a` and `b` is TRUE.|
+|!Selection|<|<|<|
+|  `if`|`(q,a,b)`| * |If `q` is TRUE, return `a`, else `b`.|
+|  `iferror`|`(a, b)`| * |Return `a`, or `b` if there's an error with `a`.|
+|  `ifs`|`(...)`| * |Test-based select. See: [[IFS Function]]|
+|  `switch`|`(n,...)`| * |Value-based select. See: [[SWITCH Function]]|
+|!Miscellaneous|<|<|<|
+| `percent`|`(a)`|percent|Return `a` divided by 100.|
+| `cat`|`(a, b)`|text|Append `a` and `b` as text.|
 
 
 !Defining new functions

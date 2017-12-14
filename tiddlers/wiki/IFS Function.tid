@@ -1,0 +1,11 @@
+created: 20171214064509307
+modified: 20171214064915328
+tags: Function
+title: IFS Function
+type: text/vnd.tiddlywiki
+
+The `IFS` function accepts an even number of arguments, where each pair of arguments is a test followed by a result.  The function returns the result after first test that evaluates to TRUE.
+
+```
+IFS(test1, result1, test2, result2, test3, result3 ...)
+```
