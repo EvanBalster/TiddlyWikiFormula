@@ -1,0 +1,9 @@
+created: 20171214034846179
+modified: 20171214035301602
+tags: ValueType
+title: NumberValue
+type: text/vnd.tiddlywiki
+
+A ''Number Value'' is a [[Value]] expressing a number.  A formula with a number result will be converted into a string by the [[FormulaWidget]].
+
+Internally, Number Values are 64-bit floating-point numbers.

@@ -103,4 +103,17 @@ exports.Value_Number.prototype.asString     = function()    {return (exports.Num
 exports.Value_Number.prototype.asNumber     = function()    {return this.value;}
 exports.Value_Number.prototype.asNumber_sum = function()    {return this.value;}
 
+
+// Percentage value.
+exports.Value_Percent = function(value) {
+  this.name = "percentage";
+
+  this.value = value;
+}
+exports.Value_Percent.prototype = new exports.Value_Percent();
+exports.Value_Percent.prototype.get          = function()    {return this.value;}
+exports.Value_Percent.prototype.asString     = function()    {return (exports.NumberFormatFunc || String)(100*this.value) + "%";}
+exports.Value_Percent.prototype.asNumber     = function()    {return this.value;}
+exports.Value_Percent.prototype.asNumber_sum = function()    {return this.value;}
+
 })();

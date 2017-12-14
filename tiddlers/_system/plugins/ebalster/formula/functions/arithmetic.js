@@ -27,7 +27,7 @@ exports.div = function(a, b)    {return new Val.Value_Number(a.asNumber() / b.as
 exports.pow = function(a, b)    {return new Val.Value_Number(Math.pow(a.asNumber(), b.asNumber()));};
 
 // Percent -- TODO make this a different value-type
-exports.percent = function(a, b)    {return new Val.Value_Number(a.asNumber() * 100);};
+exports.percent = function(a, b)    {return new Val.Value_Percent(a.asNumber() / 100);};
 
 
 // Aliases

@@ -1,0 +1,11 @@
+created: 20171214035458503
+modified: 20171214035632604
+tags: Concept
+title: Value
+type: text/vnd.tiddlywiki
+
+''Values'' are generated at every stage of a formula and are used for the internal processing.  There are a number of built-in value types, and more can be added by extensions:
+
+<$list filter="[tag[ValueType]]">
+<$link>{{!!title}}</$link><br/>
+</$list>

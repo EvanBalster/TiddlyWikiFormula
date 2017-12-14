@@ -1,0 +1,9 @@
+created: 20171214035303251
+modified: 20171214035634805
+tags: ValueType
+title: StringValue
+type: text/vnd.tiddlywiki
+
+A ''String Value'' is a [[Value]] holding some text.  A formula with a String result will be returned directly by the [[FormulaWidget]].
+
+String Values are written in `'single quotes'` or `"double quotes"`.  The quotes are not included in the string.

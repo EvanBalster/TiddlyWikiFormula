@@ -1,0 +1,9 @@
+created: 20171214035031819
+modified: 20171214035251558
+tags: ValueType
+title: PercentageValue
+type: text/vnd.tiddlywiki
+
+A ''Percentage Value'' is a special [[NumberValue]].  A formula with a Percentage as the final result will display the percentage multiplied by 100 and followed by a `%` symbol.
+
+Numbers may be converted into percentages using the [[% operator|Operators]].  For example, `5%` yields a percentage value of `.05`, which will display as `5%`.

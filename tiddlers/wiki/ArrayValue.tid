@@ -1,0 +1,9 @@
+created: 20171214035639757
+modified: 20171214035753180
+tags: ValueType
+title: ArrayValue
+type: text/vnd.tiddlywiki
+
+An ''Array Value'' is a [[Value]] expressing a number of other values in a sequence.  A formula with an array result will be converted into a string that lists the elements of the array separated by commas.
+
+A [[Filter Run]] produces an array.  [[Summing operators|Operators]] can add up all the elements in an array.
