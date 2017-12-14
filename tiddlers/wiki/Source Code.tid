@@ -1,9 +1,9 @@
 created: 20171209232942077
-modified: 20171214054202771
+modified: 20171214070355491
 tags: 
 title: Source Code
 type: text/vnd.tiddlywiki
 
-<$list filter="[prefix[$:/plugins/ebalster/formula/]sort[title]]">
+<$list filter="[all[system]] [all[shadows]] +[prefix[$:/plugins/ebalster/formula/]sort[title]]">
 <$link>{{!!title}}</$link><br/>
 </$list>

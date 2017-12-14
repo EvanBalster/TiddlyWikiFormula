@@ -1,6 +1,7 @@
 created: 20171214050556123
 modified: 20171214050739104
 module-type: formula-operator
+revision: 0
 tags: 
 title: $:/plugins/ebalster/formula/operators/compare.js
 type: application/javascript
