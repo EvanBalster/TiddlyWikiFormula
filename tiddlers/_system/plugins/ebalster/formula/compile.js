@@ -8,6 +8,8 @@ var Operators = require("$:/plugins/ebalster/formula/operators.js");
 
 var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
 var rxDatumIsDecimal      = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
+var rxDatumIsTrue         = /^s*TRUE\s*$/i;
+var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 
 var rxSkipWhitespace    = /\s*/g;
 var rxNotWhitespace     = /[^\s]+/g;
@@ -54,7 +56,7 @@ Parser.prototype.match_here = function(regex)
   // TODO this is doing much more work than is necessary
   regex.lastIndex = this.pos;
   var result = regex.exec(this.src);
-  if (!result || result.index != this.pos) return null;
+  if (!result || result.index != this.pos || result.index+result[0].length > this.end) return null;
   this.pos = regex.lastIndex;
   return result;
 }
@@ -62,7 +64,7 @@ Parser.prototype.skipWhitespace = function()
 {
   rxSkipWhitespace.lastIndex = this.pos;
   rxSkipWhitespace.test(this.src);
-  this.pos = rxSkipWhitespace.lastIndex;
+  this.pos = Math.min(rxSkipWhitespace.lastIndex, this.end);
 }
 
 var initialize = function() {
@@ -136,6 +138,10 @@ exports.compileDatum = function(datum) {
     return buildOperand(parser);
   }
 
+  // Booleans?
+  if (rxDatumIsFalse.test(datum)) return new Operands.Opd_Bool(false);
+  if (rxDatumIsTrue .test(datum)) return new Operands.Opd_Bool(true);
+
   // Otherwise, treat as a string constant
   return new Operands.Opd_Text(datum);
 };
@@ -201,7 +207,8 @@ function parseOperator(parser, operatorGroup) {
   for (var opName in operatorGroup)
   {
     var op = operatorGroup[opName];
-    if (parser.src.substr(parser.pos, op.operator.length) == op.operator)
+    if (parser.src.substr(parser.pos, op.operator.length) == op.operator
+      && parser.pos+op.operator.length <= parser.end)
     {
       if (!result || result.operator.length < op.operator.length) result = op;
     }
@@ -237,7 +244,16 @@ function buildExpression(parser, nested = false) {
     }
 
     // Grab the operand
-    var operand = buildOperand(parser);
+    try
+    {
+      var operand = buildOperand(parser);
+    }
+    catch (err)
+    {
+      throw err + (operators.length ?
+        " (after " + operators[operators.length-1].operator + ")" :
+        " (beginning of expression)");
+    }
 
     // Missing operand is an error
     if (operand === null)

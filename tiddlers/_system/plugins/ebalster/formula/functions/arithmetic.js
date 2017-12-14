@@ -5,7 +5,6 @@
 "use strict";
 
 var Val = require("$:/plugins/ebalster/formula/value.js");
-var Ops = require("$:/plugins/ebalster/formula/operands.js");
 
 
 // Unary sign operators

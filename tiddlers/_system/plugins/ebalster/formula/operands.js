@@ -38,6 +38,21 @@ exports.Opd_Text.prototype.compute = function(widget, recur)
 }
 
 
+// Boolean constant operand.
+exports.Opd_Bool = function(value) {
+  this.value = value;
+}
+exports.Opd_Bool.prototype = new exports.Operand();
+exports.Opd_Bool.prototype.name = "boolean";
+exports.Opd_Bool.prototype.is_constant = true;
+
+exports.Opd_Bool.prototype.compute = function(widget, recur)
+{
+  // Returns a number value
+  return new Values.V_Bool(this.value);
+}
+
+
 // Number constant operand.
 exports.Opd_Number = function(value) {
   this.value = value;
@@ -72,7 +87,11 @@ exports.Opd_Transclude.prototype.compute = function(widget, recur) {
   if (newDatum != this.datum)
   {
     this.datum = newDatum;
-    this.op = Compile.compileDatum(newDatum);
+    try
+    {
+      this.op = Compile.compileDatum(newDatum);
+    }
+    catch (err) {throw err + "\n  source: \"" + this.datum + "\"\n  from {{" + this.textReference + "}}";}
   }
 
   return this.op.compute(widget, recur+1);
@@ -95,7 +114,11 @@ exports.Opd_Variable.prototype.compute = function(widget, recur) {
   if (newDatum != this.datum)
   {
     this.datum = newDatum;
-    this.op = Compile.compileDatum(newDatum);
+    try
+    {
+      this.op = Compile.compileDatum(newDatum);
+    }
+    catch (err) {throw err + "\n  source: \"" + this.datum + "\"\n  from <<" + this.variable + ">>";}
   }
 
   return this.op.compute(widget, recur+1);
@@ -123,8 +146,13 @@ exports.Opd_Filter.prototype.compute = function(widget, recur) {
     var expr = exprs[i];
     var found = this.elements[expr];
     if (found) ++found.count;
-    else this.elements[expr] = {count: 1, op: Compile.compileDatum(expr)};
+    else try
+    {
+      this.elements[expr] = {count: 1, op: Compile.compileDatum(expr)};
+    }
+    catch (err) {throw err + "\n  source: \"" + expr + "\"\n  from \"" + this.filter + "\"";}
   }
+  
 
   // Delete any elements with no copies left
   for (var expr in this.elements) if (this.elements[expr].count == 0) delete this.elements[expr];
