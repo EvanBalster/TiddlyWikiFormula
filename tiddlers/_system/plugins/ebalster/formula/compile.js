@@ -10,6 +10,7 @@ var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
 var rxDatumIsDecimal      = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
 
 var rxSkipWhitespace    = /\s*/g;
+var rxNotWhitespace     = /[^\s]+/g;
 var rxOperandFilter     = /\[([^\[\]]|\[[^\[\]]*\])*\]/g;
 var rxOperandTransclusion =     /\{\{[^\{\}]+\}\}/g;
 var rxDatumIsTransclusion = /^\s*\{\{[^\{\}]+\}\}\s*$/;
@@ -41,6 +42,12 @@ Parser.prototype.getChar = function()
 Parser.prototype.remaining = function()
 {
   return this.src.substring(this.pos, this.end);
+}
+Parser.prototype.nextToken = function()
+{
+  rxNotWhitespace.lastIndex = this.pos;
+  rxNotWhitespace.test(this.src);
+  return this.src.substring(this.pos, rxNotWhitespace.lastIndex);
 }
 Parser.prototype.match_here = function(regex)
 {
@@ -109,7 +116,7 @@ exports.compileDatum = function(datum) {
   // Could be a number?
   if (rxDatumIsDecimal.test(datum)) {
     // Treat as a number constant
-    return new Operands.Number_Constant(Number(datum));
+    return new Operands.Opd_Number(Number(datum));
   }
 
   // Could be a formula?
@@ -130,7 +137,7 @@ exports.compileDatum = function(datum) {
   }
 
   // Otherwise, treat as a string constant
-  return new Operands.String_Constant(datum);
+  return new Operands.Opd_Text(datum);
 };
 
 exports.compileFormula = function(formulaString)
@@ -140,7 +147,7 @@ exports.compileFormula = function(formulaString)
   {
     return exports.compileExpression(formulaString);
   }
-  catch (err)    {return new Operands.String_Constant("`FormulaError: " + err + "`");}
+  catch (err)    {return new Operands.Opd_Text("`FormulaError: " + err + "`");}
 }
 
 exports.computeFormula = function(compiledFormula, widget, numberFormat=null, debug=false) {
@@ -235,7 +242,7 @@ function buildExpression(parser, nested = false) {
     // Missing operand is an error
     if (operand === null)
     {
-      if (operands.length) throw "missing operand after \:" + operators[operators.length-1].operator + "\"";
+      if (operands.length) throw "missing operand after \"" + operators[operators.length-1].operator + "\"";
       else                 throw "empty expression";
     }
 
@@ -299,7 +306,7 @@ function buildExpression(parser, nested = false) {
 
     if (parser.pos < parser.end)
     {
-      throw "expected an operator: \"" + parser.remaining() + "\"";
+      throw "expected operator, got \"" + parser.nextToken() + "\"";
     }
   }
 
@@ -335,7 +342,7 @@ function buildArguments(parser) {
   return results;
 };
 
-// Compile an operand into a function returning the operand value.  Filter operands return an array.
+// Compile an operand into a function returning the operand value.
 function buildOperand(parser) {
 
   var term;
@@ -351,8 +358,8 @@ function buildOperand(parser) {
   {
     // Number constant
     term = parser.match_here(rxDecimal);
-    if (term) return new Operands.Number_Constant(Number(term[0]));
-    throw "Invalid number: " + parser.remaining();
+    if (term) return new Operands.Opd_Number(Number(term[0]));
+    throw "Invalid number: " + parser.nextToken();
   }
   else if (char.match(/[a-z]/i))
   {
@@ -383,7 +390,7 @@ function buildOperand(parser) {
     if (parser.getChar() != ")")
     {
       if (parser.pos == parser.end) throw "missing ')' at end of formula";
-      else                          throw "expected ')' here: \"" + parser.remaining() + "\"";
+      else                          throw "expected ')', got \"" + parser.nextToken() + "\"";
     }
     ++parser.pos;
     return parentheses;
@@ -392,28 +399,28 @@ function buildOperand(parser) {
   case "'":
   case "\"": // String constant
     term = parser.match_here(rxString);
-    if (term) return new Operands.String_Constant(term[0].substr(1, term[0].length-2));
-    throw "Invalid string: " + parser.remaining();
+    if (term) return new Operands.Opd_Text(term[0].substr(1, term[0].length-2));
+    throw "Invalid string: " + parser.nextToken();
     break;
 
   case "[": // Filter operand
     term = parser.match_here(rxOperandFilter);
-    if (term) return new Operands.Filter(term[0]);
+    if (term) return new Operands.Opd_Filter(term[0]);
     break;
 
-  case "{": // Transclude operand
+  case "{": // Transclusion operand
     term = parser.match_here(rxOperandTransclusion);
-    if (term) return new Operands.Transclude(term[0].substring(2, term[0].length-2));
+    if (term) return new Operands.Opd_Transclude(term[0].substring(2, term[0].length-2));
     break;
 
   case "<": // Variable operand
     term = parser.match_here(rxOperandVariable);
-    if (term) return new Operands.Variable(term[0].substring(2, term[0].length-2));
+    if (term) return new Operands.Opd_Variable(term[0].substring(2, term[0].length-2));
     break;
   }
 
   // Otherwise, constant operand
-  throw "unrecognized operand: '" + parser.remaining() + "'";
+  throw "unrecognized operand: '" + parser.nextToken() + "'";
   //return new Operands.Constant("K: " + expr + " (#"+String(parser.pos)+")");
 };
 

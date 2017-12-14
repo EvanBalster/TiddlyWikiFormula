@@ -9,25 +9,25 @@ var Ops = require("$:/plugins/ebalster/formula/operands.js");
 
 
 // Unary sign operators
-exports.uplus  = function(a)    {return new Val.Value_Number(+a.asNumber_sum());};
-exports.uminus = function(a)    {return new Val.Value_Number(-a.asNumber_sum());};
+exports.uplus  = function(a)    {return new Val.V_Number(+a.asSum());};
+exports.uminus = function(a)    {return new Val.V_Number(-a.asSum());};
 
 // Sum
-exports.sum = function(a)       {return new Val.Value_Number(a.asNumber_sum());};
+exports.sum = function(a)       {return new Val.V_Number(a.asSum());};
 
 // Add
-exports.add = function(a, b)    {return new Val.Value_Number(a.asNumber_sum() + b.asNumber_sum());};
-exports.sub = function(a, b)    {return new Val.Value_Number(a.asNumber_sum() - b.asNumber_sum());};
+exports.add = function(a, b)    {return new Val.V_Number(a.asSum() + b.asSum());};
+exports.sub = function(a, b)    {return new Val.V_Number(a.asSum() - b.asSum());};
 
 // Multiply
-exports.mul = function(a, b)    {return new Val.Value_Number(a.asNumber() * b.asNumber());};
-exports.div = function(a, b)    {return new Val.Value_Number(a.asNumber() / b.asNumber());};
+exports.mul = function(a, b)    {return new Val.V_Number(a.asNumber() * b.asNumber());};
+exports.div = function(a, b)    {return new Val.V_Number(a.asNumber() / b.asNumber());};
 
 // Exponential
-exports.pow = function(a, b)    {return new Val.Value_Number(Math.pow(a.asNumber(), b.asNumber()));};
+exports.pow = function(a, b)    {return new Val.V_Number(Math.pow(a.asNumber(), b.asNumber()));};
 
 // Percent -- TODO make this a different value-type
-exports.percent = function(a, b)    {return new Val.Value_Percent(a.asNumber() / 100);};
+exports.percent = function(a, b)    {return new Val.V_Percent(a.asNumber() / 100);};
 
 
 // Aliases

@@ -20,52 +20,52 @@ exports.Operand.prototype.is_constant = false;
 exports.Operand.prototype.name = "unknown-operand";
 
 // Operand::compute -- produce
-exports.Operand.prototype.compute = (function(widget, recur) {return new Values.Value_Undefined();});
+exports.Operand.prototype.compute = (function(widget, recur) {return new Values.V_Undefined();});
 
 
 // String constant operand.
-exports.String_Constant = function(value) {
+exports.Opd_Text = function(value) {
   this.value = value;
 }
-exports.String_Constant.prototype = new exports.Operand();
-exports.String_Constant.prototype.name = "string";
-exports.String_Constant.prototype.is_constant = true;
+exports.Opd_Text.prototype = new exports.Operand();
+exports.Opd_Text.prototype.name = "string";
+exports.Opd_Text.prototype.is_constant = true;
 
-exports.String_Constant.prototype.compute = function(widget, recur)
+exports.Opd_Text.prototype.compute = function(widget, recur)
 {
   // Returns a string value
-  return new Values.Value_String(this.value);
+  return new Values.V_Text(this.value);
 }
 
 
 // Number constant operand.
-exports.Number_Constant = function(value) {
+exports.Opd_Number = function(value) {
   this.value = value;
 }
-exports.Number_Constant.prototype = new exports.Operand();
-exports.Number_Constant.prototype.name = "number";
-exports.Number_Constant.prototype.is_constant = true;
+exports.Opd_Number.prototype = new exports.Operand();
+exports.Opd_Number.prototype.name = "number";
+exports.Opd_Number.prototype.is_constant = true;
 
-exports.Number_Constant.prototype.compute = function(widget, recur)
+exports.Opd_Number.prototype.compute = function(widget, recur)
 {
   // Returns a number value
-  return new Values.Value_Number(this.value);
+  return new Values.V_Number(this.value);
 }
 
 
 var Compile = require("$:/plugins/ebalster/formula/compile.js");
 
 
-// Transcluded operand.
-exports.Transclude = function(textReference) {
+// Opd_Transcluded operand.
+exports.Opd_Transclude = function(textReference) {
   this.textReference = textReference;
   this.datum = null;
   this.op = null;
 }
-exports.Transclude.prototype = new exports.Operand();
-exports.Transclude.prototype.name = "transclude";
+exports.Opd_Transclude.prototype = new exports.Operand();
+exports.Opd_Transclude.prototype.name = "transclude";
 
-exports.Transclude.prototype.compute = function(widget, recur) {
+exports.Opd_Transclude.prototype.compute = function(widget, recur) {
 
   var newDatum = widget.wiki.getTextReference(this.textReference, "", widget.getVariable("currentTiddler"));
 
@@ -79,16 +79,16 @@ exports.Transclude.prototype.compute = function(widget, recur) {
 }
 
 
-// Variable operand.
-exports.Variable = function(variable) {
+// Opd_Variable operand.
+exports.Opd_Variable = function(variable) {
   this.variable = variable;
   this.datum = null;
   this.op = null;
 }
-exports.Variable.prototype = new exports.Operand();
-exports.Variable.prototype.name = "variable";
+exports.Opd_Variable.prototype = new exports.Operand();
+exports.Opd_Variable.prototype.name = "variable";
 
-exports.Variable.prototype.compute = function(widget, recur) {
+exports.Opd_Variable.prototype.compute = function(widget, recur) {
 
   var newDatum = widget.getVariable(this.variable) || "";
 
@@ -102,15 +102,15 @@ exports.Variable.prototype.compute = function(widget, recur) {
 }
 
 
-// Filter operand.
-exports.Filter = function(filter) {
+// Opd_Filter operand.
+exports.Opd_Filter = function(filter) {
   this.filter = filter;
   this.elements = {};
 }
-exports.Filter.prototype = new exports.Operand();
-exports.Filter.prototype.name = "filter";
+exports.Opd_Filter.prototype = new exports.Operand();
+exports.Opd_Filter.prototype.name = "filter";
 
-exports.Filter.prototype.compute = function(widget, recur) {
+exports.Opd_Filter.prototype.compute = function(widget, recur) {
   // Apply the filter and compile each result
   var exprs = widget.wiki.filterTiddlers(this.filter, widget);
 
@@ -135,7 +135,7 @@ exports.Filter.prototype.compute = function(widget, recur) {
     var elem = this.elements[expr];
     results.push(elem.op.compute(widget, recur+1));
   }
-  return new Values.Value_Array(results);
+  return new Values.V_Array(results);
 };
 
 })();

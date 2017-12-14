@@ -9,7 +9,7 @@ var Ops = require("$:/plugins/ebalster/formula/operands.js");
 
 
 // Concatenate
-exports.cat = function(a, b)    {return new Val.Value_String(a.asString() + b.asString());};
+exports.cat = function(a, b)    {return new Val.V_Text(a.asString() + b.asString());};
 
 
 // Aliases

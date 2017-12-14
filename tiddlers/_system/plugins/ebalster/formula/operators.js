@@ -53,13 +53,13 @@ exports.BinaryMathOperator.prototype.compute = (function(widget, recur) {
 exports.Operator_UnaryPlus = function Operator_UnaryPlus(first) {this.first = first;}
 exports.Operator_UnaryPlus.prototype = new exports.UnaryOperator();
 exports.Operator_UnaryPlus.prototype.name = "unary-plus";
-exports.Operator_UnaryPlus.prototype.compute = function(widget, recur) {return +this.first.compute(widget, recur).asNumber_sum();}
+exports.Operator_UnaryPlus.prototype.compute = function(widget, recur) {return +this.first.compute(widget, recur).asSum();}
 
 // Negation operator (used for unary minus)
 exports.Operator_UnaryMinus = function Operator_UnaryMinus(first) {this.first = first;}
 exports.Operator_UnaryMinus.prototype = new exports.UnaryOperator();
 exports.Operator_UnaryMinus.prototype.name = "unary-minus";
-exports.Operator_UnaryMinus.prototype.compute = function(widget, recur) {return -this.first.compute(widget, recur).asNumber_sum();}
+exports.Operator_UnaryMinus.prototype.compute = function(widget, recur) {return -this.first.compute(widget, recur).asSum();}
 
 
 // Addition operator
