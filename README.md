@@ -2,7 +2,7 @@
 
 A TiddlyWiki plugin for functional formulas, combining the power of Excel and Google Sheets with TiddlyWiki's processing idioms.
 
-Created by Evan Balster <reidgould@gmail.com>
+Created by Evan Balster <evan@imitone.com>
 
 * [Source on GitHub](https://github.com/EvanBalster/TiddlyWikiFormula).
 * [Demonstration Wiki](http://evanbalster.com/tiddlywiki/formulas.html).
