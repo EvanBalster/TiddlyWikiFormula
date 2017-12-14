@@ -1,0 +1,13 @@
+created: 20171214072454047
+modified: 20171214073436958
+tags: 
+title: Spreadsheet/Data
+type: application/json
+
+{
+    "a1": "12.40",
+    "a2": "13.33",
+    "a3": "1.72",
+    "a4": "(=10*5=)",
+    "a6": "(= a1+a2+a3+a4 =)"
+}

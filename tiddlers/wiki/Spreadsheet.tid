@@ -1,0 +1,29 @@
+created: 20171214072113031
+modified: 20171214073455647
+tags: 
+title: Spreadsheet
+type: text/vnd.tiddlywiki
+
+\define ss_cols() a b c d e f
+\define ss_rows() 1 2 3 4 5 6 7 8 9 10 11 12
+\define ss_cell() $(c)$$(r)$
+
+<$tiddler tiddler="Spreadsheet/Data">
+
+View:
+
+<table>
+<tr><th></th><$list variable=c filter=<<ss_cols>> ><th><<c>></th></$list></tr>
+<$list variable=r filter=<<ss_rows>> >
+<tr><th><<r>></th><$list variable=c filter=<<ss_cols>> ><td><$formula formula=<<ss_cell>>/></td></$list></tr>
+</$list>
+</table>
+
+<table>
+<tr><th></th><$list variable=c filter=<<ss_cols>> ><th><<c>></th></$list></tr>
+<$list variable=r filter=<<ss_rows>> >
+<tr><th><<r>></th><$list variable=c filter=<<ss_cols>> ><td><$edit-text tag=input index=<<ss_cell>> size=10/></td></$list></tr>
+</$list>
+</table>
+
+</$tiddler>

@@ -7,6 +7,7 @@
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
 var Formulas = require("$:/plugins/ebalster/formula/compile.js");
+var Operands = require("$:/plugins/ebalster/formula/operands.js");
 
 var FormulaWidget = function(parseTreeNode,options) {
 	this.initialise(parseTreeNode,options);
@@ -45,7 +46,11 @@ FormulaWidget.prototype.execute = function() {
 	// Compile the formula, if it has changed, yielding compiledFormula
 	if(this.formula !== oldFormula) {
 		if (this.formula) {
-			this.compiledFormula = Formulas.compileFormula(this.formula);
+			try
+			{
+				this.compiledFormula = Formulas.compileFormula(this.formula);
+			}
+			catch (err) {this.compiledFormula = new Operands.Opd_String(err);}
 		}
 		else {
 			this.compiledFormula = null;

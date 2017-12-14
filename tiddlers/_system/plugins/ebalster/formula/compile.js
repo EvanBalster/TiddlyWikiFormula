@@ -18,6 +18,7 @@ var rxOperandTransclusion =     /\{\{[^\{\}]+\}\}/g;
 var rxDatumIsTransclusion = /^\s*\{\{[^\{\}]+\}\}\s*$/;
 var rxOperandVariable     =     /<<[^<>]+>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
+var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
 
 var rxUnsignedDecimal =      /((\d+(\.\d*)?)|(\.\d+))/g
@@ -379,7 +380,11 @@ function buildOperand(parser) {
   }
   else if (char.match(/[a-z]/i))
   {
-    // Function call
+    // Cell name?
+    term = parser.match_here(rxCellName);
+    if (term) return new Operands.Opd_Transclude("##" + term[0]);
+
+    // Function call?
     term = parser.match_here(rxIdentifier);
 
     if (term)
