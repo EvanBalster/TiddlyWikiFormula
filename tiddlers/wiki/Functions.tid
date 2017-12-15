@@ -1,7 +1,9 @@
 created: 20171212025227476
-modified: 20171214065432974
+modified: 20171215031600191
 title: Functions
 type: text/vnd.tiddlywiki
+
+\define small(name) <code style="font-size: 65%">$name$</code>
 
 !Introduction
 
@@ -11,13 +13,12 @@ type: text/vnd.tiddlywiki
 function_name(<argument>, <argument>...)
 ```
 
-Note that function names are case-insensitive.
+Some functions have multiple names, often to help them match up with popular spreadsheet software.  Note that function names are case-insensitive.
 
 
 !Functions
 
 |Function|Args|Result|Summary|h
-| `sum`|`(a)`|number|Sum the argument (eg, an array).|
 | `uplus`|`(a)`| * |Return `a`.|
 | `uminus`|`(a)`|number|Return `a` times negative one.|
 | `add`|`(a, b)`|number|Add numbers `a` and `b`.|
@@ -28,7 +29,54 @@ Note that function names are case-insensitive.
 | `multiply`|~|~|~|
 | `div`|`(a, b)`|number|Divide `a` by `b`.|
 | `divide`|~|~|~|
-| `pow`|`(a, b)`|number|Raise base `a` to exponent `b`.|
+| `quotient`|~|~|~|
+|!Math|<|<|<|
+| `abs`|`(a)`|number|Return `a`'s absolute value.|
+| `sign`|`(a)`|number|1 for positive `a`, -1 for negative, 0 for 0.|
+| `sum`|`(a...)`|number|Sum up the arguments (including arrays).|
+| `product`|`(a,b..)`|number|Multiply the arguments.|
+| `min`|`(a,b..)`|number|Get the lowest number.|
+| `max`|`(a,b..)`|number|Get the highest number.|
+| `sqrt`|`(a)`|number|Get the square root of `a`.|
+| `cbrt`|`(a)`|number|Get the cube root of `a`.|
+|!Math (rounding)|<|<|<|
+| `round`|`(a)`|number|Round `a` to the nearest integer.|
+|~|`(a, n)`|number|Round `a` to `n` digits.|
+| `roundup`|`(a)`|number|Round `a` away from zero.|
+|~|`(a, n)`|number|Round `a` away from zero, to `n` digits.|
+| `rounddown`<br/>or `trunc`|`(a)`|number|Round `a` toward zero.|
+|~|`(a, n)`|number|Round `a` toward zero, to `n` digits.|
+| `floor`|`(a)`|number|Round `a` down to the nearest integer.|
+|~|`(a, m)`|number|Round `a` down to a multiple of `m`.|
+| `ceil`|`(a)`|number|Round `a` up to the nearest integer.|
+|~|`(a, m)`|number|Round `a` up to a multiple of `m`.|
+|!Math (exponential)|<|<|<|
+| `_e`||number|Euler's number ''e'' (approx. 2.71828).|
+| `pow`|`(a, b)`|number|Raise base `a` to the power of `b`.|
+| `power`|~|~|~|
+| `log`|`(a, b)`|number|Get the logarithm of `a` in base `b`.|
+| `exp`|`(a)`|number|Raise ''e'' to the power of `a`.|
+| `ln`|`(a)`|number|Get the natural logarithm of `a` (base ''e'').|
+| `log2`|`(a, b)`|number|Get the logarithm of `a` in base 2.|
+| `log10`|`(a, b)`|number|Get the logarithm of `a` in base 10.|
+| `expm1`|`(a)`|number|Get `exp(a) - 1`, more precisely.|
+| `log1p`|`(a)`|number|Get `log(a + 1)`, more precisely.|
+|!Math (trigonometry)|<|<|<|
+| `pi`||number|Get ''pi'' (''&pi;'', approx. 3.14159).|
+| `degrees`|`(a)`|number|Convert radians to degrees: `180*a/pi`.|
+| `radians`|`(a)`|number|Convert degrees to radians: `pi*a/180`.|
+| `sin`|`(a)`|number|Get the sine of `a`.|
+| `cos`|`(a)`|number|Get the cosine of `a`.|
+| `tan`|`(a)`|number|Get the tangent of `a`.|
+| `sec`|`(a)`|number|Get the secant, `1/cos(a)`.|
+| `csc`|`(a)`|number|Get the cosecant, `1/sin(a)`.|
+| `cot`|`(a)`|number|Get the cotangent, `1/tan(a)`.|
+| [`a`]`sin`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] sine.|
+| [`a`]`cos`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cosine.|
+| [`a`]`tan`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] tangent.|
+| [`a`]`sec`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] secant.|
+| [`a`]`csc`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cosecant.|
+| [`a`]`cot`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cotangent.|
 |!Comparison|<|<|<|
 |  `eq`|`(a, b)`|boolean|Test whether `a` and `b` are equal.|
 | `equal`|~|~|~|
@@ -37,14 +85,14 @@ Note that function names are case-insensitive.
 |  `gt`|`(a, b)`|boolean|Test whether `a` is greater than `b`.|
 | `greater`|~|~|~|
 | `gte`|`(a, b)`|boolean|Test whether `a` is greater than or equal to `b`.|
-| <code>greater_<br>or_equal</code>|~|~|~|
+| <<small greater_<br/>or_equal>>|~|~|~|
 |  `lt`|`(a, b)`|boolean|Tests whether `a` is less than `b`.|
-| <code>less</code>|~|~|~|
+| `less`|~|~|~|
 | `lte`|`(a, b)`|boolean|Tests whether `a` is less than or equal to `b`.|
-| <code>less_<br>or_equal</code>|~|~|~|
+| <<small less_or_equal>>|~|~|~|
 |!Logic|<|<|<|
-| `true`|`()`|boolean|Return TRUE.|
-| `false`|`()`|boolean|Return FALSE.|
+| `true`||boolean|Return TRUE.|
+| `false`||boolean|Return FALSE.|
 | `not`|`(a)`|boolean|Test if `a` is FALSE.|
 | `and`|`(a, b)`|boolean|Test if `a` and `b` are both TRUE.|
 | `or`|`(a, b)`|boolean|Test if one or both of `a` and `b` is TRUE.|
@@ -53,7 +101,12 @@ Note that function names are case-insensitive.
 |  `if`|`(q,a,b)`| * |If `q` is TRUE, return `a`, else `b`.|
 |  `iferror`|`(a, b)`| * |Return `a`, or `b` if there's an error with `a`.|
 |  `ifs`|`(...)`| * |Test-based select. See: [[IFS Function]]|
-|  `switch`|`(n,...)`| * |Value-based select. See: [[SWITCH Function]]|
+|  `switch`|`(n...)`| * |Value-based select. See: [[SWITCH Function]]|
+|  `choose`|`(n...)`| * |Return the `n`th element (after `n`).|
+|!Statistical|<|<|<|
+| `rand`|`()`|number|Get a random number between 0 and 1.|
+| `random`|~|~|~|
+| <<small randbetween>>|`(a, b)`|number|Get a random number between `a` and `b`.|
 |!Miscellaneous|<|<|<|
 | `percent`|`(a)`|percent|Return `a` divided by 100.|
 | `cat`|`(a, b)`|text|Append `a` and `b` as text.|

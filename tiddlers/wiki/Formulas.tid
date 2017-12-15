@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20171214053925780
+modified: 20171215034658780
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
@@ -42,15 +42,19 @@ Drag this to your wiki:
 
 !Learn More
 
-* [[Formulas in WikiText]]
-* [[Formulas as Tag Attributes]]
-* [[Syntax]]
-* [[Functions]]
-* [[Operators]]
-* [[FormulaWidget]]
-* [[FormulaMacro]]
-* [[Extending Formulas]]
-* [[Plugin Design]]
-* [[Source Code]]
+* Usage
+** [[Formulas in WikiText]]
+** [[Formulas as Tag Attributes]]
+** [[Syntax]]
+** [[Functions]]
+** [[Operators]]
+** [[FormulaWidget]]
+** [[FormulaMacro]]
+* Under the hood
+** [[Extending Formulas]]
+** [[Plugin Design]]
+** [[Source Code]]
+* Etc.
+** [[Spreadsheet Prototype]]
 
 This plugin is written by [[Evan Balster]].

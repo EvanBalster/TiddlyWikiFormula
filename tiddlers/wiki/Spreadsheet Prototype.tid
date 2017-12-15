@@ -1,0 +1,44 @@
+created: 20171214072113031
+modified: 20171215035035064
+tags: 
+title: Spreadsheet Prototype
+type: text/vnd.tiddlywiki
+
+\define ss_cols() a b c d e f g h i j
+\define ss_rows() 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+\define ss_cell() $(c)$$(r)$
+
+<$tiddler tiddler="Spreadsheet/Data">
+
+Click on cells to pop up an editor.  Formulas currently need to be written in `(= =)` but cells may be referred to by their names, such as `a2`.  Ranges aren't supported yet.
+
+<$vars popupState=<<qualify "$:/temp/spreadsheet/pop">> popupCell=<<qualify "$:/temp/spreadsheet/popcell">> >
+
+<$reveal type="popup" state=<<popupState>> >
+<div class="tc-drop-down tc-popup-keep">
+
+<$set name="cell" filter="[title<popupCell>get[text]]">
+''<<cell>>'': <$edit-text tag=input index=<<cell>> size=30 />
+<$button class="tc-btn-invisible">{{$:/core/images/save-button}}<$action-setfield $tiddler=<<popupState>> text=""/></$button>
+</$set>
+
+</div>
+</$reveal>
+
+<table>
+<tr><th></th><$list variable=c filter=<<ss_cols>> ><th><<c>></th></$list></tr>
+<$list variable=r filter=<<ss_rows>> >
+<tr><th style="padding:0;"><<r>></th><$list variable=c filter=<<ss_cols>> ><td style="padding:0;"><$button popup=<<popupState>> style="width:100%;margin:0;padding:6px;display:block;background:none;border:none;cursor:pointer;"><$action-setfield $tiddler=<<popupCell>> text=<<ss_cell>>/> <$formula formula=<<ss_cell>>/> </$button></td></$list></tr>
+</$list>
+</table>
+
+</$vars>
+
+<!-- <table>
+<tr><th></th><$list variable=c filter=<<ss_cols>> ><th><<c>></th></$list></tr>
+<$list variable=r filter=<<ss_rows>> >
+<tr><th><<r>></th><$list variable=c filter=<<ss_cols>> ><td><$edit-text tag=input index=<<ss_cell>> size=10/></td></$list></tr>
+</$list>
+</table> -->
+
+</$tiddler>

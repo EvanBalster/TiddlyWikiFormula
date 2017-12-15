@@ -52,11 +52,12 @@ exports.switch =
   }
 };
 
-// NTH (variadic)
-exports.choose = function(a)
+// CHOOSE (variadic)
+exports.choose = function(a, b)
 {
-  var result = arguments[a.asNum()];
-  if (!result) throw "CHOOSE index out of range";
+  var index = Math.floor(a.asNum());
+  var result = arguments[index];
+  if (index < 1 || !result) return new Val.V_Undefined();
   return result;
 };
 exports.choose.variadic = true;

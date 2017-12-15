@@ -10,8 +10,8 @@ var V_Num = Val.V_Num;
 
 
 // Constants
-exports.pi    = function()    {return new V_Num(Math.PI);}
-exports.euler = function()    {return new V_Num(Math.E);}
+exports.pi = function()    {return new V_Num(Math.PI);}
+exports._e = function()    {return new V_Num(Math.E);}
 
 
 // Random
@@ -164,14 +164,14 @@ function genRound(operands, func)
 exports.floor =
 {
     min_args : 1, max_args : 2,
-    select : function(operands) {return genCeilFloor(operands, signedFloor);}
+    select : function(operands) {return genCeilFloor(operands, Math.floor);}
 };
 exports.ceil =
 {
     min_args : 1, max_args : 2,
-    select : function(operands) {return genCeilFloor(operands, signedCeil);}
+    select : function(operands) {return genCeilFloor(operands, Math.ceil);}
 };
-exports.floor_precise =
+/*exports.floor_precise =
 {
     min_args : 1, max_args : 2,
     select : function(operands) {return genCeilFloor(operands, Math.floor);}
@@ -180,7 +180,7 @@ exports.ceil_precise =
 {
     min_args : 1, max_args : 2,
     select : function(operands) {return genCeilFloor(operands, Math.ceil);}
-};
+};*/
 exports.round =
 {
     min_args : 1, max_args : 2,
