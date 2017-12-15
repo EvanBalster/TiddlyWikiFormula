@@ -24,48 +24,59 @@ exports.if  = function(p, a, b) {return p.get() ? a.get() : b.get();};
 // IFERROR
 exports.iferror = function(a, b) {try {return a.get();} catch (err) {return b.get();}};
 
+
 // SWITCH (variadic)
-exports.switch = function(a)
+exports.switch =
 {
-  var switchVal = a.get();
-  var i = 1;
-  for (; i+1 < arguments.length; i += 2)
+  min_args: 3,
+  select: function(operands)
   {
-    if (arguments[i].get() == switchVal)
+    switch (operands.length % 2)
     {
-      var result = arguments[i+1];
-      if (!result) throw "SWITCH missing value after predicate";
-      return result;
+    default:
+    case 0: return function(a) // Switch with default
+      {
+        var value = a.get();
+        for (var i = 1; i+1 < arguments.length; i += 2)
+          {if (arguments[i].get() == value) return arguments[i+1];}
+        return arguments[arguments.length-1];
+      }
+    case 1: return function(a) // Switch, no default
+      {
+        var value = a.get();
+        for (var i = 1; i+1 < arguments.length; i += 2)
+          {if (arguments[i].get() == value) return arguments[i+1];}
+        return new Val.V_Undefined();
+      }
     }
   }
-  if (i < arguments.length) return arguments[i];
-  return new Val.V_Undefined();
-}
-exports.switch.variadic = true;
+};
 
 // NTH (variadic)
-exports.nth = function(a)
+exports.choose = function(a)
 {
-  var result = arguments[a.asNumber()];
-  if (!result) throw "NTH index out of range";
+  var result = arguments[a.asNum()];
+  if (!result) throw "CHOOSE index out of range";
   return result;
-}
-exports.switch.variadic = true;
+};
+exports.choose.variadic = true;
 
 // IFS function (variadic)
-exports.ifs = function()
+exports.ifs =
 {
-  for (var i = 0; i < arguments.length; i += 2)
+  min_args : 2,
+  select : function(operands)
   {
-    if (arguments[i].get())
+    if (operands.length % 2 != 0)
+      throw "Odd number of arguments to IFS";
+
+    return function()
     {
-      var result = arguments[i+1];
-      if (!result) throw "IFS missing value after predicate";
-      return result;
-    }
+      for (var i = 0; i < arguments.length; i += 2)
+        {if (arguments[i].get()) return arguments[i+1];}
+      return new Val.V_Undefined();
+    };
   }
-  return new Val.V_Undefined();
-}
-exports.ifs.variadic = true;
+};
 
 })();

@@ -45,7 +45,7 @@ exports.BinaryMathOperator = function BinaryMathOperator() {
 exports.BinaryMathOperator.prototype = new exports.BinaryOperator();
 exports.BinaryMathOperator.prototype.name = "unknown-binary-math-operator";
 exports.BinaryMathOperator.prototype.compute = (function(widget, recur) {
-  return mathOp(this.first.compute(widget, recur).asNumber(), this.first.compute(widget, recur).asNumber());
+  return mathOp(this.first.compute(widget, recur).asNum(), this.first.compute(widget, recur).asNum());
 });
 
 

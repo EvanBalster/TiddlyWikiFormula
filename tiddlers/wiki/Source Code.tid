@@ -1,9 +1,20 @@
 created: 20171209232942077
-modified: 20171214070355491
+modified: 20171214171429572
 tags: 
 title: Source Code
 type: text/vnd.tiddlywiki
 
-<$list filter="[all[system]] [all[shadows]] +[prefix[$:/plugins/ebalster/formula/]sort[title]]">
-<$link>{{!!title}}</$link><br/>
+<dl>
+<dt>Core</dt>
+<$list filter="[all[system]] [all[shadows]] +[prefix[$:/plugins/ebalster/formula/]sort[title]!regexp[functions/]!regexp[operators/]]">
+<dd><$link>{{!!title}}</$link><br/></dd>
 </$list>
+<dt>Functions</dt>
+<$list filter="[all[system]] [all[shadows]] +[prefix[$:/plugins/ebalster/formula/]sort[title]regexp[functions/]]">
+<dd><$link>{{!!title}}</$link><br/></dd>
+</$list>
+<dt>Operators</dt>
+<$list filter="[all[system]] [all[shadows]] +[prefix[$:/plugins/ebalster/formula/]sort[title]regexp[operators/]]">
+<dd><$link>{{!!title}}</$link><br/></dd>
+</$list>
+</dl>

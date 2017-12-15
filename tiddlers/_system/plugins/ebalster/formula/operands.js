@@ -64,7 +64,7 @@ exports.Opd_Number.prototype.is_constant = true;
 exports.Opd_Number.prototype.compute = function(widget, recur)
 {
   // Returns a number value
-  return new Values.V_Number(this.value);
+  return new Values.V_Num(this.value);
 }
 
 

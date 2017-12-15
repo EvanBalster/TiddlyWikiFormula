@@ -20,7 +20,7 @@ exports.Value.prototype.describe = function()    {return this.name + " (" + Stri
 exports.Value.prototype.toString = function()    {return "[Value " + this.describe() + "]";}
 
 // Get the value as a number (generic implementation)
-exports.Value.prototype.asNumber = function() {
+exports.Value.prototype.asNum = function() {
   var v = this.get();
   var n = Number(v);
   if (isNaN(n)) throw "Cannot convert " + this.describe() + " to a number!";
@@ -76,10 +76,10 @@ exports.V_Array = function(value) {
 }
 exports.V_Array.prototype = new exports.Value();
 exports.V_Array.prototype.get      = function()                {return this.value;}
-exports.V_Array.prototype.asNumber = function()                {throw "Cannot convert " + this.describe() + " to number!";}
+exports.V_Array.prototype.asNum = function()                {throw "Cannot convert " + this.describe() + " to number!";}
 exports.V_Array.prototype.asSum    = function() {
   var n = 0;
-  for (var i = 0; i < this.value.length; ++i) n += this.value[i].asNumber();
+  for (var i = 0; i < this.value.length; ++i) n += this.value[i].asNum();
   if (isNaN(n)) throw "Cannot sum " + this.describe() + " to a number!";
   return n;
 }
@@ -100,21 +100,21 @@ exports.V_Bool = function(value) {
 exports.V_Bool.prototype = new exports.Value();
 exports.V_Bool.prototype.get      = function()    {return this.value;}
 exports.V_Bool.prototype.asString = function()    {return this.value ? "TRUE" : "FALSE";}
-exports.V_Bool.prototype.asNumber = function()    {return this.value ? 1 : 0;}
+exports.V_Bool.prototype.asNum = function()    {return this.value ? 1 : 0;}
 exports.V_Bool.prototype.asSum    = function()    {return this.value ? 1 : 0;}
 
 
 // Number value.
-exports.V_Number = function(value) {
+exports.V_Num = function(value) {
   this.name = "number";
 
   this.value = value;
 }
-exports.V_Number.prototype = new exports.Value();
-exports.V_Number.prototype.get      = function()    {return this.value;}
-exports.V_Number.prototype.asString = function()    {return (exports.NumberFormatFunc || String)(this.value);}
-exports.V_Number.prototype.asNumber = function()    {return this.value;}
-exports.V_Number.prototype.asSum    = function()    {return this.value;}
+exports.V_Num.prototype = new exports.Value();
+exports.V_Num.prototype.get      = function()    {return this.value;}
+exports.V_Num.prototype.asString = function()    {return (exports.NumberFormatFunc || String)(this.value);}
+exports.V_Num.prototype.asNum = function()    {return this.value;}
+exports.V_Num.prototype.asSum    = function()    {return this.value;}
 
 
 // Percentage value.
@@ -123,7 +123,7 @@ exports.V_Percent = function(value) {
 
   this.value = value;
 }
-exports.V_Percent.prototype = new exports.V_Number();
+exports.V_Percent.prototype = new exports.V_Num();
 exports.V_Percent.prototype.asString = function()
 {
   return (exports.NumberFormatFunc || String)(100*this.value) + "%";

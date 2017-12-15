@@ -245,22 +245,17 @@ function buildExpression(parser, nested = false) {
     }
 
     // Grab the operand
-    try
-    {
-      var operand = buildOperand(parser);
-    }
-    catch (err)
-    {
-      throw err + (operators.length ?
-        " (after " + operators[operators.length-1].operator + ")" :
-        " (beginning of expression)");
-    }
+    var operand = buildOperand(parser);
 
     // Missing operand is an error
     if (operand === null)
     {
-      if (operands.length) throw "missing operand after \"" + operators[operators.length-1].operator + "\"";
-      else                 throw "empty expression";
+      var token = parser.nextToken();
+      if (token && token[0] != ")" && token[0] != ",")
+        throw "invalid operand\"" + token + "\"";
+      else if (operators.length)
+        throw "missing operand after \"" + operators[operators.length-1].operator + "\"";
+      else throw "empty expression";
     }
 
     // Postfix operators
@@ -336,8 +331,13 @@ function buildArguments(parser) {
   // Skip whitespace
   parser.skipWhitespace();
 
-  if (parser.getChar() != "(") throw "Expect '(' after function name";
+  // Argument list present?
+  if (parser.getChar() != "(") return null;
   ++parser.pos;
+
+  // Zero arguments?
+  parser.skipWhitespace();
+  if (parser.getChar() == ")") return [];
   
   var results = [];
 
@@ -389,17 +389,36 @@ function buildOperand(parser) {
 
     if (term)
     {
-      term = term[0].toLowerCase();
-      var func = formulaFunctions[term];
+      var func = formulaFunctions[term[0].toLowerCase()];
 
-      if (!func) throw "unknown function: " + term;
+      if (!func) throw "unknown function: " + term[0];
 
       var args = buildArguments(parser);
 
-      if (args.length > func.length && !func.variadic)
-        throw "too many arguments for " + term;
-      if (args.length < func.length)
-        throw "too few arguments for " + term;
+      // Omitting arguments is only OK for zero-parameter functions.
+      if (args == null)
+      {
+        if (func.min_args || func.length) throw "Expected '(' after " + term[0];
+        args = [];
+      }
+
+      if (func instanceof Function)
+      {
+        // Check parameter count
+        if (args.length > func.length && !func.variadic)
+          throw "too many arguments for " + term[0] + " (max " + func.length + ")";
+        if (args.length < func.length)
+          throw "too few arguments for " + term[0] + " (min " + func.length + ")";
+      }
+      else
+      {
+        // Use a "select" function
+        if (func.max_args && args.length > func.max_args)
+          throw "too many arguments for " + term[0] + " (max " + func.max_args + ")";
+        if (func.min_args && args.length < func.min_args)
+          throw "too few arguments for " + term[0] + " (min " + func.min_args + ")";
+        func = func.select(args);
+      }
 
       return new Operators.CallOperator(func, args);
     }
@@ -442,9 +461,8 @@ function buildOperand(parser) {
     break;
   }
 
-  // Otherwise, constant operand
-  throw "unrecognized operand: '" + parser.nextToken() + "'";
-  //return new Operands.Constant("K: " + expr + " (#"+String(parser.pos)+")");
+  // Didn't recognize the operand
+  return null;
 };
 
 })();

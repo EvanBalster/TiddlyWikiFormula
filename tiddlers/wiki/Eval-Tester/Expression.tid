@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171214073241835
+modified: 20171215021327960
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-sum([tag[Expenses]get[value]])
+acsch(csch(710.475))
