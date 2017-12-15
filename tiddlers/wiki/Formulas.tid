@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20171215034658780
+modified: 20171215045241266
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
@@ -14,11 +14,16 @@ This wiki demonstrates the ''Formula'' plugin for TiddlyWiki.
 
 The plugin is designed to give TiddlyWiki the ability to process numbers and other data just like popular spreadsheet software.
 
+It's a work in progress so please report any issues you find, preferably [[here on GitHub|https://github.com/EvanBalster/TiddlyWikiFormula/issues]].
+
+
 !Get the Plugin
 
-Drag this to your wiki:
+<<<
+Drag-and-drop this to your wiki:
 
-!! >> [[$:/plugins/ebalster/formula]]
+{{$:/plugins/ebalster/formula||$:/core/ui/Components/plugin-info}}
+<<<
 
 !Features!
 
@@ -36,9 +41,11 @@ Drag this to your wiki:
 <<example concatenation """(= '$' & 45.23*12 & " cost" =)""">>
 </table>
 
+
 !Try Me
 
 {{Try Me}}
+
 
 !Learn More
 
@@ -56,5 +63,11 @@ Drag this to your wiki:
 ** [[Source Code]]
 * Etc.
 ** [[Spreadsheet Prototype]]
+
+
+!Contributions & Feedback
+
+* [[TiddlyWikiFormula GitHub|https://github.com/EvanBalster/TiddlyWikiFormula]]
+* [[TiddlyWiki Mailing List|https://groups.google.com/forum/#!topic/tiddlywiki/bfInUWhAtzo]]
 
 This plugin is written by [[Evan Balster]].

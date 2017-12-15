@@ -1,0 +1,14 @@
+bnf: <CellReference> ::= <Letter> [<Letter>] <Digit> | <CellReference> <Digit> 
+created: 20171215044125120
+modified: 20171215044716266
+tags: Syntax
+title: Cell Reference
+type: text/vnd.tiddlywiki
+
+A ''Cell Reference'' consists of one or two letters followed by one or more digits.  These are interpreted as index references for a data tiddler.  So writing `B3` in a formula is equivalent to the [[Transclusion]] `{{##B3}}`.
+
+```
+(= a1+a2+a3+a4 * b1 =)
+```
+
+This is an advanced feature meant to help other developers implement spreadsheets using the Formulas plugin.  Currently, the `<$tiddler>` widget is necessary to make this feature work.

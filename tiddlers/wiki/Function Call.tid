@@ -1,6 +1,6 @@
 bnf: <FunctionCall> ::= <Identifier> "(" <ArgumentList> ")"
 created: 20171212035346404
-modified: 20171212035523791
+modified: 20171215044300209
 tags: Syntax
 title: Function Call
 type: text/vnd.tiddlywiki
@@ -10,3 +10,5 @@ A ''Function Call'' is written as a [[function name|Functions]] followed by a pa
 ```
 multiply(2.5, {{Apples!!number}})
 ```
+
+Functions with zero arguments, like `pi`, may omit the parentheses.
