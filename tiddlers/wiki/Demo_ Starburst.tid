@@ -1,0 +1,27 @@
+created: 20171215181411828
+modified: 20171215222210664
+tags: 
+title: Demo: Starburst
+type: text/vnd.tiddlywiki
+
+<$tiddler tiddler="$:/temp/SvgSlider">
+
+<$edit-text tag=Input field=val type=range class=full-slider/>
+
+
+<svg viewBox="-100 -100 200 200" width=400 height=400>
+<circle cx=0 cy=0 r=<<formula "100*{{!!val}}%">> style="fill:black;"/>
+<circle cx=0 cy=0 r=<<formula "100*{{!!val}}%^3">> style="fill:red;"/>
+<circle cx=0 cy=0 r=<<formula "100*{{!!val}}%^4">> style="fill:white;"/>
+<$list filter=".1 .2 .3 .4 .5 .6 .7 .8 .9 1" variable=rad>
+<$list filter="0 1 2 3 4 5 6 7 8" variable=ori>
+<circle
+  cx=<<formula "<<rad>>*100*{{!!val}}%^1.2*sin(pi*<<ori>>/4.5+{{!!val}}*.08+<<rad>>)">>
+  cy=<<formula "<<rad>>*100*{{!!val}}%^1.2*cos(pi*<<ori>>/4.5+{{!!val}}*.06+<<rad>>+.5)">>
+  r=<<formula "5*{{!!val}}%^1.5">> style="fill:white;"/>
+</$list>
+</$list>
+</svg>
+
+
+</$tiddler>

@@ -4,3 +4,8 @@ pre, code, .tc-edit-texteditor
   font-size: 10pt;
   line-height: 15pt;
 }
+
+.full-slider
+{
+  width: 100%;
+}
