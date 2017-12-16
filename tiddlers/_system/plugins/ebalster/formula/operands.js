@@ -18,9 +18,23 @@ exports.Operand = function() {
 }
 exports.Operand.prototype.is_constant = false;
 exports.Operand.prototype.name = "unknown-operand";
+exports.Operand.prototype.toString = function()    {return "[Operand " + this.name + "]";}
 
 // Operand::compute -- produce
 exports.Operand.prototype.compute = (function(widget, recur) {return new Values.V_Undefined();});
+
+
+// An operand that just throws an error.
+exports.Opd_Error = function(exception) {
+  this.exception = exception;
+}
+exports.Opd_Error.prototype = new exports.Operand();
+exports.Opd_Error.prototype.name = "error";
+exports.Opd_Error.prototype.compute = function(widget, recur)
+{
+  // Throw up
+  throw this.exception;
+}
 
 
 // String constant operand.
@@ -91,7 +105,12 @@ exports.Opd_Transclude.prototype.compute = function(widget, recur) {
     {
       this.op = Compile.compileDatum(newDatum);
     }
-    catch (err) {throw err + "\n  source: \"" + this.datum + "\"\n  from {{" + this.textReference + "}}";}
+    catch (err)
+    {
+      // Save the error
+      this.op = new exports.Opd_Error(
+        err + "\n  source: \"" + this.datum + "\"\n  from {{" + this.textReference + "}}");
+    }
   }
 
   return this.op.compute(widget, recur+1);
@@ -103,6 +122,7 @@ exports.Opd_Variable = function(variable) {
   this.variable = variable;
   this.datum = null;
   this.op = null;
+  this.compileError = null;
 }
 exports.Opd_Variable.prototype = new exports.Operand();
 exports.Opd_Variable.prototype.name = "variable";
@@ -118,7 +138,12 @@ exports.Opd_Variable.prototype.compute = function(widget, recur) {
     {
       this.op = Compile.compileDatum(newDatum);
     }
-    catch (err) {throw err + "\n  source: \"" + this.datum + "\"\n  from <<" + this.variable + ">>";}
+    catch (err)
+    {
+      // Save the error
+      this.op = new exports.Opd_Error(
+        err + "\n  source: \"" + this.datum + "\"\n  from <<" + this.variable + ">>");
+    }
   }
 
   return this.op.compute(widget, recur+1);
@@ -129,6 +154,7 @@ exports.Opd_Variable.prototype.compute = function(widget, recur) {
 exports.Opd_Filter = function(filter) {
   this.filter = filter;
   this.elements = {};
+  this.compileError = null;
 }
 exports.Opd_Filter.prototype = new exports.Operand();
 exports.Opd_Filter.prototype.name = "filter";
@@ -150,7 +176,12 @@ exports.Opd_Filter.prototype.compute = function(widget, recur) {
     {
       this.elements[expr] = {count: 1, op: Compile.compileDatum(expr)};
     }
-    catch (err) {throw err + "\n  source: \"" + expr + "\"\n  from \"" + this.filter + "\"";}
+    catch (err)
+    {
+      // Save the error
+      this.elements[expr] = new exports.Opd_Error(
+        err + "\n  source: \"" + expr + "\"\n  from \"" + this.filter + "\"");
+    }
   }
   
 
