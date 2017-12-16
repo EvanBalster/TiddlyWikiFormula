@@ -40,8 +40,13 @@ FormulaWidget.prototype.execute = function() {
 	// Get parameters from our attributes
 	this.formula   = this.getAttribute("formula");
 	this.debug     = this.getAttribute("debug");
-	var vPrecision = this.getAttribute("toPrecision") || this.getVariable("formulaPrecision");
-	var vFixed     = this.getAttribute("toFixed")     || this.getVariable("formulaFixed");
+
+	var self = this;
+	this.format =
+	{
+		fixed:     (this.getAttribute("toFixed")     || this.getVariable("formulaFixed")),
+		precision: (this.getAttribute("toPrecision") || this.getVariable("formulaPrecision")),
+	};
 
 	// Compile the formula, if it has changed, yielding compiledFormula
 	if(this.formula !== oldFormula) {
@@ -50,7 +55,7 @@ FormulaWidget.prototype.execute = function() {
 			{
 				this.compiledFormula = Formulas.compileFormula(this.formula);
 			}
-			catch (err) {this.compiledFormula = new Operands.Opd_String(err);}
+			catch (err) {this.compiledFormula = new Operands.Opd_Error(err);}
 		}
 		else {
 			this.compiledFormula = null;
@@ -59,9 +64,7 @@ FormulaWidget.prototype.execute = function() {
 
 	// Compute the formula, yielding currentValue
 	if(this.compiledFormula) {
-		var numberFormat = null;
-		if      (vFixed    ) numberFormat = function(num) {return num.toFixed    (vFixed);};
-		else if (vPrecision) numberFormat = function(num) {return num.toPrecision(vPrecision);};
+		var numberFormat = Formulas.numberFormatSelect(this.format);
 		this.currentValue = Formulas.computeFormula(this.compiledFormula, this, numberFormat, Boolean(this.debug));
 	} else {
 		this.currentValue = "`Error: formula not assigned`";

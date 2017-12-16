@@ -1,0 +1,42 @@
+created: 20171216220518577
+modified: 20171216221207512
+tags: Widget
+title: FormulaVarsWidget
+type: text/vnd.tiddlywiki
+
+!Introduction
+
+The `<$formula-vars>` widget works like TiddlyWiki's $vars widget, except each attribute is computed as a formula before being assigned to a variable.
+
+
+!Attributes
+
+|Attribute|Description|h
+|{attributes not starting with $}|Each attribute name specifies a variable name.  The attribute value is evaluated as a formula and the result is assigned to the variable.|
+|$toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
+|$toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
+
+
+!Examples
+
+```
+<$formula-vars
+  catch="14+8"
+  fahrenheit="6^3+5^3+4^3+3^3+2^3+11">
+
+* Catch-<<catch>>
+* Fahrenheit <<fahrenheit>>
+
+</$formula-vars>
+```
+
+<<<
+<$formula-vars
+  catch="14+8"
+  fahrenheit=6^3+5^3+4^3+3^3+2^3+11>
+
+* Catch-<<catch>>
+* Fahrenheit <<fahrenheit>>
+
+</$formula-vars>
+<<<

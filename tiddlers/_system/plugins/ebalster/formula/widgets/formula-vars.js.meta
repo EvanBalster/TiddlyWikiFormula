@@ -1,0 +1,7 @@
+created: 20171216003055342
+description: As the $vars widget, but each attribute is interpreted as a formula.
+modified: 20171216010219036
+module-type: widget
+tags: 
+title: $:/plugins/ebalster/formula/widgets/formula-vars
+type: application/javascript

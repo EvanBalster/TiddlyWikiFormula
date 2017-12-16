@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20171216192803590
+modified: 20171216221234829
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
@@ -58,6 +58,7 @@ Drag-and-drop this to your wiki:
 ** [[Functions]]
 ** [[Operators]]
 ** [[FormulaWidget]]
+** [[FormulaVarsWidget]]
 ** [[FormulaMacro]]
 * Under the hood
 ** [[Extending Formulas]]

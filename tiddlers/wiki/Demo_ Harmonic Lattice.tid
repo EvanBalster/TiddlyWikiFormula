@@ -1,43 +1,42 @@
 created: 20171215221052525
-modified: 20171216010423947
+modified: 20171216220454488
 tags: 
 title: Demo: Harmonic Lattice
 type: text/vnd.tiddlywiki
 
 \define slider(field) <$edit-text field="$field$" type=range/>
 
-<$tiddler tiddler="$:/temp/SvgSlider">
+<$tiddler tiddler="$:/state/demo_harmonic_lattice">
 
 Meet the "harmonic lattice".
 
 |!Interpolation|linear|<<slider interpolate>>|log|{{!!interpolate}}%|
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -10 300 160" width="640">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -10 300 150" width="640">
 <g style="font-size: 4pt; align: center;">
 <!--            -->
 <!--            -->
 <!--            -->
-<$vars lattice="1 2 3 4 5 6 7 8 9 10 11 12">
+<$vars lattice="1 2 3 4 5 6 7 8 9">
 <$list variable="den" filter=<<lattice>> >
 <$list variable="num" filter=<<lattice>> >
-<$vars
-  xl=<<formula "120*(<<num>>/<<den>>)-120">>
-  yl=<<formula "20*(max(<<num>>,<<den>>)-1)">>
-  xe=<<formula "40*log2(<<num>>/<<den>>)">>
-  ye=<<formula "40*log2(max(<<num>>,<<den>>))">>
-  lerp=<<formula "{{!!interpolate}}*.01">> >
-<$vars
-  y=<<formula "<<yl>>+(<<ye>>-<<yl>>)*<<lerp>>">>
-  x=<<formula "<<xl>>+(<<xe>>-<<xl>>)*<<lerp>>">> >
+<$formula-vars
+  xl="120*(<<num>>/<<den>>)-120"
+  yl="15*(max(<<num>>,<<den>>)-1)"
+  xe="40*log2(<<num>>/<<den>>)"
+  ye="40*log2(max(<<num>>,<<den>>))"
+  lerp="{{!!interpolate}}*.01">
+<$formula-vars
+  x="<<xl>>+(<<xe>>-<<xl>>)*<<lerp>>"
+  y="<<yl>>+(<<ye>>-<<yl>>)*<<lerp>>">
 <line x1=<<x>> y1=<<y>> x2=<<x>> y2=300 style="stroke-width: 2; stroke: red; opacity:.2;"/>
-<circle cx=<<x>> cy=<<y>> r=5 style="fill: lightgray; opacity: .75;"/>
+<circle cx=<<x>> cy=<<y>> r=5 style="fill: lightgray; opacity: 1;"/>
 <g transform="translate(0, 2)">
-<text x=<<x>> y=<<y>> text-anchor=middle>
-<<num>>/<<den>>
-</text>
+<text x=<<x>> y=<<y>> text-anchor=middle><<num>>/<<den>></text>
 </g>
-</$vars>
-</$vars>
+</$formula-vars>
+</$formula-vars>
+</$set>
 </$list>
 </$list>
 </$vars>

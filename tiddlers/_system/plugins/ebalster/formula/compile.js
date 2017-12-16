@@ -194,6 +194,15 @@ exports.evalFormula = function(formulaString, widget, numberFormat=null, debug=f
   return exports.computeFormula(compiledFormula, widget, numberFormat, debug);
 };
 
+exports.numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);}}
+exports.numberFormatPrecision = function(vPrecision) {return function(num) {return num.toPrecision(vPrecision);}}
+exports.numberFormatSelect = function(settings)
+{
+  if (!isNaN(settings.fixed))     return exports.numberFormatFixed    (settings.fixed);
+  if (!isNaN(settings.precision)) return exports.numberFormatPrecision(settings.precision);
+  return String;
+}
+
 
 
 // Compile an operator
