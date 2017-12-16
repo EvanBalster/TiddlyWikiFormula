@@ -1,10 +1,10 @@
 created: 20171212014005571
-modified: 20171215045241266
+modified: 20171216192803590
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
 
-\define formulaFixed() 2
+\define formulaFixed() 3
 
 \define example(what, code) <tr><th>$what$</th><td>`$code$`</td><td>$code$</td></tr>
 
@@ -36,10 +36,12 @@ Drag-and-drop this to your wiki:
 <<example transclusion "(= {{Soda-Pop!!value}} =)">>
 <$macrocall $name=example what=variables code="(= <<now>> =)"/>
 <<example filters "(= [tag[Expenses]] =)">>
-<<example "complex<br/>formulas" "(= 5*sum([tag[Expenses]get[value]]) =)">>
+<<example "complex<br/>formulas" "(= round(5*sum([tag[Expenses]get[value]]), 2) =)">>
 <<example strings """(= "hello" =)""">>
 <<example concatenation """(= '$' & 45.23*12 & " cost" =)""">>
 </table>
+
+(Precision set to <<formulaFixed>> decimal places)
 
 
 !Try Me

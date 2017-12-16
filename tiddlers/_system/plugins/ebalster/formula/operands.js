@@ -1,5 +1,5 @@
 /*\
-title: $:/core/modules/macros/csvtiddlers.js
+title: $:/plugins/ebalster/formula/operands.js
 type: application/javascript
 module-type: macro
 

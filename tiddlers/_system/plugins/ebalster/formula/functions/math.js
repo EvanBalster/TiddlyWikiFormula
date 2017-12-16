@@ -147,16 +147,17 @@ function genCeilFloor(operands, func)
     switch (operands.length)
     {
     case 1: return function(a)    {return new V_Num(func(a.asNum()));};
-    case 2: return function(a, b) {var prec = b.asNum(); return func(a.asNum()/prec) * prec;};
+    case 2: return function(a, b) {var prec = b.asNum(); return new V_Num(func(a.asNum()/prec) * prec);};
     }
 }
 
 function genRound(operands, func)
 {
+    var lndigit = Math.log(.1);
     switch (operands.length)
     {
     case 1: return function(a)    {return new V_Num(func(a.asNum()));};
-    case 2: return function(a, b) {var prec = Math.pow(10, b.asNum()); return func(a.asNum()/prec) * prec;};
+    case 2: return function(a, b) {var prec = Math.exp(lndigit*b.asNum()); return new V_Num(func(a.asNum()/prec) * prec);};
     }
 }
 

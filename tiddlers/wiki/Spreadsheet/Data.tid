@@ -1,5 +1,5 @@
 created: 20171214072454047
-modified: 20171215044808781
+modified: 20171216012927936
 tags: 
 title: Spreadsheet/Data
 type: application/json
@@ -9,5 +9,6 @@ type: application/json
     "b1": "(=a1=)",
     "c1": "(=sum(a1, b1)=)",
     "d1": "",
-    "c2": "(=c1=)"
+    "c2": "(=c1=)",
+    "d2": ""
 }

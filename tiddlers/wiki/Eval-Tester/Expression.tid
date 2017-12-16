@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171215023115641
+modified: 20171216192811924
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-choose(1, 1, 2, 3)
+round(pi, 4)
