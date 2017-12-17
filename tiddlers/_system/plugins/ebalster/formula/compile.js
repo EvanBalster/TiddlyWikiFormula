@@ -120,6 +120,13 @@ exports.compileExpression = function(expression) {
 
 exports.compileDatum = function(datum) {
 
+  // Short-hand formula
+  if (datum.charAt(0) == "=") {
+    var parser = new Parser(datum);
+    parser.pos = 1;
+    return buildExpression(parser);
+  }
+
   // Could be a number?
   if (rxDatumIsDecimal.test(datum)) {
     // Treat as a number constant
