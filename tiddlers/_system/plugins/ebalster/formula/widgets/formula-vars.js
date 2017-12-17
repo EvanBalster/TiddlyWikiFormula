@@ -38,15 +38,12 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 	// Parse variables
 	var self = this;
 
-	var vPrecision = this.getAttribute("$toPrecision") || this.parentWidget.getVariable("formulaPrecision");
-	var vFixed     = this.getAttribute("$toFixed")     || this.parentWidget.getVariable("formulaFixed");
-
-	this.format =
+	this.formatOptions =
 	{
-		fixed:     (this.getAttribute("$toFixed")     || this.parentWidget.getVariable("formulaFixed")),
-		precision: (this.getAttribute("$toPrecision") || this.parentWidget.getVariable("formulaPrecision")),
+		fixed:      (this.getAttribute("$toFixed")     || this.parentWidget.getVariable("formulaFixed")),
+		precision:  (this.getAttribute("$toPrecision") || this.parentWidget.getVariable("formulaPrecision")),
+		dateFormat: (this.getAttribute("$dateFormat")  || this.parentWidget.getVariable("formulaDateFormat")),
 	};
-	var numberFormat = Formulas.numberFormatSelect(this.format);
 
 	if (!this.currentValues)
 	{
@@ -71,7 +68,7 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 			// Recompute the formula
 			if (self.formulaComp[key]) {
 				self.currentValues[key] = Formulas.computeFormula(
-					self.formulaComp[key], self, numberFormat);
+					self.formulaComp[key], self, self.formatOptions);
 			}
 			else {
 				self.currentValues[key] = "Error: formula not assigned";

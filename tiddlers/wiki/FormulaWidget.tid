@@ -1,5 +1,5 @@
 created: 20171212074056811
-modified: 20171216221220105
+modified: 20171217225852436
 tags: Widget
 title: FormulaWidget
 type: text/vnd.tiddlywiki
@@ -15,6 +15,7 @@ The `<$formula>` widget computes a formula and returns its result as WikiText.
 |formula|The formula string to be evaluated.|
 |toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
 |toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
+|dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.  (Defaults to variable `<<formulaDateFormat>>`.)|
 |debug|Whether to include debug information in the output.  (Defaults to 0.)|
 
 

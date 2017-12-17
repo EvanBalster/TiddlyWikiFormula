@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171217224747595
+modified: 20171217230054451
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-weeknum(date(2021, 1, 1))
+add_days(now, 800000)

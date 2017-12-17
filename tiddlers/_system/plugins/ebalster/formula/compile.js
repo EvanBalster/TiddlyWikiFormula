@@ -187,11 +187,21 @@ exports.compileFormula = function(formulaString)
   catch (err)    {return new Operands.Opd_Text("`FormulaError: " + err + "`");}
 }
 
-exports.computeFormula = function(compiledFormula, widget, numberFormat=null, debug=false) {
+var numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);}}
+var numberFormatPrecision = function(vPrecision) {return function(num) {return num.toPrecision(vPrecision);}}
+var numberFormatSelect    = function(settings)
+{
+  if (!isNaN(settings.fixed))     return numberFormatFixed    (settings.fixed);
+  if (!isNaN(settings.precision)) return numberFormatPrecision(settings.precision);
+  return String;
+}
+
+exports.computeFormula = function(compiledFormula, widget, formatOptions=null, debug=false) {
   
   var value;
 
-  Values.NumberFormatFunc = numberFormat;
+  Values.NumberFormatFunc = numberFormatSelect(formatOptions);
+  Values.DateFormat = formatOptions.dateFormat || "0hh:0mm, DDth MMM YYYY";
 
   // Compute a value from the root operand of the compiled formula.
   try
@@ -209,7 +219,7 @@ exports.computeFormula = function(compiledFormula, widget, numberFormat=null, de
   catch (err)    {return "`ValueError: " + String(err) + "\nvalue: " + String(value) + "`";}
 };
 
-exports.evalFormula = function(formulaString, widget, numberFormat=null, debug=false) {
+exports.evalFormula = function(formulaString, widget, formatOptions=null, debug=false) {
   
   var compiledFormula;
 
@@ -221,17 +231,8 @@ exports.evalFormula = function(formulaString, widget, numberFormat=null, debug=f
   catch (err)    {return "`FormulaError: " + String(err) + "`";}
 
   // Compute the formula
-  return exports.computeFormula(compiledFormula, widget, numberFormat, debug);
+  return exports.computeFormula(compiledFormula, widget, formatOptions, debug);
 };
-
-exports.numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);}}
-exports.numberFormatPrecision = function(vPrecision) {return function(num) {return num.toPrecision(vPrecision);}}
-exports.numberFormatSelect = function(settings)
-{
-  if (!isNaN(settings.fixed))     return exports.numberFormatFixed    (settings.fixed);
-  if (!isNaN(settings.precision)) return exports.numberFormatPrecision(settings.precision);
-  return String;
-}
 
 
 

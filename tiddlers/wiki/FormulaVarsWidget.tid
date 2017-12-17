@@ -1,5 +1,5 @@
 created: 20171216220518577
-modified: 20171216221207512
+modified: 20171217225909394
 tags: Widget
 title: FormulaVarsWidget
 type: text/vnd.tiddlywiki
@@ -15,6 +15,7 @@ The `<$formula-vars>` widget works like TiddlyWiki's $vars widget, except each a
 |{attributes not starting with $}|Each attribute name specifies a variable name.  The attribute value is evaluated as a formula and the result is assigned to the variable.|
 |$toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
 |$toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
+|$dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.  (Defaults to variable `<<formulaDateFormat>>`.)|
 
 
 !Examples

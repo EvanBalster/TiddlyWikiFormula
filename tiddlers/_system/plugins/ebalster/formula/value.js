@@ -5,7 +5,7 @@
 
 exports.NumberFormatFunc = null;
 
-exports.DateFormat = null;
+exports.DateFormat = "0hh:0mm, DDth MMM YYYY";
 
 
 // Base type for formula values
@@ -103,7 +103,7 @@ exports.V_Date = function(value) {
 }
 exports.V_Date.prototype = new exports.Value();
 exports.V_Date.prototype.get      = function()    {return this.value;}
-exports.V_Date.prototype.asString = function()    {return $tw.utils.formatDateString(this.value, exports.DateFormat || "0hh:0mm, DDth MMM YYYY");}
+exports.V_Date.prototype.asString = function()    {return $tw.utils.formatDateString(this.value, exports.DateFormat);}
 exports.V_Date.prototype.asNum    = function()    {throw "Date-to-Number conversion usupported"}
 exports.V_Date.prototype.asSum    = function()    {throw "Date-to-Number conversion usupported"}
 exports.V_Date.prototype.asDate   = function()    {return this.value;}

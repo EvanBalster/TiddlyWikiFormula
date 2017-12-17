@@ -42,10 +42,11 @@ FormulaWidget.prototype.execute = function() {
 	this.debug     = this.getAttribute("debug");
 
 	var self = this;
-	this.format =
+	this.formatOptions =
 	{
-		fixed:     (this.getAttribute("toFixed")     || this.getVariable("formulaFixed")),
-		precision: (this.getAttribute("toPrecision") || this.getVariable("formulaPrecision")),
+		fixed:      (this.getAttribute("toFixed")     || this.getVariable("formulaFixed")),
+		precision:  (this.getAttribute("toPrecision") || this.getVariable("formulaPrecision")),
+		dateFormat: (this.getAttribute("dateFormat")  || this.getVariable("formulaDateFormat")),
 	};
 
 	// Compile the formula, if it has changed, yielding compiledFormula
@@ -64,8 +65,7 @@ FormulaWidget.prototype.execute = function() {
 
 	// Compute the formula, yielding currentValue
 	if(this.compiledFormula) {
-		var numberFormat = Formulas.numberFormatSelect(this.format);
-		this.currentValue = Formulas.computeFormula(this.compiledFormula, this, numberFormat, Boolean(this.debug));
+		this.currentValue = Formulas.computeFormula(this.compiledFormula, this, this.formatOptions, Boolean(this.debug));
 	} else {
 		this.currentValue = "`Error: formula not assigned`";
 	}
