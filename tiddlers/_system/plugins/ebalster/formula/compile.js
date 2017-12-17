@@ -7,7 +7,6 @@ var Operands  = require("$:/plugins/ebalster/formula/operands.js");
 var Operators = require("$:/plugins/ebalster/formula/operators.js");
 
 var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
-var rxDatumIsDecimal      = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
 var rxDatumIsTrue         = /^s*TRUE\s*$/i;
 var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 
@@ -21,8 +20,13 @@ var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
 var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
 
-var rxUnsignedDecimal =      /((\d+(\.\d*)?)|(\.\d+))/g
-var rxDecimal         = /[+-]?((\d+(\.\d*)?)|(\.\d+))/g
+var rxUnsignedDecimal =          /((\d+(\.\d*)?)|(\.\d+))/g
+var rxDecimal         =     /[+-]?((\d+(\.\d*)?)|(\.\d+))/g
+var rxDatumIsDecimal  = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
+
+var rxDate            =     /\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d+)?)?)?/g;
+var rxDatumIsDate     = /^\s*\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d{3})?)?)?\s*$/;
+var rxDateFragment    = /\d+/g;
 
 var rxString          = /("(\\.|[^"\\])*"|'(\\.|[^'\\])*')/g
 
@@ -142,6 +146,25 @@ exports.compileDatum = function(datum) {
   // Booleans?
   if (rxDatumIsFalse.test(datum)) return new Operands.Opd_Bool(false);
   if (rxDatumIsTrue .test(datum)) return new Operands.Opd_Bool(true);
+
+  // Date?
+  if (rxDatumIsDate.test(datum))
+  {
+    rxDateFragment.lastIndex = 0;
+    var parts = [];
+    while (true)
+    {
+      var res = rxDateFragment.exec(datum);
+      if (!res) break;
+      parts.push(parseInt(res[0]));
+    }
+    if (parts.length)
+    {
+      return new Operands.Opd_Date(new Date(
+        parts[0], parts[1] || 0, parts[2] || 1,
+        parts[3] || 0, parts[4] || 0, parts[5] || 0, parts[6] || 0));
+    }
+  }
 
   // Otherwise, treat as a string constant
   return new Operands.Opd_Text(datum);

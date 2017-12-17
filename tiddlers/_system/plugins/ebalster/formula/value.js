@@ -5,6 +5,8 @@
 
 exports.NumberFormatFunc = null;
 
+exports.DateFormat = null;
+
 
 // Base type for formula values
 exports.Value = function() {
@@ -58,16 +60,6 @@ exports.V_Undefined.prototype = new exports.Value();
 exports.V_Undefined.prototype.get = function()    {return undefined;}
 
 
-// String value.
-exports.V_Text = function(value) {
-  this.name = "string";
-
-  this.value = value;
-}
-exports.V_Text.prototype = new exports.Value();
-exports.V_Text.prototype.get = function()    {return this.value;}
-
-
 // Array value.
 exports.V_Array = function(value) {
   this.name = "array";
@@ -91,7 +83,30 @@ exports.V_Array.prototype.asString     = function() {
 }
 
 
-// Number value.
+// String value.
+exports.V_Text = function(value) {
+  this.name = "string";
+
+  this.value = value;
+}
+exports.V_Text.prototype = new exports.Value();
+exports.V_Text.prototype.get = function()    {return this.value;}
+
+
+// Date value.
+exports.V_Date = function(value) {
+  this.name = "date";
+
+  this.value = value;
+}
+exports.V_Date.prototype = new exports.Value();
+exports.V_Date.prototype.get      = function()    {return this.value;}
+exports.V_Date.prototype.asString = function()    {return $tw.utils.formatDateString(this.value, exports.DateFormat || "0hh:0mm, DDth MMM YYYY");}
+exports.V_Date.prototype.asNum    = function()    {throw "Date-to-Number conversion usupported"}
+exports.V_Date.prototype.asSum    = function()    {throw "Date-to-Number conversion usupported"}
+
+
+// Boolean value.
 exports.V_Bool = function(value) {
   this.name = "boolean";
 
@@ -100,7 +115,7 @@ exports.V_Bool = function(value) {
 exports.V_Bool.prototype = new exports.Value();
 exports.V_Bool.prototype.get      = function()    {return this.value;}
 exports.V_Bool.prototype.asString = function()    {return this.value ? "TRUE" : "FALSE";}
-exports.V_Bool.prototype.asNum = function()    {return this.value ? 1 : 0;}
+exports.V_Bool.prototype.asNum    = function()    {return this.value ? 1 : 0;}
 exports.V_Bool.prototype.asSum    = function()    {return this.value ? 1 : 0;}
 
 
@@ -113,7 +128,7 @@ exports.V_Num = function(value) {
 exports.V_Num.prototype = new exports.Value();
 exports.V_Num.prototype.get      = function()    {return this.value;}
 exports.V_Num.prototype.asString = function()    {return (exports.NumberFormatFunc || String)(this.value);}
-exports.V_Num.prototype.asNum = function()    {return this.value;}
+exports.V_Num.prototype.asNum    = function()    {return this.value;}
 exports.V_Num.prototype.asSum    = function()    {return this.value;}
 
 

@@ -52,6 +52,21 @@ exports.Opd_Text.prototype.compute = function(widget, recur)
 }
 
 
+// Date constant operand.
+exports.Opd_Date = function(value) {
+  this.value = value;
+}
+exports.Opd_Date.prototype = new exports.Operand();
+exports.Opd_Date.prototype.name = "date";
+exports.Opd_Date.prototype.is_constant = true;
+
+exports.Opd_Date.prototype.compute = function(widget, recur)
+{
+  // Returns a string value
+  return new Values.V_Date(this.value);
+}
+
+
 // Boolean constant operand.
 exports.Opd_Bool = function(value) {
   this.value = value;
