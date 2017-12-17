@@ -39,16 +39,17 @@ exports.Value.prototype.asSum = function() {
   return n;
 }
 
-// Get the value as a string
+// More convertsions
 exports.Value.prototype.asString = function() {
   return String(this.get());
 }
-
-// Get the value as an array
 exports.Value.prototype.asArray = function() {
   var v = this.get();
   if (Array.isArray(v)) return v;
   else return [v];
+}
+exports.Value.prototype.asDate = function() {
+  throw "Cannot convert " + this.describe() + " to a date!";
 }
 
 
@@ -90,7 +91,8 @@ exports.V_Text = function(value) {
   this.value = value;
 }
 exports.V_Text.prototype = new exports.Value();
-exports.V_Text.prototype.get = function()    {return this.value;}
+exports.V_Text.prototype.get    = function()    {return this.value;}
+//exports.V_Text.prototype.asDate = function() {return $tw.utils.parseDate();}
 
 
 // Date value.
@@ -104,6 +106,7 @@ exports.V_Date.prototype.get      = function()    {return this.value;}
 exports.V_Date.prototype.asString = function()    {return $tw.utils.formatDateString(this.value, exports.DateFormat || "0hh:0mm, DDth MMM YYYY");}
 exports.V_Date.prototype.asNum    = function()    {throw "Date-to-Number conversion usupported"}
 exports.V_Date.prototype.asSum    = function()    {throw "Date-to-Number conversion usupported"}
+exports.V_Date.prototype.asDate   = function()    {return this.value;}
 
 
 // Boolean value.
