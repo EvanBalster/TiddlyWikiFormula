@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20171217220719825
+modified: 20171217230336077
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
@@ -10,7 +10,7 @@ type: text/vnd.tiddlywiki
 
 !Welcome!
 
-This wiki demonstrates the ''Formula'' plugin for TiddlyWiki.
+This wiki demonstrates the ''Formula'' plugin for TiddlyWiki (version {{$:/plugins/ebalster/formula!!version}}).
 
 The plugin is designed to give TiddlyWiki the ability to process numbers and other data just like popular spreadsheet software.
 

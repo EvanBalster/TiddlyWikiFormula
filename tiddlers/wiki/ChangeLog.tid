@@ -1,10 +1,10 @@
 created: 20171216221810025
-modified: 20171217220715955
+modified: 20171217230424873
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
-!!! 0.1.1 — unreleased
+!!! 0.1.1 — 2017 December 17
 
 * Add [[FormulaVarsWidget]].
 * Add preliminary support for dates.
