@@ -1,10 +1,10 @@
 created: 20171212014005571
-modified: 20171216221234829
+modified: 20171217220719825
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
 
-\define formulaFixed() 3
+\define formulaFixed() 2
 
 \define example(what, code) <tr><th>$what$</th><td>`$code$`</td><td>$code$</td></tr>
 
@@ -61,6 +61,7 @@ Drag-and-drop this to your wiki:
 ** [[FormulaVarsWidget]]
 ** [[FormulaMacro]]
 * Under the hood
+** [[ChangeLog]]
 ** [[Extending Formulas]]
 ** [[Plugin Design]]
 ** [[Source Code]]

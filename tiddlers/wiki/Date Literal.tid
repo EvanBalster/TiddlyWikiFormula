@@ -1,0 +1,15 @@
+created: 20171217215558004
+modified: 20171217220533053
+tags: Syntax
+title: Date Literal
+type: text/vnd.tiddlywiki
+
+A ''Date Literal'' specifies a date and optionally a 24-hour time.  The time may include seconds and milliseconds.
+
+```
+2017-12-15
+2017-12-15 13:07
+2017-12-15 13:07
+```
+
+Date literals can be used in a [[Datum]] but not in a [[Formula]].  Use the DATE function to create dates in formulas.

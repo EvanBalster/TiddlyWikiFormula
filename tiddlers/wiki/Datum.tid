@@ -1,17 +1,19 @@
-bnf: <Formula> | <Transclusion> | <RawValue>
+bnf: <Datum> ::= <DatumFormula> | <Transclusion> | <Variable> | <Date> | <Number> | <RawValue>
 created: 20171211224412729
-modified: 20171212073722988
+modified: 20171217221435624
 tags: Syntax
 title: Datum
 type: text/vnd.tiddlywiki
 
 A ''Datum'' is some text that may be included into a formula by a [[Transclusion]], [[Filter Run]] or [[Variable]].  It can be:
 
-* A [[Formula]] in mushroom brackets `(= =)`
+* A [[Formula]] starting with an equals sign `=` (spreadsheet style).
+* A [[Formula]] in mushroom brackets `(= =)` ([[wikitext style|Formulas in WikiText]])
 * A [[Transclusion]] in curly braces `{{ }}` (yielding another ''Datum'').
 * A [[Variable]] in pointy braces `<< >>` (yielding another ''Datum'').
 * Some other value, which is treated as a constant.
-** A [[Number Literal]]
+** A [[Number Literal]] such as `1.23`
+** A [[Date Literal]] such as `2017-12-15`
 ** Arbitrary text
 
 A ''Datum'' is analog to a cell in spreadsheet software.

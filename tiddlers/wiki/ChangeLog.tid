@@ -1,0 +1,24 @@
+created: 20171216221810025
+modified: 20171217220715955
+tags: 
+title: ChangeLog
+type: text/vnd.tiddlywiki
+
+!!! 0.1.1 — unreleased
+
+* Add [[FormulaVarsWidget]].
+* Add preliminary support for dates.
+** [[Date Literal]] in `YYYY-MM-DD` format.
+** A selection of new [[Functions]] for composing, decomposing and offsetting dates.
+* Spreadsheet workflow accommodations
+** Add [[Cell Reference]]s for use with data tiddlers
+** Add shorthand style for formula [[Datum]].
+* Fix an error with the second parameter in rounding functions.
+* Fixed errors not displaying when included by filter, transclusion or variable
+* Various other small changes
+
+!!!0.1.0 — 2017 December 14
+
+* Initial public release.
+* Includes number, string & array datatypes and a library of math & logic functions
+* Includes syntax for single "cell references"
