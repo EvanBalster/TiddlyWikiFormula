@@ -11,21 +11,24 @@ var V_Num  = Val.V_Num;
 
 
 /*!
- * iso-week <https://github.com/jonschlinkert/iso-week>
- *
- * Copyright (c) 2014 Jon Schlinkert, contributors.
- * Licensed under the MIT license.
- * 
- * THIS FUNCTION APPEARS TO BE BUGGY
+ * isoWeekNum from pikaday <https://github.com/actano/Pikaday>
  */
-function isoWeekOfYear(date, firstday=4) {
+function isoWeekOfYear(date, dayInFirstWeek = 4) {
     date = date instanceof Date ? date : new Date();
-    var res = new Date(date.valueOf());
-    var day = (date.getDay() + 6) % 7;
-    res.setDate(res.getDate() - day + 3);
-    var first = new Date(res.getFullYear(), 0, firstday);
-    var days = Math.floor((res - first) / 86400000);
-    return 1 + Math.ceil(days / 7);
+    date.setHours(0, 0, 0, 0);
+    var yearDay        = date.getDate()
+      , weekDay        = date.getDay()
+      , dayShift       = dayInFirstWeek - 1 // counting starts at 0
+      , daysPerWeek    = 7
+      , prevWeekDay    = function(day) { return (day + daysPerWeek - 1) % daysPerWeek; }
+    ;
+    date.setDate(yearDay + dayShift - prevWeekDay(weekDay));
+    var jan4th      = new Date(date.getFullYear(), 0, dayInFirstWeek)
+      , msPerDay    = 24 * 60 * 60 * 1000
+      , daysBetween = (date.getTime() - jan4th.getTime()) / msPerDay
+      , weekNum     = 1 + Math.round((daysBetween - dayShift + prevWeekDay(jan4th.getDay())) / daysPerWeek)
+    ;
+    return weekNum;
 };
 function isLeapYear(year) {
     return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
@@ -112,7 +115,7 @@ exports.tw_date = function(timestamp) {
 
 // Stringify as TiddlyWiki date
 exports.to_tw_date = function(date) {
-    return $tw.utils.stringifyDate(date.asDate());
+    return new V_String($tw.utils.stringifyDate(date.asDate()));
 }
 
 // Create ISO date
