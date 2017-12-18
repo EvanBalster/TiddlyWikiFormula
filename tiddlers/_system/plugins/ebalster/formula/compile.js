@@ -168,7 +168,7 @@ exports.compileDatum = function(datum) {
     if (parts.length)
     {
       return new Operands.Opd_Date(new Date(
-        parts[0], parts[1] || 0, parts[2] || 1,
+        parts[0], (parts[1] || 1)-1, parts[2] || 1,
         parts[3] || 0, parts[4] || 0, parts[5] || 0, parts[6] || 0));
     }
   }
