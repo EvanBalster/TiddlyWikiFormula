@@ -1,5 +1,5 @@
 created: 20171214064708742
-modified: 20171214065028691
+modified: 20171218190926537
 tags: Function
 title: SWITCH Function
 type: text/vnd.tiddlywiki
@@ -9,3 +9,17 @@ The `SWITCH` function takes a test value, followed by some pairs of case values 
 ```
 SWITCH(test, case1, result1, case2, result2, ... [default])
 ```
+
+For example, we can display the name of the current weekday with this formula:
+
+```
+switch(weekday(now),
+  1, "Sun", 2, "Mon", 3, "Tue", 4, "Wed",
+  5, "Thu", 6, "Fri", 7, "Sat",
+  "ERROR")
+```
+
+(= switch(weekday(now),
+  1, "Sun", 2, "Mon", 3, "Tue", 4, "Wed",
+  5, "Thu", 6, "Fri", 7, "Sat",
+  "ERROR") =)

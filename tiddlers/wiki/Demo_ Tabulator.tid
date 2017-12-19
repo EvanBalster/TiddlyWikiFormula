@@ -1,0 +1,46 @@
+created: 20171218170936546
+modified: 20171218191642209
+tags: Demo
+title: Demo: Tabulator
+type: text/vnd.tiddlywiki
+
+<!-- note: we want dates in this format, and numbers displayed with two digits after the decimal point. -->
+
+<$vars formulaDateFormat="DD/mmm/YYYY" formulaFixed="2">
+
+<table>
+<!-- This first row is the table header. -->
+<tr>
+  <th>Date</th>
+  <th>Description</th>
+  <th>Cost</th>
+</tr>
+<!-- This $list widget will show each of our expenses. -->
+<$list filter="[prefix[Demo]tag[Expense]]">
+<tr>
+  <td> <$link>(= {{!!date}} =)</$link> </td>
+  <td> {{!!summary}} </td>
+  <td> {{!!cost}} </td>
+</tr>
+</$list>
+<!-- This row calculates a total. -->
+<tr>
+  <td colspan="3"> <hr/> </td>
+</tr>
+<!-- This row calculates a total using SUM. -->
+<tr>
+  <th> </th>
+  <th> TOTAL: </th>
+  <th>
+    (= sum([prefix[Demo]tag[Expense]get[cost]]) =)
+  </th>
+</tr>
+<!-- This row shows our average per day. This is a bit more complex! -->
+<tr>
+  <td> </td>
+  <td> Average per day (December): </td>
+  <td> (= sum([prefix[Demo]tag[Expense]get[cost]]) / 31 =) </td>
+</tr>
+</table>
+
+</$vars>

@@ -1,22 +1,35 @@
 created: 20171213021420297
-modified: 20171213021901878
-tags: 
+modified: 20171219000800262
+tags: Developer
 title: Extending Formulas
 type: text/vnd.tiddlywiki
 
 <<<
-This part of the documentation is incomplete.  Good luck, kid!
+''Warning'': The internal code of the Formulas plugin is still in flux.  Your extensions may "break" with future updates.
 <<<
 
 !Defining new functions
 
 Functions are loaded from tiddlers with `module-type: formula-function` at startup.
 
+Each function is assigned as a field of the module's `exports` object.
+
+Formula-Functions are usually expressed as JavaScript functions accepting some [[Value Objects|Value Object]] as arguments and returning a [[Value Object]] as a result.  Functions may throw (string) exceptions if there is a problem.
+
+Formula-Functions that behave differently based on the arguments are expressed as objects with the following fields:
+
+|Property|Meaning|h
+|select|Required.  Function taking one argument, "operands", that returns the function to be used.  The selection is usually based on the number of arguments.|
+|min_args|Optional minimum number of arguments.  Defaults to zero.|
+|min_args|Optional maximum number of arguments.  Defaults to unlimited.|
+
 See the existing function tiddlers for a starting point:
 
 <$list filter="[prefix[$:/plugins/ebalster/formula/functions/]]">
 <$link>{{!!title}}</$link><br/>
 </$list>
+
+In the future, conventions for value conversion may change.  Currently, all values are encapsulated in `V_***` objects, and must be converted to usable data using `as***` methods.  This is being reconsidered.
 
 
 !Defining new operators
@@ -34,6 +47,30 @@ is equivalent to
 ```
 add(multiply(10,3), multiply(pow(4,2), 2))
 ```
+
+Each function is assigned as a field of the module's `exports` object.
+
+Formula-Operators are expressed as objects with the following properties:
+
+|Property|Meaning|h
+| `arity`|Required.  The number of operands the operator uses.  1 means unary, 2 means binary.  Other numbers are not supported at the moment.|
+| `operator`|Required.  The operator's symbol, expressed as a string.  Should include only symbolic characters, and no spaces.|
+| `function`|Required.  The function to convert the operator into.  Should be a directly-defined formula-function taking `arity` arguments.|
+| `precedence`|Required for binary operators.  Determines order of operations.|
+| `associativity`|Optional.  Assign `"right"` to evaluate a binary operator right-to-left rather than left-to-right (the default).|
+| `position`|Required for unary operators.  `"pre"` for prefix operators, `"post"` for postfix.|
+
+Prefix unary operators are applied first, in reverse order, followed by postfix unary operators in forward order, followed by binary operators.  The predefined binary operators use this order:
+
+|Category|Operators|Precedence|Associativity|h
+|Exponents|`^`|30|right*|
+|Multiplication|`* /`|20||
+|Addition|`+ -`|10||
+|Concatenation|`&`|4||
+|Comparison|`= < <= > >= <>`|0||
+
+^^* Right-associativity is not supported yet, but will be in the future.^^
+
 
 See the existing operators for a starting point:
 
