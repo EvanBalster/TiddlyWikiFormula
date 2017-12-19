@@ -172,7 +172,7 @@ exports.date = {
     min_args: 1, max_args: 3,
     select: function(operands) {
         switch (operands.length) {
-        case 1: return exports.to_date;
+        case 1: return to_date;
         case 3: return exports.make_date;
         default: throw "Bad arguments to DATE. Should be (timestamp) or (year, month, day).";
         }
