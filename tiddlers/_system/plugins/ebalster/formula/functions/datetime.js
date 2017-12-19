@@ -36,6 +36,46 @@ function isLeapYear(year) {
 function daysInYear(year) {
     return isLeapYear(year) ? 366 : 365;
 }
+function daysInMonth(year, monthIndex) {
+    switch (monthIndex) {
+    case  0: case  2: case  4: case  6: case  7: case  9: case 11:return 31;
+    case  3: case  5: case  8: case 10: return 30;
+    case  1: return (isLeapYear(year) ? 29 : 28);
+    default: throw "daysInMonth: invalid monthIndex: " + monthIndex;
+    }
+}
+
+// Utility: Add some months or years to a date
+function dateAddMonths(date, monthDiff, yearDiff = 0) {
+    var newMonth = date.getMonth() + Math.round(monthDiff);
+    var newYear = date.getFullYear() + Math.round(yearDiff);
+
+    var yearShift = ((newMonth < 0) ? -Math.floor(-(newMonth-11)/12) : Math.floor(newMonth/12));
+    newYear  += yearShift;
+    newMonth -= 12*yearShift;
+
+    return new Date(newYear, newMonth,
+        Math.min(date.getDate(), daysInMonth(newYear, newMonth)),
+        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+}
+
+// Utility: Get date difference in whole years and months
+function dateDelta(date1, date2) {
+    if (date2.getTime() < date1.getTime())
+    {
+        var d = dateDelta(date2, date1);
+        return {years: -d.years, months: -d.months};
+    }
+    var dMonths = 12*(date2.getYear()-date1.getYear()) + (date2.getMonth()-date1.getMonth());
+    if (date2.getDate() < date1.getDate()) dMonths -= 1;
+    var dYears = Math.floor(dMonths/12);
+    //dMonths -= dYears*12;
+    /*var dDays = (new Date(
+        date1.getFullYear()+dYears, date1.getMonth()+dMonths, date2.getDate(),
+        date2.getHours(), date2.getMinutes(), date2.getSeconds(), date2.getMilliseconds()
+        ).getTime() - date1.getTime()) / 86400000;*/
+    return {years: dYears, months: dMonths};
+}
 
 
 // Get the current time
@@ -67,41 +107,32 @@ function makeTimeAddFunction(milliseconds) {
     return function(a, b) {return new V_Date(new Date(a.asDate().getTime() + b.asNum() * milliseconds));}
 }
 
+exports.years  = function(a, b) {return new V_Num(dateDelta(a.asDate(), b.asDate()).years);};
+exports.months = function(a, b) {return new V_Num(dateDelta(a.asDate(), b.asDate()).months);};
 exports.days            = makeTimeDiffFunction(86400000);
 exports.hours           = makeTimeDiffFunction( 3600000);
 exports.minutes         = makeTimeDiffFunction(   60000);
 exports.seconds         = makeTimeDiffFunction(    1000);
 exports.milliseconds    = makeTimeDiffFunction(       1);
 
+exports.add_years  = function(a, b) {return new V_Date(dateAddMonths(a.asDate(), 0, b.asNum()));};
+exports.add_months = function(a, b) {return new V_Date(dateAddMonths(a.asDate(), b.asNum()));};
 exports.add_days         = makeTimeAddFunction(86400000);
 exports.add_hours        = makeTimeAddFunction( 3600000);
 exports.add_minutes      = makeTimeAddFunction(   60000);
 exports.add_seconds      = makeTimeAddFunction(    1000);
 exports.add_milliseconds = makeTimeAddFunction(       1);
 
-/*function datedif_util(a, days) {
-    var years = 0, months = 0, reverse = (days < 0);
-    var accum = 0, baseYear = a.getFullYear(), baseMonth = a.getMonth();
-    if (reverse)
-    {
-        while (accum > days)
-        {
-
-        }
-    }
-}
-
-exports.datedif = function(a, b, c) {
+/*exports.datedif = function(a, b, c) {
     a = a.asDate();
     b = b.asDate();
-    var days = (b.getTime() - a.getTime()) / 86400000;
-    var months = 0, years = 0;
-    var years = days / 365;
     switch (c.asString().toUpperCase())
     {
-    case "D": return days;
-    case "M": return 
-    case "Y": return years;
+    case "D": return new V_Num((b.getTime() - a.getTime()) / 86400000);
+    case "M": {var d=dateDelta(a, b); return d.months+12*d.years;}
+    case "Y": return dateDelta(a, b).years;
+    case "YM": return dateDelta(a, b).months;
+    case "MD": return dateDelta(a, b).days;
     }
 };*/
 
@@ -111,6 +142,11 @@ exports.tw_date = function(timestamp) {
     var date = $tw.utils.parseDate(timestamp.asString());
     if (!date) throw "Bad timestamp: \"" + date + "\"";
     return new V_Date(date);
+}
+
+function to_date(a) {
+    if (a instanceof V_Date) return a;
+    return exports.tw_date(a);
 }
 
 // Stringify as TiddlyWiki date
@@ -136,7 +172,7 @@ exports.date = {
     min_args: 1, max_args: 3,
     select: function(operands) {
         switch (operands.length) {
-        case 1: return exports.tw_date;
+        case 1: return exports.to_date;
         case 3: return exports.make_date;
         default: throw "Bad arguments to DATE. Should be (timestamp) or (year, month, day).";
         }
