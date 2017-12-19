@@ -13,8 +13,8 @@ exports.nth = function(a, i) {
     if (! (a instanceof V_Array)) throw "NTH(a,i) function requires a is array!";
     a = a.get();
     i = Math.floor(i.asNum());
-    if (i < a.length) return a[i];
-    return new Val.V_Undefined();
+    if (i < 1 || i > a.length) return new Val.V_Undefined();
+    return a[i-1];
 }
 
 exports.first = function(a) {
