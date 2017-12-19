@@ -49,7 +49,7 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 	{
 		// Initial values
 		this.currentValues = {};
-		this.formulaSrc = {}
+		this.formulaSrc = {};
 		this.formulaComp = {};
 	}
 
@@ -75,7 +75,7 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 			}
 		}
 	});
-}
+};
 
 /*
 Compute the internal state of the widget

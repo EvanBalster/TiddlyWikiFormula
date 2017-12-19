@@ -43,14 +43,14 @@ exports.switch =
         for (var i = 1; i+1 < arguments.length; i += 2)
           {if (arguments[i].get() == value) return arguments[i+1];}
         return arguments[arguments.length-1];
-      }
+      };
     case 1: return function(a) // Switch, no default
       {
         var value = a.get();
         for (var i = 1; i+1 < arguments.length; i += 2)
           {if (arguments[i].get() == value) return arguments[i+1];}
         return new Val.V_Undefined();
-      }
+      };
     }
   }
 };
@@ -71,7 +71,7 @@ exports.ifs =
   min_args : 2,
   select : function(operands)
   {
-    if (operands.length % 2 != 0)
+    if (operands.length % 2 !== 0)
       throw "Odd number of arguments to IFS";
 
     return function()

@@ -41,7 +41,6 @@ FormulaWidget.prototype.execute = function() {
 	this.formula   = this.getAttribute("formula");
 	this.debug     = this.getAttribute("debug");
 
-	var self = this;
 	this.formatOptions =
 	{
 		fixed:      (this.getAttribute("toFixed")     || this.getVariable("formulaFixed")),
