@@ -21,11 +21,18 @@ exports.or  = function(a, b)    {return new Val.V_Bool(a.get() || b.get());};
 exports.xor = function(a, b)    {return new Val.V_Bool(a.get() ? !b.get() : !!b.get());};
 
 // Ternary
-exports.if  = function(p, a, b) {return p.get() ? a.get() : b.get();};
+exports.if  = function(p, a, b) {return p.get() ? a : b;};
 
 
 // IFERROR
-exports.iferror = function(a, b) {try {return a.get();} catch (err) {return b.get();}};
+/*exports.iferror = {
+  min_args = 2, max_args = 2,
+  func = function(a, b) {
+  select: function(operands) {
+    try {return a.compute();}
+    catch (err) {return b.compute();}
+  }
+  };*/
 
 
 // SWITCH (variadic)
