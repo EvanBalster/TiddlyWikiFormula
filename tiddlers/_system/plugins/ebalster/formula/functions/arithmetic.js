@@ -8,7 +8,7 @@ var Val = require("$:/plugins/ebalster/formula/value.js");
 
 
 // Unary sign operators
-exports.uplus  = function(a)    {return new a;};
+exports.uplus  = function(a)    {return a;};
 exports.uminus = function(a)    {return new Val.V_Num(-a.asNum());};
 
 // Add
