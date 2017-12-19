@@ -20,15 +20,15 @@ var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
 var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
 
-var rxUnsignedDecimal =          /((\d+(\.\d*)?)|(\.\d+))/g
-var rxDecimal         =     /[+-]?((\d+(\.\d*)?)|(\.\d+))/g
+var rxUnsignedDecimal =          /((\d+(\.\d*)?)|(\.\d+))/g;
+var rxDecimal         =     /[+-]?((\d+(\.\d*)?)|(\.\d+))/g;
 var rxDatumIsDecimal  = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
 
 var rxDate            =     /\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d+)?)?)?/g;
 var rxDatumIsDate     = /^\s*\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d{3})?)?)?\s*$/;
 var rxDateFragment    = /\d+/g;
 
-var rxString          = /("(\\.|[^"\\])*"|'(\\.|[^'\\])*')/g
+var rxString          = /("(\\.|[^"\\])*"|'(\\.|[^'\\])*')/g;
 
 var formulaFunctions   = null;
 var operatorsUnaryPre  = null;
@@ -45,17 +45,17 @@ function Parser(src)
 Parser.prototype.getChar = function()
 {
   return this.src.charAt(this.pos);
-}
+};
 Parser.prototype.remaining = function()
 {
   return this.src.substring(this.pos, this.end);
-}
+};
 Parser.prototype.nextToken = function()
 {
   rxNotWhitespace.lastIndex = this.pos;
   rxNotWhitespace.test(this.src);
   return this.src.substring(this.pos, rxNotWhitespace.lastIndex);
-}
+};
 Parser.prototype.match_here = function(regex)
 {
   // TODO this is doing much more work than is necessary
@@ -64,17 +64,17 @@ Parser.prototype.match_here = function(regex)
   if (!result || result.index != this.pos || result.index+result[0].length > this.end) return null;
   this.pos = regex.lastIndex;
   return result;
-}
+};
 Parser.prototype.skipWhitespace = function()
 {
   rxSkipWhitespace.lastIndex = this.pos;
   rxSkipWhitespace.test(this.src);
   this.pos = Math.min(rxSkipWhitespace.lastIndex, this.end);
-}
+};
 
 var initialize = function() {
   formulaFunctions = {};
-  var operators = {}
+  var operators = {};
   $tw.modules.applyMethods("formula-function", formulaFunctions);
   $tw.modules.applyMethods("formula-operator", operators);
 
@@ -105,7 +105,7 @@ var initialize = function() {
       break;
     }
   }
-}
+};
 
 
 exports.compileExpression = function(expression) {
@@ -119,10 +119,12 @@ exports.compileExpression = function(expression) {
 };
 
 exports.compileDatum = function(datum) {
+  
+  var parser;
 
   // Short-hand formula
   if (datum.charAt(0) == "=") {
-    var parser = new Parser(datum);
+  	parser = new Parser(datum);
     parser.pos = 1;
     return buildExpression(parser);
   }
@@ -136,7 +138,7 @@ exports.compileDatum = function(datum) {
   // Could be a formula?
   if (rxDatumIsFormula.test(datum)) {
     // Parse contents as a formula
-    var parser = new Parser(datum);
+    parser = new Parser(datum);
     parser.pos = datum.indexOf("=")+1;
     parser.end = datum.lastIndexOf("=");
     return buildExpression(parser);
@@ -146,7 +148,7 @@ exports.compileDatum = function(datum) {
   if (rxDatumIsTransclusion.test(datum) ||
       rxDatumIsVariable.test(datum)) {
     // Defer to the operand parser...
-    var parser = new Parser(datum);
+    parser = new Parser(datum);
     return buildOperand(parser);
   }
 
@@ -185,20 +187,22 @@ exports.compileFormula = function(formulaString)
     return exports.compileExpression(formulaString);
   }
   catch (err)    {return new Operands.Opd_Text("`FormulaError: " + err + "`");}
-}
+};
 
-var numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);}}
-var numberFormatPrecision = function(vPrecision) {return function(num) {return num.toPrecision(vPrecision);}}
+var numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);};};
+var numberFormatPrecision = function(vPrecision) {return function(num) {return num.toPrecision(vPrecision);};};
 var numberFormatSelect    = function(settings)
 {
   if (!isNaN(settings.fixed))     return numberFormatFixed    (settings.fixed);
   if (!isNaN(settings.precision)) return numberFormatPrecision(settings.precision);
   return String;
-}
+};
 
-exports.computeFormula = function(compiledFormula, widget, formatOptions=null, debug=false) {
+exports.computeFormula = function(compiledFormula, widget, formatOptions, debug) {
   
   var value;
+  
+  formatOptions = formatOptions || {};
 
   Values.NumberFormatFunc = numberFormatSelect(formatOptions);
   Values.DateFormat = formatOptions.dateFormat || "0hh:0mm, DDth MMM YYYY";
@@ -219,14 +223,14 @@ exports.computeFormula = function(compiledFormula, widget, formatOptions=null, d
   catch (err)    {return "`ValueError: " + String(err) + "\nvalue: " + String(value) + "`";}
 };
 
-exports.evalFormula = function(formulaString, widget, formatOptions=null, debug=false) {
+exports.evalFormula = function(formulaString, widget, formatOptions, debug) {
   
   var compiledFormula;
 
   // Compile the formula
   try
   {
-    var compiledFormula = exports.compileExpression(formulaString);
+    compiledFormula = exports.compileExpression(formulaString);
   }
   catch (err)    {return "`FormulaError: " + String(err) + "`";}
 
@@ -261,7 +265,7 @@ function parseOperator(parser, operatorGroup) {
 }
 
 // Parse a formula.
-function buildExpression(parser, nested = false) {
+function buildExpression(parser, nested) {
   
   // Make sure math functions are initialized
   if (!formulaFunctions) initialize();
@@ -271,6 +275,11 @@ function buildExpression(parser, nested = false) {
   var operands = [];
   var operators = [];
   var precedences = [];
+  var operand = null;
+  
+  var applyUnary = function(unary) {
+    operand = new Operators.CallOperator(unary.func_bind, [operand]);
+  };
 
   while (true)
   {
@@ -285,7 +294,7 @@ function buildExpression(parser, nested = false) {
     }
 
     // Grab the operand
-    var operand = buildOperand(parser);
+    operand = buildOperand(parser);
 
     // Missing operand is an error
     if (operand === null)
@@ -306,9 +315,7 @@ function buildExpression(parser, nested = false) {
       else break;
     }
 
-    unaries.forEach(function(unary) {
-      operand = new Operators.CallOperator(unary.func_bind, [operand]);
-    });
+    unaries.forEach(applyUnary);
 
     operands.push(operand);
 
@@ -348,7 +355,7 @@ function buildExpression(parser, nested = false) {
   }
 
   // Sanity check
-  if (operators.length != 0 || operands.length != 1)
+  if (operators.length !== 0 || operands.length != 1)
     throw "internal error: resoving failed; " + operands.length + " operands and " + operators.length + " operators remain";
 
   // For non-nested expressions, throw if any tokens remain.
@@ -363,7 +370,7 @@ function buildExpression(parser, nested = false) {
   }
 
   return operands[0];
-};
+}
 
 // Compile a function argument list.  Error if the next 
 function buildArguments(parser) {
@@ -397,7 +404,7 @@ function buildArguments(parser) {
   }
 
   return results;
-};
+}
 
 // Compile an operand into a function returning the operand value.
 function buildOperand(parser) {
@@ -436,7 +443,7 @@ function buildOperand(parser) {
       var args = buildArguments(parser);
 
       // Omitting arguments is only OK for constant functions
-      if (args == null)
+      if (args === null)
       {
         if (!func.isConstant) throw "Expected '(' after " + term[0];
         args = [];
@@ -476,14 +483,12 @@ function buildOperand(parser) {
     }
     ++parser.pos;
     return parentheses;
-    break;
 
   case "'":
   case "\"": // String constant
     term = parser.match_here(rxString);
     if (term) return new Operands.Opd_Text(term[0].substr(1, term[0].length-2));
     throw "Invalid string: " + parser.nextToken();
-    break;
 
   case "[": // Filter operand
     term = parser.match_here(rxOperandFilter);
@@ -503,6 +508,6 @@ function buildOperand(parser) {
 
   // Didn't recognize the operand
   return null;
-};
+}
 
 })();
