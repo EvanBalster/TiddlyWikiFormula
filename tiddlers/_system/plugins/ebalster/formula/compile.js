@@ -377,7 +377,7 @@ function buildArguments(parser) {
 
   // Zero arguments?
   parser.skipWhitespace();
-  if (parser.getChar() == ")") return [];
+  if (parser.getChar() == ")") {++parser.pos; return [];}
   
   var results = [];
 
@@ -435,10 +435,10 @@ function buildOperand(parser) {
 
       var args = buildArguments(parser);
 
-      // Omitting arguments is only OK for zero-parameter functions.
+      // Omitting arguments is only OK for constant functions
       if (args == null)
       {
-        if (func.min_args || func.length) throw "Expected '(' after " + term[0];
+        if (!func.isConstant) throw "Expected '(' after " + term[0];
         args = [];
       }
 
@@ -446,9 +446,9 @@ function buildOperand(parser) {
       {
         // Check parameter count
         if (args.length > func.length && !func.variadic)
-          throw "too many arguments for " + term[0] + " (max " + func.length + ")";
+          throw "too many arguments for " + term[0] + " (requires " + func.length + ")";
         if (args.length < func.length)
-          throw "too few arguments for " + term[0] + " (min " + func.length + ")";
+          throw "too few arguments for " + term[0] + (func.variadic?" (min ":" (requires ") + func.length + ")";
       }
       else
       {

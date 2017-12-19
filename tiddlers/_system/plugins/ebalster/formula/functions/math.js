@@ -14,6 +14,9 @@ var V_Array = Val.V_Array;
 exports.pi = function()    {return new V_Num(Math.PI);}
 exports._e = function()    {return new V_Num(Math.E);}
 
+exports.pi.isConstant = true;
+exports._e.isConstant = true;
+
 
 // Random
 exports.rand        = function()        {return new V_Num(Math.random());}

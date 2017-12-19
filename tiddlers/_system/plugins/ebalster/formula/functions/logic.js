@@ -11,6 +11,9 @@ var Val = require("$:/plugins/ebalster/formula/value.js");
 exports.true  = function()    {return new Val.V_Bool(true);};
 exports.false = function()    {return new Val.V_Bool(false);};
 
+exports.true.isConstant = true;
+exports.false.isConstant = true;
+
 // Logical operators
 exports.not = function(a)       {return new Val.V_Bool(!a.get());};
 exports.and = function(a, b)    {return new Val.V_Bool(a.get() && b.get());};
