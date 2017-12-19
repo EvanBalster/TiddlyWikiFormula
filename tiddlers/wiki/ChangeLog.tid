@@ -1,14 +1,19 @@
 created: 20171216221810025
-modified: 20171219000836763
+modified: 20171219012103676
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 !!! 0.1.2 — unreleased
 
-* Document [[Extending Formulas]] better.
+* Add `add_months`, `add_years`, `months` and `years` [[Functions]].
+** These work a little differently than the `days`-and-less equivalents.
+* `date` function now returns a date if given a date.
 * Fix exception in `to_tw_date`.
 * Fix off-by-one-month error in parsing date [[Datum]].
+* Document [[Extending Formulas]] better.
+* Add [[Demo: Tabulator]].
+* Misc documentation changes.
 
 !!! 0.1.1 — 2017 December 17
 

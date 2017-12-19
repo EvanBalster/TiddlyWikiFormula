@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171217223106441
+modified: 20171219012006167
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -125,11 +125,15 @@ Some functions have multiple names, often to help them match up with popular spr
 | `weeknum`|`(date)`|number|Get the week of the year (1-53).|
 | <<small isoweekday>>|`(date)`|number|Get the day of the week starting Mon (1-7).|
 | <<small isoweeknum>>|`(date)`|number|Get the ISO week of the year (0-52).|
+| `years`|`(d1,d2)`|number|Count the whole years from `d1` to `d2`.|
+| `months`|`(d1,d2)`|number|Count the whole months `d1` to `d2`.|
 | `days`|`(d1,d2)`|number|Total the days from `d1` to `d2`.|
 | `hours`|`(d1,d2)`|number|Total the hours from `d1` to `d2`.|
 | `minutes`|`(d1,d2)`|number|Total the minutes from `d1` to `d2`.|
 | `seconds`|`(d1,d2)`|number|Total the seconds from `d1` to `d2`.|
 | <<small milliseconds>>|`(d1,d2)`|number|Total the milliseconds from `d1` to `d2`.|
+| `add_years`|`(d1,n)`|number|Advance `d1` by `n` years.|
+| `add_months`|`(d1,n)`|number|Advance `d1` by `n` months.|
 | `add_days`|`(d1,n)`|number|Add `n` days to `d1`.|
 | `add_hours`|`(d1,n)`|number|Add `n` hours to `d1`.|
 | <<small add_minutes>>|`(d1,n)`|number|Add `n` minutes to `d1`.|

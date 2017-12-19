@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171218165545553
+modified: 20171219012239980
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-switch(weekday(now), 1, "Sun", 2, "Mon", 3, "Tue", 4, "Wed", 5, "Thu", 6, "Fri", 7, "Sat", "ERROR") & ", week " & weeknum(now)
+add_months(now, 6)
