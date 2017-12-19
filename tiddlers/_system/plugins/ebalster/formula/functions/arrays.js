@@ -7,6 +7,7 @@
 var Val = require("$:/plugins/ebalster/formula/value.js");
 
 var V_Array = Val.V_Array;
+var V_Num   = Val.V_Num;
 
 
 exports.nth = function(a, i) {
