@@ -1,11 +1,20 @@
 created: 20171216221810025
-modified: 20171219012103676
+modified: 20171219022151008
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
-!!! 0.1.2 — unreleased
+!!! 0.1.3 — 2017 December 18
 
+* Add array-related [[Functions]]: `COUNT`, `COUNTA`, `AVERAGE`, `FIRST`, `LAST`, `NTH`
+* Parentheses are now required after zero-argument functions (like `NOW`) but not constants (like `_E`)
+* Fix error parsing zero-argument functions
+* Fix error with `DATE(d)` function
+* Fix error with unary plus operator and function
+
+!!! 0.1.2 — 2017 December 18
+
+* Add `dateFormat` to [[FormulaWidget]] and [[FormulaVarsWidget]].
 * Add `add_months`, `add_years`, `months` and `years` [[Functions]].
 ** These work a little differently than the `days`-and-less equivalents.
 * `date` function now returns a date if given a date.

@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171219012239980
+modified: 20171219022822302
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-add_months(now, 6)
+nth([tag[Expenses]], 3)

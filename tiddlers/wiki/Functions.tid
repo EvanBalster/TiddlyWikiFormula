@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171219012006167
+modified: 20171219022729030
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -107,6 +107,13 @@ Some functions have multiple names, often to help them match up with popular spr
 | `rand`|`()`|number|Get a random number between 0 and 1.|
 | `random`|~|~|~|
 | <<small randbetween>>|`(a, b)`|number|Get a random number between `a` and `b`.|
+| `average`|`(a...)`|number|Average the arguments (including arrays).|
+|!Arrays (Filter Results)|<|<|<|
+| `count`|`(a...)`|number|Count all the items in the arrays.<br/>Non-array arguments count as 1.|
+| `counta`|~|~|~|
+| `nth`|`(a,n)`| * |Get the `n`th item in array `a`.|
+| `first`|`(a)`| * |Get the first item in array `a`.|
+| `last`|`(a)`| * |Get the last item in array `a`.|
 |!Date & Time|<|<|<|
 | `now`||date|Get the current date and time.|
 | `date`|`(y,m,d)`|date|Make a date from `y`ear, `m`onth and `d`ay.|
