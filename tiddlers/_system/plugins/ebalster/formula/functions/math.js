@@ -7,6 +7,7 @@
 var Val = require("$:/plugins/ebalster/formula/value.js");
 
 var V_Num = Val.V_Num;
+var V_Array = Val.V_Array;
 
 
 // Constants
@@ -52,12 +53,36 @@ exports.sum =
     {
         switch (operands)
         {
-        case 1: return function(a) {return new Val.V_Num(a.asSum());};
+        case 1: return function(a) {return new V_Num(a.asSum());};
         default: return function()
             {
                 var sum = 0;
                 for (var i = 0; i < arguments.length; ++i) sum += arguments[i].asSum();
                 return new V_Num(sum);
+            }
+        }
+    }
+};
+exports.average =
+{
+    min_args : 1,
+    select : function(operands)
+    {
+        switch (operands)
+        {
+        case 1: return function(a) {
+                if (a instanceof V_Array) return new V_Num(a.asSum()/a.get().length);
+                return a.asNum();
+            };
+        default: return function() {
+                var sum = 0, count = 0;
+                for (var i = 0; i < arguments.length; ++i)
+                {
+                    var a = arguments[i];
+                    sum += a.asSum();
+                    count += ((a instanceof V_Array) ? a.get().length : 1);
+                }
+                return new V_Num(sum/count);
             }
         }
     }
