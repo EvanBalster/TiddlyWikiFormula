@@ -83,7 +83,7 @@ exports.now         = function()     {return new V_Date(new Date(Date.now()));};
 
 // Decompose dates
 exports.year        = function(d)    {return new V_Num(d.asDate().getFullYear());};
-exports.month       = function(d)    {return new V_Num(d.asDate().getMonth());};
+exports.month       = function(d)    {return new V_Num(d.asDate().getMonth()+1);};
 exports.day         = function(d)    {return new V_Num(d.asDate().getDate());};
 exports.hour        = function(d)    {return new V_Num(d.asDate().getHours());};
 exports.minute      = function(d)    {return new V_Num(d.asDate().getMinutes());};
