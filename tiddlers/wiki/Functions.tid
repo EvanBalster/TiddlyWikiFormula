@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171219022729030
+modified: 20171220211651821
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -121,6 +121,8 @@ Some functions have multiple names, often to help them match up with popular spr
 | `date`|`(stamp)`|date|Make a date from a TiddlyWiki timestamp.|
 | `tw_date`|~|~|~|
 | <<small to_tw_date>>|`(date)`|date|Make a TiddlyWiki timestamp from a date.|
+| `julian`|`(n)`|date|Convert a Julian day to a date.|
+| `to_julian`|`(date)`|number|Convert a date to a Julian day.|
 | `year`|`(date)`|number|Get the year from a date.|
 | `month`|`(date)`|number|Get the month number (1-12).|
 | `day`|`(date)`|number|Get the day of the month (1-31).|
