@@ -10,6 +10,14 @@ var V_Date = Val.V_Date;
 var V_Num  = Val.V_Num;
 
 
+var MS_PER_DAY = 86400000;
+var MS_PER_HOUR = 3600000;
+var MS_PER_MINUTE = 60000;
+var MS_PER_SECOND =  1000;
+
+var UNIX_EPOCH_JULIAN_DAY = 2440587;
+
+
 /*!
  * isoWeekNum from pikaday <https://github.com/actano/Pikaday>
  */
@@ -20,13 +28,11 @@ function isoWeekOfYear(date, dayInFirstWeek) {
     var yearDay        = date.getDate(),
         weekDay        = date.getDay(),
         dayShift       = dayInFirstWeek - 1, // counting starts at 0
-        daysPerWeek    = 7,
-        prevWeekDay    = function(day) { return (day + daysPerWeek - 1) % daysPerWeek; };
+        prevWeekDay    = function(day) { return (day + 7 - 1) % 7; };
     date.setDate(yearDay + dayShift - prevWeekDay(weekDay));
     var jan4th      = new Date(date.getFullYear(), 0, dayInFirstWeek),
-        msPerDay    = 24 * 60 * 60 * 1000,
-        daysBetween = (date.getTime() - jan4th.getTime()) / msPerDay,
-        weekNum     = 1 + Math.round((daysBetween - dayShift + prevWeekDay(jan4th.getDay())) / daysPerWeek);
+        daysBetween = (date.getTime() - jan4th.getTime()) / MS_PER_DAY,
+        weekNum     = 1 + Math.round((daysBetween - dayShift + prevWeekDay(jan4th.getDay())) / 7);
     return weekNum;
 }
 function isLeapYear(year) {
@@ -73,7 +79,7 @@ function dateDelta(date1, date2) {
     /*var dDays = (new Date(
         date1.getFullYear()+dYears, date1.getMonth()+dMonths, date2.getDate(),
         date2.getHours(), date2.getMinutes(), date2.getSeconds(), date2.getMilliseconds()
-        ).getTime() - date1.getTime()) / 86400000;*/
+        ).getTime() - date1.getTime()) / MS_PER_DAY;*/
     return {years: dYears, months: dMonths};
 }
 
@@ -109,26 +115,26 @@ function makeTimeAddFunction(milliseconds) {
 
 exports.years  = function(a, b) {return new V_Num(dateDelta(a.asDate(), b.asDate()).years);};
 exports.months = function(a, b) {return new V_Num(dateDelta(a.asDate(), b.asDate()).months);};
-exports.days            = makeTimeDiffFunction(86400000);
-exports.hours           = makeTimeDiffFunction( 3600000);
-exports.minutes         = makeTimeDiffFunction(   60000);
-exports.seconds         = makeTimeDiffFunction(    1000);
-exports.milliseconds    = makeTimeDiffFunction(       1);
+exports.days            = makeTimeDiffFunction(MS_PER_DAY);
+exports.hours           = makeTimeDiffFunction(MS_PER_HOUR);
+exports.minutes         = makeTimeDiffFunction(MS_PER_MINUTE);
+exports.seconds         = makeTimeDiffFunction(MS_PER_SECOND);
+exports.milliseconds    = makeTimeDiffFunction(1);
 
 exports.add_years  = function(a, b) {return new V_Date(dateAddMonths(a.asDate(), 0, b.asNum()));};
 exports.add_months = function(a, b) {return new V_Date(dateAddMonths(a.asDate(), b.asNum()));};
-exports.add_days         = makeTimeAddFunction(86400000);
-exports.add_hours        = makeTimeAddFunction( 3600000);
-exports.add_minutes      = makeTimeAddFunction(   60000);
-exports.add_seconds      = makeTimeAddFunction(    1000);
-exports.add_milliseconds = makeTimeAddFunction(       1);
+exports.add_days         = makeTimeAddFunction(MS_PER_DAY);
+exports.add_hours        = makeTimeAddFunction(MS_PER_HOUR);
+exports.add_minutes      = makeTimeAddFunction(MS_PER_MINUTE);
+exports.add_seconds      = makeTimeAddFunction(MS_PER_SECOND);
+exports.add_milliseconds = makeTimeAddFunction(1);
 
 /*exports.datedif = function(a, b, c) {
     a = a.asDate();
     b = b.asDate();
     switch (c.asString().toUpperCase())
     {
-    case "D": return new V_Num((b.getTime() - a.getTime()) / 86400000);
+    case "D": return new V_Num((b.getTime() - a.getTime()) / MS_PER_DAY);
     case "M": {var d=dateDelta(a, b); return d.months+12*d.years;}
     case "Y": return dateDelta(a, b).years;
     case "YM": return dateDelta(a, b).months;
@@ -143,11 +149,6 @@ exports.tw_date = function(timestamp) {
     if (!date) throw "Bad timestamp: \"" + date + "\"";
     return new V_Date(date);
 };
-
-function to_date(a) {
-    if (a instanceof V_Date) return a;
-    return exports.tw_date(a);
-}
 
 // Stringify as TiddlyWiki date
 exports.to_tw_date = function(date) {
@@ -164,7 +165,24 @@ exports.make_time = function(hour, minute, second) {
     return new V_Date(new Date(0, 0, 0, hour.asNum(), minute.asNum(), second.asNum()));
 };
 
+// Create from julian
+exports.julian = function(julian) {
+    return new V_Date(new Date((julian.asNum() - UNIX_EPOCH_JULIAN_DAY) * MS_PER_DAY));
+};
+
+// Convert to julian
+exports.to_julian = function(date) {
+    return new V_Num(UNIX_EPOCH_JULIAN_DAY + (date.asDate().getTime() / MS_PER_DAY));
+};
+
 exports.time = exports.make_time;
+
+
+// Cast the incoming value into a date.
+function interpret_date(a) {
+    if (a instanceof V_Date) return a;
+    return exports.tw_date(a);
+}
 
 
 // Consruct a date from a TiddlyWiki timestamp or a set of parts
@@ -172,7 +190,7 @@ exports.date = {
     min_args: 1, max_args: 3,
     select: function(operands) {
         switch (operands.length) {
-        case 1: return to_date;
+        case 1: return interpret_date;
         case 3: return exports.make_date;
         default: throw "Bad arguments to DATE. Should be (timestamp) or (year, month, day).";
         }
