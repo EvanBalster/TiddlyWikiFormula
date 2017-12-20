@@ -8,6 +8,7 @@ var Val = require("$:/plugins/ebalster/formula/value.js");
 
 var V_Date = Val.V_Date;
 var V_Num  = Val.V_Num;
+var V_Text = Val.V_Text;
 
 
 var MS_PER_DAY = 86400000;
@@ -152,7 +153,7 @@ exports.tw_date = function(timestamp) {
 
 // Stringify as TiddlyWiki date
 exports.to_tw_date = function(date) {
-    return new V_String($tw.utils.stringifyDate(date.asDate()));
+    return new V_Text($tw.utils.stringifyDate(date.asDate()));
 };
 
 // Create ISO date
