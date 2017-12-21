@@ -228,4 +228,22 @@ exports.rounddown =
 
 exports.trunc = exports.rounddown;
 
+
+/*
+    Algorithms
+*/
+exports.gcd = function(a,b) {
+    a = Math.abs(Math.round(a.asNum()));
+    b = Math.abs(Math.round(b.asNum()));
+    if (b > a) {var temp = a; a = b; b = temp;}
+    var limit = 1000;
+    while (true) {
+        if (b == 0) return new Val.V_Num(a);
+        a %= b;
+        if (a == 0) return new Val.V_Num(b);
+        b %= a;
+        if (--limit < 0) throw "GCD function is nonterminal!";
+    }
+}
+
 })();
