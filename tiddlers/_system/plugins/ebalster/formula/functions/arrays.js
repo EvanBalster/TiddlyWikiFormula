@@ -16,21 +16,21 @@ exports.nth = function(a, i) {
     i = Math.floor(i.asNum());
     if (i < 1 || i > a.length) return new Val.V_Undefined();
     return a[i-1];
-}
+};
 
 exports.first = function(a) {
     if (! (a instanceof V_Array)) throw "FIRST(a) function requires a is array!";
     a = a.get();
     if (a.length) return a[0];
     return new Val.V_Undefined();
-}
+};
 
 exports.last = function(a) {
     if (! (a instanceof V_Array)) throw "LAST(a) function requires a is array!";
     a = a.get();
     if (a.length) return a[a.length-1];
     return new Val.V_Undefined();
-}
+};
 
 // COUNT function, currently counts everything
 exports.count =
@@ -52,7 +52,7 @@ exports.count =
                     count += ((a instanceof V_Array) ? a.get().length : 1);
                 }
                 return new V_Num(count);
-            }
+            };
         }
     }
 };

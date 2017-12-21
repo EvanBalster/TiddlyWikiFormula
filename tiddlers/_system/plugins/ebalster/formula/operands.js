@@ -165,10 +165,11 @@ exports.Opd_Variable.prototype.compute = function(widget, recur) {
 };
 
 
-// Opd_Filter operand.
+// Opd_Filter operand, with some lazy-compile optimizations.
 exports.Opd_Filter = function(filter) {
   this.filter = filter;
-  this.elements = {};
+  this.elements = {}; // Each has count, op, value
+  //this.array = [];
   this.compileError = null;
 };
 exports.Opd_Filter.prototype = new exports.Operand();
@@ -176,38 +177,42 @@ exports.Opd_Filter.prototype.name = "filter";
 
 exports.Opd_Filter.prototype.compute = function(widget, recur) {
   // Apply the filter and compile each result
-  var expr, exprs = widget.wiki.filterTiddlers(this.filter, widget);
+  var i, expr, elem, exprs = widget.wiki.filterTiddlers(this.filter, widget);
 
-  // Mark all existing elements for removal
+  // Clear the array and mark all existing elements for removal
   for (expr in this.elements) this.elements[expr].count = 0;
+  //this.array = [];
 
   // Selectively re-compile any filter results that have changed
-  for (var i = 0; i < exprs.length; ++i)
+  for (i = 0; i < exprs.length; ++i)
   {
     expr = exprs[i];
-    var found = this.elements[expr];
-    if (found) ++found.count;
-    else try
-    {
-      this.elements[expr] = {count: 1, op: Compile.compileDatum(expr)};
+    elem = this.elements[expr];
+    //this.array.push(expr);
+    
+    if (elem) ++elem.count;
+    else try {
+      this.elements[expr] = {count: 1, op: Compile.compileDatum(expr), value: null};
     }
-    catch (err)
-    {
+    catch (err) {
       // Save the error
       this.elements[expr] = new exports.Opd_Error(
         err + "\n  source: \"" + expr + "\"\n  from \"" + this.filter + "\"");
     }
   }
-  
 
-  // Delete any elements with no copies left
-  for (expr in this.elements) if (this.elements[expr].count === 0) delete this.elements[expr];
+  // Compute (unique) values.  Delete any elements with no copies left.
+  for (expr in this.elements) {
+    elem = this.elements[expr];
+    if (elem.count === 0) delete this.elements[expr];
+    else elem.val = elem.op.compute(widget, recur+1);
+  }
 
   // Return value computes an array of datum values.
   var results = [];
-  for (expr in this.elements) {
-    var elem = this.elements[expr];
-    results.push(elem.op.compute(widget, recur+1));
+  for (i = 0; i < exprs.length; ++i) {
+    expr = exprs[i];
+    results.push(this.elements[expr].val);
   }
   return new Values.V_Array(results);
 };
