@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171220232110675
+modified: 20171221022202989
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-mid(regexextract1("1103b nowide speed-up [1]+1", "\[\d\]", "[0]"), 2, 1)
+[all[tiddlers+shadows]get[created]splitbefore[0]]

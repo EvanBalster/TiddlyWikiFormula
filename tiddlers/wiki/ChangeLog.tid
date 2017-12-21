@@ -1,9 +1,14 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171221002258605
+modified: 20171221022730543
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
+
+!!! 0.1.5 — 2017 December 20
+
+* Fix handling of duplicate values in filter results
+
 
 !!! 0.1.4 — 2017 December 20
 
