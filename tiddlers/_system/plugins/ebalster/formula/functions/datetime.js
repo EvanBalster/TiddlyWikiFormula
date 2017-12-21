@@ -6,6 +6,7 @@
 
 var Val = require("$:/plugins/ebalster/formula/value.js");
 
+var V_Bool = Val.V_Bool;
 var V_Date = Val.V_Date;
 var V_Num  = Val.V_Num;
 var V_Text = Val.V_Text;
@@ -47,7 +48,7 @@ function daysInMonth(year, monthIndex) {
     case  0: case  2: case  4: case  6: case  7: case  9: case 11:return 31;
     case  3: case  5: case  8: case 10: return 30;
     case  1: return (isLeapYear(year) ? 29 : 28);
-    default: throw "daysInMonth: invalid monthIndex: " + monthIndex;
+    default: throw "days_in_month: invalid monthIndex: " + monthIndex;
     }
 }
 
@@ -129,6 +130,10 @@ exports.add_hours        = makeTimeAddFunction(MS_PER_HOUR);
 exports.add_minutes      = makeTimeAddFunction(MS_PER_MINUTE);
 exports.add_seconds      = makeTimeAddFunction(MS_PER_SECOND);
 exports.add_milliseconds = makeTimeAddFunction(1);
+
+exports.is_leap_year  = function(year)       {return new V_Bool(isLeapYear(year.asNum()));};
+exports.days_in_year  = function(year)       {return new V_Num(daysInYear(year.asNum()));};
+exports.days_in_month = function(yr, mon)    {return new V_Num(daysInMonth(yr.asNum(), mon.asNum()-1));};
 
 /*exports.datedif = function(a, b, c) {
     a = a.asDate();
