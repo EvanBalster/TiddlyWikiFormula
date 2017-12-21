@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20171220214525273
+modified: 20171221192856982
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
@@ -60,12 +60,16 @@ Drag-and-drop this to your wiki:
 ** [[FormulaWidget]]
 ** [[FormulaVarsWidget]]
 ** [[FormulaMacro]]
+** [[range Operator]]
 * Under the hood
 ** [[ChangeLog]]
 ** [[Extending Formulas]]
 ** [[Plugin Design]]
 ** [[Source Code]]
-* Etc.
+* Demos & Fun Stuff
+** [[Demo: Starburst]]
+** [[Demo: Real Projective Line]]
+** [[Demo: Tabulator]]
 ** [[Spreadsheet Prototype]]
 
 

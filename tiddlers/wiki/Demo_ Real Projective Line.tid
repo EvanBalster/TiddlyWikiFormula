@@ -1,0 +1,92 @@
+created: 20171221064018661
+modified: 20171221075409105
+tags: 
+title: Demo: Real Projective Line
+type: text/vnd.tiddlywiki
+
+\define formulaFixed() 2
+
+\define slider(field) <$edit-text field="$field$" type=range/>
+
+\define nl()
+<$text text="""
+"""/>
+\end
+
+<$tiddler tiddler="$:/state/demo_real_projective">
+
+!!Real Projective Line
+
+The ''Real Projective Line'' is a way to visualize all the real numbers as well as infinity as a continuous line.  We arrange all the "projective" numbers into a circle, then find the real number by shooting a ray from the apex of the circle, through the projective point, and onto the number line.
+
+Try changing the projective point, expressed here as an heading on the circle:
+
+<div style="width: 95%; margin: 0 auto;">
+
+|!Orientation|0°|<<slider orientation>>|360°|(={{!!orientation}}%*360=) deg|
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -80 320 180" width="640" height="340">
+<rect x=-160 y=-80 width=320 height=180 rx=5 fill=#001133/>
+<g style="font-size: .1pt; font-weight: bold; align: center; stroke-width:.007; text-anchor: middle;" transform=scale(60)>
+<line x1=-10 x2=10 y1=1 y2=1 stroke=#999999/>
+<$list filter="[[-4]] [[-3]] [[-2]] [[-1]] 0 1 2 3 4" variable="x">
+<line x1=<<x>> x2=<<x>> y1=.97 y2=1.03 stroke=#999999/>
+</$list>
+<circle r=1 stroke=#DDDDDD fill=none/>
+<not-circle r=.35 stroke=#222222 fill=none/>
+<circle cx=0 cy=-1 r=.035 stroke=#FFFFFF/>
+<circle cx=0 cy=+1 r=.035 stroke=#FFFFFF/>
+<circle cx=-1 cy=0 r=.035 stroke=#FFFFFF/>
+<circle cx=+1 cy=0 r=.035 stroke=#FFFFFF/>
+<$formula-vars
+  theta="PI*2*{{!!orientation}}%"
+  >
+<$formula-vars
+  n="2*tan(<<theta>>/2)"
+  nshow="if({{!!orientation}}=50,'infinity',tan(<<theta>>/2))"
+  sin="sin(<<theta>>)"
+  cos="cos(<<theta>>)"
+  sin_in="sin(<<theta>>)*.35"
+  cos_in="cos(<<theta>>)*.35"
+  >
+<$formula-vars
+  x1="-10*<<n>>"
+  y1=-21
+  x2="10*<<n>>"
+  y2="19"
+  >
+<not-line x1=<<sin>> y1=<<cos>> x2=<<sin_in>> y2=<<cos_in>> stroke=#333333/>
+<line x1=<<x1>> y1=<<y1>> x2=<<x2>> y2=<<y2>> stroke=#666666/>
+<circle cx=<<sin>> cy=<<cos>> r=.02 fill=#FFFFFF/>
+<circle cx=<<n>> cy=1 r=.025 fill=#FFFFFF/>
+<text x=.02 y=-.02 fill=white>(={{!!orientation}}%*360=)°
+<tspan x="0" dy="1em"><<nshow>></tspan>
+</text>
+</$formula-vars>
+</$formula-vars>
+</$formula-vars>
+<text x=0 y=1.45 fill=white>fig. 1: the real projective line.</text>
+<text x=0 y=-1.12 fill=white style="font-size: .14pt;">∞</text>
+<text x=0 y=1.2 fill=white>0</text>
+<text x=-1.15 y=.03 fill=white>−1</text>
+<text x=1.15 y=.03 fill=white>+1</text>
+</g>
+</svg>
+
+</div>
+
+Notice how when you set the orientation to 180 degrees, the number becomes infinite — the ray can never hit the number line.
+
+This numbering system has some fascinating properties.  Flipping the projective point left-to-right negates the real number, while flipping vertically results in its reciprocal.
+
+Flip: <$button>
+Horizontal
+<$action-setfield orientation=<<formula "100-{{!!orientation}}">>/>
+</$button><$button>
+Vertical
+<$action-setfield orientation=<<formula "if({{!!orientation}}>50,150,50)-{{!!orientation}}">>/>
+</$button>
+
+In projective mathematics, infinity and zero are reciprocals, and infinity isn't positive or negative — it's "just" infinity.
+
+By turning the projective circle into a sphere, we can model vectors in higher dimensions, or complex numbers.

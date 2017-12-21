@@ -1,9 +1,19 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171221022730543
+modified: 20171221203018994
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
+
+!!! 0.1.6? — UNRELEASED
+
+* Add [[range Operator]] for counting.
+* Implemented selective evaluation to save performance
+** Logic functions supported: `if`
+* Add calendar functions: `is_leap_year(y)`, `days_in_year(y)`, `days_in_month(y,m)`
+* Add math function: `gcd`
+* Implement operand constructors for more flexible/performant functions.
+
 
 !!! 0.1.5 — 2017 December 20
 

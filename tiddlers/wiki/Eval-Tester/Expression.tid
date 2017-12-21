@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171221022202989
+modified: 20171221202433947
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-[all[tiddlers+shadows]get[created]splitbefore[0]]
+days_in_month(2021, 2)

@@ -1,5 +1,5 @@
 created: 20171212223658588
-modified: 20171213014414352
+modified: 20171221192725044
 title: Formulas as Tag Attributes
 type: text/vnd.tiddlywiki
 
@@ -22,3 +22,14 @@ Formulas can currently be used as attributes in HTML tags, widgets and by using 
 <circle cx=50 cy=50 r=<<formula 5*5>> />
 </svg>
 </td></tr></table>
+
+In the future we want to implement a direct syntax, which will allow formulas to be easier to write and more efficient:
+
+```
+<svg
+  width=(=10*10=)
+  height=(=10*10=)
+  viewBox="0 0 100 100">
+<circle cx=50 cy=50 r=(=5*5=) />
+</svg>
+```
