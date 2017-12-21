@@ -1,0 +1,7 @@
+created: 20171219214111425
+modified: 20171219220856264
+tags: UnitTest
+title: UnitTest/Functions/nth/sorted-return
+type: text/vnd.tiddlywiki
+
+(= nth([tag[Expenses]!sort[]], 3)="Candy-Bar" =)

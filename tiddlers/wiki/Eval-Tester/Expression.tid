@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171219022822302
+modified: 20171220232110675
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-nth([tag[Expenses]], 3)
+mid(regexextract1("1103b nowide speed-up [1]+1", "\[\d\]", "[0]"), 2, 1)

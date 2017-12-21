@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171220211651821
+modified: 20171221001129994
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -18,19 +18,21 @@ Some functions have multiple names, often to help them match up with popular spr
 
 !Functions
 
-|Function|Args|Result|Summary|h
-| `uplus`|`(a)`| * |Return `a`.|
-| `uminus`|`(a)`|number|Return `a` times negative one.|
-| `add`|`(a, b)`|number|Add numbers `a` and `b`.|
-| `sub`|`(a, b)`|number|Subtract `b` from `a`.|
+|!Operators|<|<|<|
+|!Function|!Args|!Result|!Summary|
+| `uplus`|`(a)`| * |Return `a`.<br/>Same as `+a`.|
+| `uminus`|`(a)`|number|Return `a` times `-1`.<br/>Same as `-a`.|
+| `add`|`(a, b)`|number|Add numbers `a` and `b`.<br/>Same as `(a+b)`.|
+| `sub`|`(a, b)`|number|Subtract `b` from `a`.<br/>Same as `(a-b)`.|
 | `subtract`|~|~|~|
 | `minus`|~|~|~|
-| `mul`|`(a, b)`|number|Multiply numbers `a` and `b`.|
+| `mul`|`(a, b)`|number|Multiply numbers `a` and `b`.<br/>Same as `(a*b)`.|
 | `multiply`|~|~|~|
-| `div`|`(a, b)`|number|Divide `a` by `b`.|
+| `div`|`(a, b)`|number|Divide `a` by `b`.<br/>Same as `(a/b)`.|
 | `divide`|~|~|~|
 | `quotient`|~|~|~|
 |!Math|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `abs`|`(a)`|number|Return `a`'s absolute value.|
 | `sign`|`(a)`|number|1 for positive `a`, -1 for negative, 0 for 0.|
 | `sum`|`(a...)`|number|Sum up the arguments (including arrays).|
@@ -40,6 +42,7 @@ Some functions have multiple names, often to help them match up with popular spr
 | `sqrt`|`(a)`|number|Get the square root of `a`.|
 | `cbrt`|`(a)`|number|Get the cube root of `a`.|
 |!Math (rounding)|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `round`|`(a)`|number|Round `a` to the nearest integer.|
 |~|`(a, n)`|number|Round `a` to `n` digits.|
 | `roundup`|`(a)`|number|Round `a` away from zero.|
@@ -51,6 +54,7 @@ Some functions have multiple names, often to help them match up with popular spr
 | `ceil`|`(a)`|number|Round `a` up to the nearest integer.|
 |~|`(a, m)`|number|Round `a` up to a multiple of `m`.|
 |!Math (exponential)|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `_e`||number|Euler's number ''e'' (approx. 2.71828).|
 | `pow`|`(a, b)`|number|Raise base `a` to the power of `b`.|
 | `power`|~|~|~|
@@ -62,6 +66,7 @@ Some functions have multiple names, often to help them match up with popular spr
 | `expm1`|`(a)`|number|Get `exp(a) - 1`, more precisely.|
 | `log1p`|`(a)`|number|Get `log(a + 1)`, more precisely.|
 |!Math (trigonometry)|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `pi`||number|Get ''pi'' (''&pi;'', approx. 3.14159).|
 | `degrees`|`(a)`|number|Convert radians to degrees: `180*a/pi`.|
 | `radians`|`(a)`|number|Convert degrees to radians: `pi*a/180`.|
@@ -77,7 +82,36 @@ Some functions have multiple names, often to help them match up with popular spr
 | [`a`]`sec`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] secant.|
 | [`a`]`csc`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cosecant.|
 | [`a`]`cot`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cotangent.|
+|!Math (Statistical)|<|<|<|
+|!Function|!Args|!Result|!Summary|
+| `rand`|`()`|number|Get a random number between 0 and 1.|
+| `random`|~|~|~|
+| <<small randbetween>>|`(a, b)`|number|Get a random number between `a` and `b`.|
+| `average`|`(a...)`|number|Average the arguments (including arrays).|
+| `percent`|`(a)`|percent|Return `a/100` as a percentage.|
+|!Strings & Text|<|<|<|
+|!Function|!Args|!Result|!Summary|
+| `t`|`(a)`|text|Turn `a` into text. (Often automatic.)|
+| `value`|`(t)`|number|Turn `t` into a number. (Often automatic.)|
+| `cat`|`(a, b)`|text|Append `a` and `b` as text.<br/>Same as `(a&b)`.|
+| <<small concatenate>>|~|~|~|
+| `len`|`(text)`|number|Get the length of `text` in characters.|
+| `mid`|`(t,i,n)`|text|Get `n` characters from `t` starting at the `i`th character.|
+| `substr`|~|~|~|
+| `substitute`|`(t,a,b)`|text|Replace any `a` in `t` with `b`.|
+| `textjoin`|`(d,a..)`|text|Join arrays & values into text, with `d` inserted between each element.<br/>If `a` is FALSE, include empty values.|
+| `split`|`(t,d)`|text|Split `t` into an array, starting a new element whenever `d` appears.|
+| `trim`|`(t)`|text|Remove whitespace from the beginning and end of `t`.|
+|!Regular Expressions|<|<|<|
+|!Function|!Args|!Result|!Summary|
+| <<small regexreplace>>|`(s,R,b)`|text|Replace all `R` matches in `s` with `b`.|
+| <<small regexmatch>>|`(s,R)`|bool|Test whether `s` matches `R` at least once.|
+| <<small regexextract>>|`(s,R)`|array|Get all `R` matches in `s`.|
+| <<small regexextract1>>|`(s,R,d)`|text|Get the first `R` match in `s`.<br/>Result is `d` if there are no matches.|
+|!Note:| //`R` are regular expressions like in the `regexp` filter operator.// |<|<|
 |!Comparison|<|<|<|
+|!Function|!Args|!Result|!Summary|
+| `exact`|`(a,b)`|boolean|Test whether `a` and `b` are exactly equal.|
 |  `eq`|`(a, b)`|boolean|Test whether `a` and `b` are equal.|
 | `equal`|~|~|~|
 |  `ne`|`(a, b)`|boolean|Test whether `a` and `b` are not equal.|
@@ -91,6 +125,7 @@ Some functions have multiple names, often to help them match up with popular spr
 | `lte`|`(a, b)`|boolean|Tests whether `a` is less than or equal to `b`.|
 | <<small less_or_equal>>|~|~|~|
 |!Logic|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `true`||boolean|The value TRUE.|
 | `false`||boolean|The value FALSE.|
 | `not`|`(a)`|boolean|Test if `a` is FALSE.|
@@ -98,23 +133,21 @@ Some functions have multiple names, often to help them match up with popular spr
 | `or`|`(a, b)`|boolean|Test if one or both of `a` and `b` is TRUE.|
 | `xor`|`(a, b)`|boolean|Test if just one of `a` and `b` is TRUE.|
 |!Selection|<|<|<|
+|!Function|!Args|!Result|!Summary|
 |  `if`|`(q,a,b)`| * |If `q` is TRUE, return `a`, else `b`.|
 |  `iferror`|`(a, b)`| * |Return `a`, or `b` if there's an error with `a`.|
 |  `ifs`|`(...)`| * |Test-based select. See: [[IFS Function]]|
 |  `switch`|`(n...)`| * |Value-based select. See: [[SWITCH Function]]|
 |  `choose`|`(n...)`| * |Return the `n`th element (after `n`).|
-|!Statistical|<|<|<|
-| `rand`|`()`|number|Get a random number between 0 and 1.|
-| `random`|~|~|~|
-| <<small randbetween>>|`(a, b)`|number|Get a random number between `a` and `b`.|
-| `average`|`(a...)`|number|Average the arguments (including arrays).|
-|!Arrays (Filter Results)|<|<|<|
+|!Arrays & Filter Results|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `count`|`(a...)`|number|Count all the items in the arrays.<br/>Non-array arguments count as 1.|
 | `counta`|~|~|~|
 | `nth`|`(a,n)`| * |Get the `n`th item in array `a`.|
 | `first`|`(a)`| * |Get the first item in array `a`.|
 | `last`|`(a)`| * |Get the last item in array `a`.|
 |!Date & Time|<|<|<|
+|!Function|!Args|!Result|!Summary|
 | `now`||date|Get the current date and time.|
 | `date`|`(y,m,d)`|date|Make a date from `y`ear, `m`onth and `d`ay.|
 | `time`|`(h,m,s)`|date|Make a date from `h`our, `m`inute and `s`econd.|
@@ -148,9 +181,6 @@ Some functions have multiple names, often to help them match up with popular spr
 | <<small add_minutes>>|`(d1,n)`|number|Add `n` minutes to `d1`.|
 | <<small add_seconds>>|`(d1,n)`|number|Add `n` seconds to `d1`.|
 | <<small add_<br/>milliseconds>>|`(d1,n)`|number|Add `n` milliseconds to `d1`.|
-|!Miscellaneous|<|<|<|
-| `percent`|`(a)`|percent|Return `a` divided by 100.|
-| `cat`|`(a, b)`|text|Append `a` and `b` as text.|
 
 
 !Defining new functions
