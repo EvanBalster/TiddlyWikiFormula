@@ -449,22 +449,28 @@ function buildOperand(parser) {
         args = [];
       }
 
-      if (func instanceof Function)
-      {
+      if (func instanceof Function) {
         // Check parameter count
         if (args.length > func.length && !func.variadic)
           throw "too many arguments for " + term[0] + " (requires " + func.length + ")";
         if (args.length < func.length)
           throw "too few arguments for " + term[0] + (func.variadic?" (min ":" (requires ") + func.length + ")";
       }
-      else
-      {
-        // Use a "select" function
+      else if (func.select || func.construct) {
+        // Check argument range
         if (func.max_args && args.length > func.max_args)
           throw "too many arguments for " + term[0] + " (max " + func.max_args + ")";
         if (func.min_args && args.length < func.min_args)
           throw "too few arguments for " + term[0] + " (min " + func.min_args + ")";
+        
+        // If a construct function is present, use it to generate an operand.
+        if (func.construct) return func.construct(args);
+
+        // If a select function is present, prepare to bind it with a CallOperator.
         func = func.select(args);
+      }
+      else {
+        throw "Function " + term[0] + " seems to be unusable.";
       }
 
       return new Operators.CallOperator(func, args);
