@@ -4,6 +4,7 @@
 /*global $tw: false */
 "use strict";
 
+var Operator = require("$:/plugins/ebalster/formula/operators.js").Operator;
 var Val = require("$:/plugins/ebalster/formula/value.js");
 
 
@@ -21,7 +22,22 @@ exports.or  = function(a, b)    {return new Val.V_Bool(a.get() || b.get());};
 exports.xor = function(a, b)    {return new Val.V_Bool(a.get() ? !b.get() : !!b.get());};
 
 // Ternary
-exports.if  = function(p, a, b) {return p.get() ? a : b;};
+function IfOp(pred, tval, fval) {
+  this.pred = pred;
+  this.tval = tval;
+  this.fval = fval;
+}
+IfOp.prototype = new Operator();
+IfOp.prototype.name = "if";
+IfOp.prototype.compute = (function(widget, recur) {
+  return (this.pred.compute(widget, recur).get() ? this.tval.compute(widget, recur) : this.fval.compute(widget, recur));
+});
+exports.if = {
+  min_args: 3, max_args: 3,
+  construct: function(operands) {
+    return new IfOp(operands[0], operands[1], operands[2]);
+  }
+};
 
 
 // IFERROR
