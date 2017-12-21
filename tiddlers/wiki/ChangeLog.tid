@@ -1,6 +1,6 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171220231244548
+modified: 20171221002258605
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
@@ -8,12 +8,12 @@ type: text/vnd.tiddlywiki
 !!! 0.1.4 — 2017 December 20
 
 * Add text conversion functions:
-** `t`, `text`, `value`, `textjoin`
+** `t`, `value`, `textjoin`
 * Add text utility functions:
 ** `len`, `exact`, `mid`, `substitute`, `split`, `trim`
 * Add regular expression functions:
 ** `regexreplace`, `regexmatch`, `regexextract`, `regexextract1`.
-* Add julian date functions:
+* Add julian day / date conversion functions:
 ** `julian`, `to_julian`
 * Fix off-by-one error in `month` function
 * Fix error in `if` function, disable `if` function pending support for more powerful function construction

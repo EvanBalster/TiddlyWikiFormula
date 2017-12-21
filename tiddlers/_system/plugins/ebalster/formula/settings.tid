@@ -1,0 +1,18 @@
+caption: readme
+created: 20171221001634811
+modified: 20171221002035357
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/settings
+type: text/vnd.tiddlywiki
+
+Currently no global settings are implemented, but formulas can be controlled by setting some global macros.  For example:
+
+|Macro|Meaning|h
+|`\define formulaFixed() 2`|makes numbers display with 2 decimal points.|
+|`\define formulaPrecision() 4`|makes numbers display with 4 significant digits (but `formulafixed` takes priority.|
+|`\define formulaDateFormat() YYYY-MM-0DD`|Sets a date display format using the same rules as TiddlyWiki.|
+
+Place these at the top of the tiddler where they should take effect, or create a tiddler tagged with <<tag $:/tags/Macro>> to make them apply to all tiddlers.
+
+In the future, we'll probably add some global settings here...
