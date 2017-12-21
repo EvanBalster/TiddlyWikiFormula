@@ -13,13 +13,13 @@ var V_Text = Val.V_Text;
 // Cast to text.  Second argument not yet supported.
 exports.t = function(a)    {return new V_Text(a.asString());};
 
-exports.text = {
+/*exports.text = {
 	min_args: 1, max_args: 1,
 	select: function(operands) {
 		if (operands.length == 1) return exports.t;
 		return function(a, format) {return new V_Text(a.asString());};
 	}
-};
+};*/
 
 // Cast string to number.
 exports.value = function(a)    {return new Val.V_Num(a.get());};
