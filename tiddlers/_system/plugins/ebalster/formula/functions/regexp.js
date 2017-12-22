@@ -19,7 +19,7 @@ function tw_regex(rx_str) {
 		if (flags.index == 0) return new RegExp(rx_str.substr(flags[0].length), flags[0]);
 		else                  return new RegExp(rx_str.substr(0, rx_str.length-flags[0].length), flags[0]);
 	}
-	return new RegExp(rx_str);
+	return new RegExp(rx_str, "g");
 }
 
 
