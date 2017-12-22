@@ -29,6 +29,7 @@ var rxDatumIsDate     = /^\s*\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d{3})
 var rxDateFragment    = /\d+/g;
 
 var rxString          = /("(\\.|[^"\\])*"|'(\\.|[^'\\])*')/g;
+var rxEscapeSequence  = /\\([a-tv-z0"'\\]|u[a-fA-F0-9]{0,4}|$)/g;
 
 var formulaFunctions   = null;
 var operatorsUnaryPre  = null;
@@ -493,8 +494,27 @@ function buildOperand(parser) {
   case "'":
   case "\"": // String constant
     term = parser.match_here(rxString);
-    if (term) return new Operands.Opd_Text(term[0].substr(1, term[0].length-2));
-    throw "Invalid string: " + parser.nextToken();
+    if (!term) throw "Invalid string: " + parser.nextToken();
+    term = term[0].substr(1, term[0].length-2);
+    term = term.replace(rxEscapeSequence, function(esc) {
+      switch (esc.charAt(1)) {
+        case '"': return '"';
+        case '\'': return '\'';
+        case '\\': return '\\';
+        case 'n': return '\n';
+        case 'r': return '\r';
+        case 'b': return '\b';
+        case 'f': return '\f';
+        case 't': return '\t';
+        case 'v': return '\v';
+        case '0': return '\0';
+        case 'u':
+          if (esc.length < 6) throw "Invalid escape sequence: " + esc;
+          return String.fromCharCode(parseInt(esc.substr(2), 16));
+        default: throw "Invalid escape sequence: " + esc;
+      }
+    });
+    return new Operands.Opd_Text(term);
 
   case "[": // Filter operand
     term = parser.match_here(rxOperandFilter);
