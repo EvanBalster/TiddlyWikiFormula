@@ -1,9 +1,9 @@
 created: 20171211181356482
-modified: 20171211182432575
+modified: 20171222215509357
 tags: 
 title: $:/config/FileSystemPaths
 type: text/plain
 
-[is[system]removeprefix[$:/]addprefix[_system/]]
-[!has[draft.of]addprefix[wiki/]]
+[is[system]!title[$:/StoryList]removeprefix[$:/]addprefix[_system/]]
 [has[draft.of]addprefix[drafts/]]
+[!is[system]!has[draft.of]addprefix[wiki/]]

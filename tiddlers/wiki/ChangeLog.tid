@@ -1,6 +1,6 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171222230953590
+modified: 20171222233208246
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
@@ -17,7 +17,7 @@ Potentially destructive changes are noted in bold.
 * Implement escape sequences in [[String Literal]].
 ** `\\`, `\'`, `\"`, `\n`, `\r`, `\t`, `\v`, `\f`, `\b`, `\0`, `\u1234` (unicode)
 * Add calendar functions: `is_leap_year(y)`, `days_in_year(y)`, `days_in_month(y,m)`
-* Add math function: `gcd`
+* Add math [[Functions]]: `gcd` and `lcm`
 * Fix support for `(?igm)` flags in regular expression strings.
 * Make `regexextract` and `regexreplace` search globally by default.
 * Make `regexmatch` and `regexextract1` search non-globally by default.
