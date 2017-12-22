@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171221001129994
+modified: 20171222232630454
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -41,6 +41,8 @@ Some functions have multiple names, often to help them match up with popular spr
 | `max`|`(a,b..)`|number|Get the highest number.|
 | `sqrt`|`(a)`|number|Get the square root of `a`.|
 | `cbrt`|`(a)`|number|Get the cube root of `a`.|
+| `gcd`|`(a,b)`|number|Get the greatest common divisor.|
+| `lcm`|`(a,b)`|number|Get the least common multiple.|
 |!Math (rounding)|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `round`|`(a)`|number|Round `a` to the nearest integer.|
@@ -181,7 +183,9 @@ Some functions have multiple names, often to help them match up with popular spr
 | <<small add_minutes>>|`(d1,n)`|number|Add `n` minutes to `d1`.|
 | <<small add_seconds>>|`(d1,n)`|number|Add `n` seconds to `d1`.|
 | <<small add_<br/>milliseconds>>|`(d1,n)`|number|Add `n` milliseconds to `d1`.|
-
+| <<small is_leap_year>>|`(year)`|boolean|Test if `year` is a leap year with 366 days.|
+| <<small days_in_year>>|`(year)`|number|Count the days in `year` (365 or 366).|
+| <<small days_in_month>>|`(y,m)`|number|Count days in `y`ear & `m`onth (28-31).|
 
 !Defining new functions
 

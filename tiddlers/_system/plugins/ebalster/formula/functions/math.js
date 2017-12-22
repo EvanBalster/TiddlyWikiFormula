@@ -232,18 +232,33 @@ exports.trunc = exports.rounddown;
 /*
     Algorithms
 */
-exports.gcd = function(a,b) {
-    a = Math.abs(Math.round(a.asNum()));
-    b = Math.abs(Math.round(b.asNum()));
+function compute_gcd(a, b) {
+    a = Math.abs(Math.round(a));
+    b = Math.abs(Math.round(b));
     if (b > a) {var temp = a; a = b; b = temp;}
     var limit = 1000;
     while (true) {
-        if (b == 0) return new Val.V_Num(a);
+        if (b == 0) return a;
         a %= b;
-        if (a == 0) return new Val.V_Num(b);
+        if (a == 0) return b;
         b %= a;
         if (--limit < 0) throw "GCD function is nonterminal!";
     }
 }
+
+function compute_lcm(a, b) {
+    a = Math.abs(Math.round(a));
+    b = Math.abs(Math.round(b));
+    return (!a || !b) ? 0 : Math.abs((a * b) / compute_gcd(a, b));
+}
+
+exports.gcd = function(a,b) {
+    return new V_Num(compute_gcd(a.asNum(), b.asNum()));
+};
+
+exports.lcm = function(a,b) {
+    return new V_Num(compute_lcm(a.asNum(), b.asNum()));
+};
+
 
 })();
