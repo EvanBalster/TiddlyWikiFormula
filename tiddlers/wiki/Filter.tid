@@ -1,0 +1,9 @@
+created: 20171212071049935
+modified: 20171222230242839
+tags: Syntax
+title: Filter
+type: text/vnd.tiddlywiki
+
+A ''Filter'' in a [[Formula]] follows the [[same rules and syntax as ordinary filters|https://tiddlywiki.com/#Filter%20Expression]].  The result is interpreted as an array of [[Data|Datum]].
+
+Various [[Functions]] such as `sum` and `textjoin` are made to deal with arrays.

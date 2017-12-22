@@ -1,12 +1,25 @@
 bnf: <String> ::= '"' <Text> '"'
 created: 20171212073742019
-modified: 20171213015708330
+modified: 20171222223456068
 tags: Syntax
 title: String Literal
 type: text/vnd.tiddlywiki
 
 A ''String Literal'' in Formulas is a quoted piece of text.  `'single quotes'` or `"double quotes"` may be used.
 
-The current parsing is quite crude, and escape sequences are not properly supported.
+The backslash `\` may be used to "escape" characters that are difficult to include in the string normally:
+
+|Escape Code|Result|h
+|`\\`|`\`|
+|`\'`|`'`|
+|`\"`|`"`|
+|`\n`|Line break.|
+|`\r`|Carriage return.|
+|`\t`|Horizontal tab.|
+|`\v`|Vertical tab.|
+|`\f`|Form Feed.|
+|`\b`|Backspace.|
+|`\0`|Null character.|
+|`\u1234`|Unicode character #1234. (Any 4-digit hexadecimal value may be used.)|
 
 Strings may be concatenated with other values using the `&` [[operator|Operators]], resulting in a string.

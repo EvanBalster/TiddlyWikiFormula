@@ -1,5 +1,5 @@
 created: 20171210222937878
-modified: 20171222213819311
+modified: 20171222225306078
 title: Try Me
 type: text/vnd.tiddlywiki
 
@@ -7,22 +7,22 @@ type: text/vnd.tiddlywiki
 
 Use this area to try out some formulas.
 
-''Enter Formula'': `(=` <$edit-text tag="input" size=36 tiddler="Eval-Tester/Expression"/> `=)`
+;Formula:
+:`(=` <$edit-text tag="input" size=60 tiddler="Eval-Tester/Expression"/> `=)`
 
-<<<
-<hr/>
-<$formula formula={{Eval-Tester/Expression}} toFixed={{Eval-Tester/toFixed}} toPrecision={{Eval-Tester/toPrecision}}/>
-<hr/>
-<<<
+;Result:
+:<$formula formula={{Eval-Tester/Expression}} toFixed={{Eval-Tester/toFixed}} toPrecision={{Eval-Tester/toPrecision}}/>
 
 Try these:
 
 <<<
 ```
 sum([tag[Expenses]get[value]])
+"Sum(" & [tag[Expenses]get[value]] & ") = " & sum([tag[Expenses]get[value]])
 {{Soda-Pop!!value}}*5
 20 + 3^3 * 1000
 "$" & {{Candy-Bar!!value}}
+"This is ''bold text''!"
 ```
 <<<
 

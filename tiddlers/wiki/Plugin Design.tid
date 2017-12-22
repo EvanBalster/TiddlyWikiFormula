@@ -1,5 +1,5 @@
 created: 20171212015720773
-modified: 20171213045307711
+modified: 20171222230323819
 title: Plugin Design
 type: text/vnd.tiddlywiki
 
@@ -26,7 +26,7 @@ Formulas ''do not'' support WikiText, because the result of WikiText processing 
 
 !!Familiarity
 
-Formulas are designed to be as similar as possible to the familiar syntax used in TiddlyWiki.  [[Transclusion]]s, [[Variable]]s and [[Filter Run]]s follow TiddlyWiki's existing syntax and behaviors.  [[Datum]] values are interpreted using a subset of WikiText rules.
+Formulas are designed to be as similar as possible to the familiar syntax used in TiddlyWiki.  [[Transclusion]]s, [[Variable]]s and [[Filter]]s follow TiddlyWiki's existing syntax and behaviors.  [[Datum]] values are interpreted using a subset of WikiText rules.
 
 Formulas are otherwise designed to look and behave similar to their analogs in popular spreadsheet software Microsoft Excel and Google Sheets.
 
