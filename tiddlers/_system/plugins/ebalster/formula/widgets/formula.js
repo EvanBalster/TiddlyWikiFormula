@@ -25,9 +25,22 @@ FormulaWidget.prototype.render = function(parent,nextSibling) {
 	this.parentDomNode = parent;
 	this.computeAttributes();
 	this.execute();
-	var textNode = this.document.createTextNode(this.currentValue);
-	parent.insertBefore(textNode,nextSibling);
-	this.domNodes.push(textNode);
+	this.rerender(parent,nextSibling);
+};
+
+FormulaWidget.prototype.rerender = function(parent, nextSibling) {
+
+	this.removeChildDomNodes();
+
+	// Parse the value, or, failing this, produce a text node.
+	var parser = this.wiki.parseText(
+		this.wikifyType, this.currentValue,
+		{parseAsInline: this.wikifyMode});
+	var parseTreeNodes = (parser ? parser.tree : [{type: "text", text: this.currentValue}]);
+
+	// Construct and render the child widgets.
+	this.makeChildWidgets(parseTreeNodes);
+	this.renderChildren(parent,nextSibling);
 };
 
 /*
@@ -40,6 +53,9 @@ FormulaWidget.prototype.execute = function() {
 	// Get parameters from our attributes
 	this.formula   = this.getAttribute("formula");
 	this.debug     = this.getAttribute("debug");
+
+	this.wikifyType = this.getAttribute("outputType");
+	this.wikifyMode = this.getAttribute("outputMode","block");
 
 	this.formatOptions =
 	{
@@ -80,7 +96,9 @@ FormulaWidget.prototype.refresh = function(changedTiddlers) {
 	this.execute();
 	if(this.currentValue !== oldValue) {
 		// Regenerate and rerender the widget and replace the existing DOM node
-		this.refreshSelf();
+		//   We DON'T call refreshSelf() because it call execute() again
+		var nextSibling = this.findNextSiblingDomNode();
+		this.rerender(this.parentDomNode,nextSibling);
 		return true;
 	} else {
 		return false;
