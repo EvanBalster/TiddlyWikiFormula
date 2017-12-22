@@ -1,0 +1,61 @@
+created: 20171222014351538
+modified: 20171222014457642
+tags: 
+title: Widget Architecture/Functionality
+type: text/vnd.tiddlywiki
+
+!! Functionality
+
+<$details summary="getVariable, setVariable, hasVariable, substituteVariableParameters">
+Var stuff; Doc later
+
+Note: getVariable gets from the PARENT widget.
+</$details>
+<$details summary="evaluateMacroModule(name, actualParams, defaultValue)">
+Var stuff; Doc later
+</$details>
+<$details summary="getStateQualifier">
+Var stuff; Doc later
+</$details>
+
+<$details summary="addEventListeners(listeners), addEventListener(type, handler)">
+
+"Add a list of event listeners from an array `[{type:,handler:},...]`"
+
+"Add an event listener".  The handler argument can be a method name on this widget or a function to be called with `this`=this widget.
+
+</$details>
+
+
+<$details summary="dispatchEvent(event)">
+
+"Dispatch an event to a widget. If the widget doesn't handle the event then it is also dispatched to the parent widget.
+
+Event has a field `type` which is a string.  Returns whether the event was //not// handled.
+
+</$details>
+
+
+<$details summary="invokeActions(triggeringWidget,event) : bool">
+
+"Invoke the action widgets that are descendents of the current widget."
+
+Returns whether event was handled.
+
+</$details>
+
+
+<$details summary="invokeActionString(actions,triggeringWidget,event,variables) : bool">
+
+"Invoke the action widgets defined in a string"
+
+Returns whether event was handled.
+
+</$details>
+
+
+<$details summary="allowActionPropagation()">
+
+"Invoke the action widgets defined in a string"
+
+</$details>

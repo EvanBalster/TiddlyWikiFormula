@@ -1,0 +1,72 @@
+created: 20171222015158308
+modified: 20171222214441861
+tags: 
+title: Widget Inspector
+type: text/vnd.tiddlywiki
+
+\define detectImplement(method)
+(= if(regexmatch({{!!text}}, "\.\s*prototype\s*\.\s*$method$\s*="),"Y","n") =)
+\end
+
+\define countSelfCalls(method)
+(= count(regexextract({{!!text}}, "(this|self)\s*\.\s*$method$\s*\(")) =)
+\end
+
+\define allTest(method)
+<<detectImplement "$method$">> <<countSelfCalls "$method$">>
+\end
+
+\define widgetShortName(title)
+(= mid(regexextract1("$title$", "/[a-zA-Z0-9_-]+(?=\.)", "uunknown"), 2, 999) =)
+\end
+
+Check the number of calls to this.execute, this.refreshSelf, this.computeAttributes and this.renderChildren in each widget implementation.
+
+<table>
+<tr>
+<th>Widget</th>
+<!-- <th>rend<br/>der</th>
+<th>refr<br/>esh</th> -->
+<th>exec</th>
+<th>refr<br/>self</th>
+<!-- <th>ini</th> -->
+<th>comp<br/>attr</th>
+<th>rend<br/>chil</th>
+</tr>
+<$list filter="[all[shadows]module-type[widget]]">
+<tr>
+<th rowspan=2 style="width: 8em;"><$link><$macrocall $name=widgetShortName title={{!!title}}/></$link></th>
+<!-- <td><<detectImplement render>></td>
+<td><<detectImplement refresh>></td> -->
+<td><<countSelfCalls execute>></td>
+<td><<countSelfCalls refreshSelf>></td>
+<!-- <td><<countSelfCalls initialise>></td> -->
+<td><<countSelfCalls computeAttributes>></td>
+<td><<countSelfCalls renderChildren>></td>
+</tr>
+<tr>
+<td colspan=4>
+<$details summary="View Call Tree">
+<pre><code><$formula outputType="txt" formula="""
+ textjoin("", true, regexextract({{!!text}},
+   "(\n[^\n]*prototype\s*\..+\n|[^\n]*(this|self)\s*\.\s*[a-zA-Z0-9_]+\([^\n]*\n)"))
+"""/></code></pre>
+</$details>
+</td>
+</tr>
+</$list>
+</table>
+
+Method implementation
+
+[[Widget Call Trees]]
+
+```
+<dl>
+<$list filter="[all[shadows+tiddlers]module-type[widget]]">
+<dt><$link><$macrocall $name=widgetShortName title={{!!title}}/></$link></dt>
+<dd>(= regexextract({{!!text}}, "\.\s*prototype\s*\.\s*[a-zA-Z0-9_-]+\s*=") =)</dd>
+<!-- <dd>(= regexextract({{!!text}}, "(this|self)\s*\.\s*[a-zA-Z0-9_-]+\s*\(") =)</dd> -->
+</$list>
+</dl>
+```

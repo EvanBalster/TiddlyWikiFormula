@@ -1,0 +1,61 @@
+created: 20171222014259532
+modified: 20171222014300656
+tags: 
+title: Widget Architecture/Commonly Overridden Methods
+type: text/vnd.tiddlywiki
+
+!!Commonly overridden methods
+
+
+<$details summary="render(parent, nextSibling)">
+
+Render this widget into the DOM.
+
+Default:
+
+```
+this.parentDomNode = parent;
+this.execute();
+this.renderChildren(parent, nextSibling);
+```
+
+Called by:
+
+* `Widget.renderChildren` (from parent)
+* `Widget.refreshSelf` (from self)
+* `Widget.invokeActionString` (uncommon, for action fields)
+
+</$details>
+
+<$details summary="execute()">
+
+Compute the internal state of the widget
+
+Default:
+
+```
+this.makeChildWidgets();
+```
+
+Called by:
+
+* `Widget.render` (default implementation)
+* `<subclass>.refresh` (some implementations)
+
+</$details>
+
+<$details summary="refresh(changedTiddlers) : bool">
+
+"Selectively refreshes the widget if needed. Returns true if the widget or any of its children needed re-rendering"
+
+Default:
+
+```
+this.refreshChildren(changedTiddlers);
+```
+
+Called by:
+
+* `Widget.refreshChildren` (from parent)
+
+</$details>

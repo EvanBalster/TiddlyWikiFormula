@@ -1,0 +1,80 @@
+created: 20171222014321635
+modified: 20171222073336784
+tags: 
+title: Widget Architecture/Implementor Utility Methods
+type: text/vnd.tiddlywiki
+
+!!Implementor Utility Methods
+
+
+<$details summary="Widget(parseTreeNode, options)">
+
+Constructor.  Calls `initialize`.
+
+</$details>
+
+
+<$details summary="initialize(parseTreeNode, options)">
+
+  Common init code.  Call from constructor.
+
+</$details>
+
+
+<$details summary="computeAttributes()">
+
+"Compute the current values of the attributes of the widget. Returns a hashmap of the names of the attributes that have changed"
+
+Called by:
+
+* Implementations only
+
+</$details>
+
+
+<$details summary="makeChildWidgets(parseTreeNodes), makeChildWidget(parseTreeNode)">
+
+Turn the parse tree nodes into child widgets.  Recursive.
+
+</$details>
+
+
+<$details summary="renderChildren(parent, nextSibling)">
+
+"Render children into the DOM."
+
+Broadcasts `render` to children with the same args.
+
+</$details>
+
+<$details summary="removeChildDomNodes">
+
+"Remove any DOM nodes created by this widget or its children."
+
+Un-renders children.
+
+</$details>
+
+<$details summary="refreshSelf() TODO">
+
+"Rebuild a previously rendered widget."
+
+```
+    var nextSibling = this.findNextSiblingDomNode();
+    this.removeChildDomNodes();
+    this.render(this.parentDomNode,nextSibling);
+```
+
+</$details>
+
+
+<$details summary="refreshChildren(Refresh all the children of a widget) : bool">
+
+"Refresh all the children of a widget"
+
+</$details>
+
+
+!!! `assignAttributes(domNode, options)` ...
+
+!!! `hasAttribute(name), getAttribute(name, defaultText)` ...

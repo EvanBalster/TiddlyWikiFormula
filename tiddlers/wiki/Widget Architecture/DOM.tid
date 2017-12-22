@@ -1,0 +1,20 @@
+created: 20171222014403570
+modified: 20171222014404669
+tags: 
+title: Widget Architecture/DOM
+type: text/vnd.tiddlywiki
+
+!!DOM
+
+
+<$details summary="nextSibling(), previousSibling(), parent">
+
+Get relatives in DOM.
+
+</$details>
+
+<$details summary="findNextSiblingDomNode(firstIndex), findFirstDomNode() TODO">
+
+DOM searching?
+
+</$details>

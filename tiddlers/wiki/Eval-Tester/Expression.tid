@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171221202433947
+modified: 20171222213938009
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-days_in_month(2021, 2)
+"Sum: `" & [tag[Expenses]get[value]] & "` = " & sum([tag[Expenses]get[value]])

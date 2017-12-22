@@ -1,0 +1,21 @@
+created: 20171222000814739
+modified: 20171222073212005
+tags: 
+title: Widget Architecture
+type: text/vnd.tiddlywiki
+
+These are Evan's notes on Widget design.
+
+Mainly I'm concerned with avoiding redundant logic.  I've noticed that some TiddlyWiki core widgets run `execute` twice, and copying them led to repeating this mistake in my formula plugin.
+
+
+{{Widget Architecture/Commonly Overridden Methods}}
+
+
+{{Widget Architecture/Implementor Utility Methods}}
+
+
+{{Widget Architecture/Functionality}}
+
+
+{{Widget Architecture/DOM}}

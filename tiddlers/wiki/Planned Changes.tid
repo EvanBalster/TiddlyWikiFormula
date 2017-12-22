@@ -1,0 +1,17 @@
+created: 20171222192325797
+modified: 20171222194136259
+tags: 
+title: Planned Changes
+type: text/vnd.tiddlywiki
+
+* Wikify formula output
+
+!! Major changes
+
+* Arrays stringify to TiddlyWiki lists
+* Ditch value encapsulation
+** Make functions accept operands to make lazy evaluation simpler
+** Operands can have default conversion methods
+* Smarter comparison of arrays
+* Add global format settings with clear defaults
+* Use format strings instead of toFixed/toPrecision
