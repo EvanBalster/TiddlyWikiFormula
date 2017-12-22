@@ -77,10 +77,14 @@ exports.V_Array.prototype.asSum = function() {
   return n;
 };
 exports.V_Array.prototype.asString     = function() {
-  var result = "[";
-  if (this.value.length) result += this.value[0].asString();
-  for (var i = 1; i < this.value.length; ++i) result += "," + this.value[i].asString();
-  return result + "]";
+  var result = "";
+  for (var i = 0; i < this.value.length; ++i) {
+    var part = this.value[i].asString();
+    if (i && part.length) result += " ";
+    if (part.indexOf(/\s/g) >= 0) result += "[[" + part + "]]";
+    else result += part;
+  }
+  return result;
 };
 
 
