@@ -12,7 +12,7 @@ var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 
 var rxSkipWhitespace    = /\s*/g;
 var rxNotWhitespace     = /[^\s]+/g;
-var rxOperandFilter     = /\[([^\[\]]|\[[^\[\]]*\])*\]/g;
+var rxOperandFilter     = /\[(([^\[\]]|\[[^\[\]]*\])+(\](\s*[+-])?\s*\[)?)+\]/g;
 var rxOperandTransclusion =     /\{\{[^\{\}]+\}\}/g;
 var rxDatumIsTransclusion = /^\s*\{\{[^\{\}]+\}\}\s*$/;
 var rxOperandVariable     =     /<<[^<>]+>>/g;
