@@ -45,6 +45,10 @@ exports.max = function(a)
 };
 exports.max.variadic = true;
 
+exports.clamp = function(a, min, max) {
+    return new V_Num(Math.min(Math.max(a.asNum(), min.asNum()), max.asNum()));
+};
+
 
 /*
     Series arithmetic
@@ -142,6 +146,7 @@ exports.cot = function(a)    {return new V_Num(1/Math.tan(a.asNum()));};
 exports.asin = function(a)    {return new V_Num(Math.asin(  a.asNum()));};
 exports.acos = function(a)    {return new V_Num(Math.acos(  a.asNum()));};
 exports.atan = function(a)    {return new V_Num(Math.atan(  a.asNum()));};
+exports.atan2 = function(y,x)    {return new V_Num(Math.atan2(y.asNum(), x.asNum()));};
 exports.acsc = function(a)    {return new V_Num(Math.asin(1/a.asNum()));};
 exports.asec = function(a)    {return new V_Num(Math.acos(1/a.asNum()));};
 exports.acot = function(a)    {return new V_Num(Math.atan(1/a.asNum()));};
@@ -200,6 +205,7 @@ exports.ceil =
     min_args : 1, max_args : 2,
     select : function(operands) {return genCeilFloor(operands, Math.ceil);}
 };
+
 /*exports.floor_precise =
 {
     min_args : 1, max_args : 2,
@@ -227,6 +233,36 @@ exports.rounddown =
 };
 
 exports.trunc = exports.rounddown;
+
+// Related functions
+exports.fract  = function(a)      {a = a.asNum(); return new V_Num(a-signedFloor(a));};
+exports.modulo = function(a,b)    {b = b.asNum(); return new V_Num(b*Math.floor(a/b));};
+
+exports.mod = exports.modulo;
+
+
+/*
+    Interpolation
+*/
+exports.mix = function(a,b,m) {
+    a = a.asNum();
+    b = b.asNum();
+    m = m.asNum();
+    return new V_Num(a + (b-a) * m);
+};
+
+exports.step = function(e,x)    {return new V_Num((x.asNum()<e.asNum()) ? 0.0 : 1.0);};
+
+exports.smoothstep = function(e0,e1,x) {
+    x  = x .asNum();
+    e0 = e0.asNum();
+    e1 = e1.asNum();
+    if (x < e0) return new V_Num(0.0);
+    if (x > e1) return new V_Num(1.0);
+    x = (x-e0) / (e1-e0);
+    return new V_Num(3*x*x - 2*x*x*x);
+};
+
 
 
 /*
