@@ -39,26 +39,38 @@ exports.regexmatch = function(s, rx) {
 };
 
 // Regex extract
-exports.regexextract = function(s, rx) {
+function regexextract(s, rx) {
 	rx = tw_regex(rx.asString(), "g");
 	s = s.asString();
+	var captureIndex = (arguments[2] ? arguments[2].asNum() : 0);
 	var matches = [];
 	var match;
 	while ((match = rx.exec(s)) != null) {
 		if (match[0].length == 0) ++rx.lastIndex;
-		matches.push(new V_Text(match[0]));
+		matches.push(new V_Text(match[captureIndex] || ""));
 		if (!rx.global) break;
 	}
 	return new Val.V_Array(matches);
+}
+
+exports.regexextract = {
+	min_args: 2, max_args: 3,
+	select: function(operands) {return regexextract;}
 };
 
 // Regex extract, single argument
-exports.regexextract1 = function(s, rx, dfl) {
+function regexextract1(s, rx, dfl) {
 	rx = tw_regex(rx.asString(), "");
 	s = s.asString();
+	var captureIndex = (arguments[3] ? arguments[3].asNum() : 0);
 	var match = rx.exec(s);
-	return new Val.V_Text(match ? match[0] : dfl.asString());
-};
+	return new Val.V_Text(
+		(match && match[captureIndex]) ? match[captureIndex] : dfl.asString());
+}
 
+exports.regexextract1 = {
+	min_args: 3, max_args: 4,
+	select: function(operands) {return regexextract1;}
+};
 
 })();
