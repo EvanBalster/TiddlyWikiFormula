@@ -109,6 +109,8 @@ FormulaVarsWidget.prototype.refresh = function formulaVarsRefresh(changedTiddler
 		}
 	}
 
+	if (this.getAttribute("$noRebuild") === "true") changedValues = false;
+
 	if(changedValues) {
 		// Regenerate and rerender the widget and replace the existing DOM node
 		this.refreshSelf();
