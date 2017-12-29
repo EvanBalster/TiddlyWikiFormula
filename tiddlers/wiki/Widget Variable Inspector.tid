@@ -1,0 +1,86 @@
+created: 20171227155501239
+modified: 20171229232457610
+searchterm: (g|s)etVariable
+tags: 
+title: Widget Variable Inspector
+type: text/vnd.tiddlywiki
+
+\define countVarSets()
+(= count(regexextract({{!!text}}, ".\\s*setVariable\\s*\\(")) =)
+\end
+
+\define countVarGets()
+(= count(regexextract({{!!text}}, ".\\s*getVariable\\s*\\(")) =)
+\end
+
+\define specialVarRegex()
+((current|story)Tiddler|namespace|transclusion|tv-[-a-zA-Z_]+)
+\end
+
+\define countSpecialsRegex(getOrSet)
+.\\s*$(getOrSet)$Variable\\s*\\(\\s*[\\\'\\\"]$(specialVarRegex)$
+\end
+
+\define countSpecialGets()
+(= count(regexextract({{!!text}}, ".\\s*getVariable\\s*\\(\\s*[\\\'\\\"]$(specialVarRegex)$")) =)
+\end
+
+\define countSpecialSets()
+(= count(regexextract({{!!text}}, ".\\s*setVariable\\s*\\(\\s*[\\\'\\\"]$(specialVarRegex)$")) =)
+\end
+
+\define widgetShortName(title)
+(= mid(regexextract1("$title$", "/[a-zA-Z0-9_-]+(?=\\.)", "uunknown"), 2, 999) =)
+\end
+
+Locate calls to getVariable and setVariable in all widget implementations.
+
+Each count is displayed as X/Y where X is the number of operations on these special variables:
+
+* `currentTiddler`
+* `storyTiddler`
+* `namespace`
+* `transclusion`
+* `tv-` prefixed variables
+
+;Search Term
+:<$radio field="searchterm" value="(g|s)etVariable"> Get+Set</$radio>
+:<$radio field="searchterm" value="getVariable"> Get</$radio>
+:<$radio field="searchterm" value="setVariable"> Set</$radio>
+
+<table>
+<tr>
+<th>Widget</th>
+<th>getVariable</th>
+<th>setVariable</th>
+</tr>
+<$list filter="[all[shadows]module-type[widget]regexp:text{!!searchterm}]">
+<tr>
+<th style="width: 8em;"><$link><$macrocall $name=widgetShortName title={{!!title}}/></$link></th>
+<td><<countSpecialGets>>/<<countVarGets>></td>
+<td><<countSpecialSets>>/<<countVarSets>></td>
+</tr>
+<tr>
+<th></th>
+<td colspan=5>
+<$details summary="View Call Tree">
+<$comment "Mine out functions with the calls we're interested in" />
+
+<pre class=tiny-monospace><code class=tiny-monospace>
+<$text text=(=
+  textjoin("", true, regexextract(
+    textjoin("", true, regexextract({{!!text}},
+      "([^\\n]*prototype\\s*\\.[^\\n]+\\n|[^\\n]*[gs]etVariable[^\\n]*\\n)")),
+    "[^\\n]*prototype\\s*\\.[^\\n]+\\n([\\t ][^\\n]*\\n)+"))
+=)/>
+</code></pre>
+
+</$details>
+</td>
+</tr>
+</$list>
+</table>
+
+Method implementation
+
+[[Widget Call Trees]]

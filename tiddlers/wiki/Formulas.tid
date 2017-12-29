@@ -1,81 +1,9 @@
-created: 20171212014005571
-modified: 20171222223817168
+created: 20171229211746845
+modified: 20171229211815989
 tags: 
 title: Formulas
 type: text/vnd.tiddlywiki
 
-\define formulaFixed() 2
+!>> [[Formula Plugin]]
 
-\define example(what, code) <tr><th>$what$</th><td>`$code$`</td><td>$code$</td></tr>
-
-!Welcome!
-
-This wiki demonstrates the ''Formula'' plugin for TiddlyWiki (version {{$:/plugins/ebalster/formula!!version}}).
-
-The plugin is designed to give TiddlyWiki the ability to process numbers and other data just like popular spreadsheet software.
-
-It's a work in progress so please report any issues you find, preferably [[here on GitHub|https://github.com/EvanBalster/TiddlyWikiFormula/issues]].
-
-
-!Get the Plugin
-
-<<<
-Drag-and-drop this to your wiki:
-
-{{$:/plugins/ebalster/formula||$:/core/ui/Components/plugin-info}}
-<<<
-
-!Features!
-
-<table>
-<tr><th></th><th>code</th><th>result</th></tr>
-<<example numbers "(= 2 =)">>
-<<example math "(= 2+3*4 =)">>
-<<example functions "(= pow(2, 3) =)">>
-<<example comparison "(= 2+3*4 > 12 =)">>
-<<example transclusion "(= {{Soda-Pop!!value}} =)">>
-<$macrocall $name=example what=variables code="(= <<now>> =)"/>
-<<example filters "(= [tag[Expenses]] =)">>
-<<example "complex<br/>formulas" "(= round(5*sum([tag[Expenses]get[value]]), 2) =)">>
-<<example strings """(= "hello" =)""">>
-<<example concatenation """(= '$' & 45.23*12 & " cost" =)""">>
-</table>
-
-(Precision set to <<formulaFixed>> decimal places)
-
-
-!Try Me
-
-{{Try Me}}
-
-
-!Learn More
-
-* Usage
-** [[Formulas in WikiText]]
-** [[Formulas as Tag Attributes]]
-** [[Syntax]]
-** [[Functions]]
-** [[Operators]]
-** [[FormulaWidget]]
-** [[FormulaVarsWidget]]
-** [[FormulaMacro]]
-** [[range Operator]]
-* Under the hood
-** [[ChangeLog]]
-** [[Extending Formulas]]
-** [[Plugin Design]]
-** [[Source Code]]
-* Demos & Fun Stuff
-** [[Demo: Starburst]]
-** [[Demo: Real Projective Line]]
-** [[Demo: Tabulator]]
-** [[Spreadsheet Prototype]]
-
-
-!Contributions & Feedback
-
-* [[TiddlyWikiFormula GitHub|https://github.com/EvanBalster/TiddlyWikiFormula]]
-* [[TiddlyWiki Mailing List|https://groups.google.com/forum/#!topic/tiddlywiki/bfInUWhAtzo]]
-
-This plugin is written by [[Evan Balster]].
+This page has been renamed.

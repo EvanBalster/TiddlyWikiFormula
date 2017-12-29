@@ -1,0 +1,10 @@
+created: 20171229233125420
+interpolate: 100
+lattice-depth: 53
+modified: 20171229233209517
+noRebuild: true
+octaveList: [range[-180,180,36]]
+semitoneList: [range[-180,180,3]]
+title: Harmonic Lattice/State
+type: text/vnd.tiddlywiki
+

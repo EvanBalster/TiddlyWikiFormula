@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171222232630454
+modified: 20171229233023468
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -18,10 +18,10 @@ Some functions have multiple names, often to help them match up with popular spr
 
 !Functions
 
-|!Operators|<|<|<|
+|!Arithmetic & Operators|<|<|<|
 |!Function|!Args|!Result|!Summary|
-| `uplus`|`(a)`| * |Return `a`.<br/>Same as `+a`.|
-| `uminus`|`(a)`|number|Return `a` times `-1`.<br/>Same as `-a`.|
+| `uplus`|`(a)`| * |Result is `a`.<br/>Same as `(+a)`.|
+| `uminus`|`(a)`|number|Multiply `a` by `-1`.<br/>Same as `(-a)`.|
 | `add`|`(a, b)`|number|Add numbers `a` and `b`.<br/>Same as `(a+b)`.|
 | `sub`|`(a, b)`|number|Subtract `b` from `a`.<br/>Same as `(a-b)`.|
 | `subtract`|~|~|~|
@@ -31,6 +31,8 @@ Some functions have multiple names, often to help them match up with popular spr
 | `div`|`(a, b)`|number|Divide `a` by `b`.<br/>Same as `(a/b)`.|
 | `divide`|~|~|~|
 | `quotient`|~|~|~|
+| `mod`|`(a,b)`|number|Get the remainder when dividing `a/b`.|
+| `modulo`|~|~|~|
 |!Math|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `abs`|`(a)`|number|Return `a`'s absolute value.|
@@ -39,10 +41,14 @@ Some functions have multiple names, often to help them match up with popular spr
 | `product`|`(a,b..)`|number|Multiply the arguments.|
 | `min`|`(a,b..)`|number|Get the lowest number.|
 | `max`|`(a,b..)`|number|Get the highest number.|
+| `clamp`|`(a,L,H)`|number|Limit `a` to a range from min `L` to max `H`.|
 | `sqrt`|`(a)`|number|Get the square root of `a`.|
 | `cbrt`|`(a)`|number|Get the cube root of `a`.|
 | `gcd`|`(a,b)`|number|Get the greatest common divisor.|
 | `lcm`|`(a,b)`|number|Get the least common multiple.|
+| `mix`|`(a,b,x)`|number|Get a value between `a` and `b`.<br/>Same as `((1-x)*a + x*b)`.|
+| `step`|`(a,x)`|number|`0` if `x<a`, `1` otherwise. (GLSL-inspired.)|
+| `smoothstep`|`(a,b,x)`|number|As `step` but ease from `0` to `1` as `x` moves from `a` to `b`. (GLSL-inspired.)|
 |!Math (rounding)|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `round`|`(a)`|number|Round `a` to the nearest integer.|
@@ -55,6 +61,7 @@ Some functions have multiple names, often to help them match up with popular spr
 |~|`(a, m)`|number|Round `a` down to a multiple of `m`.|
 | `ceil`|`(a)`|number|Round `a` up to the nearest integer.|
 |~|`(a, m)`|number|Round `a` up to a multiple of `m`.|
+| `fract`|`(a)`|number|Get the fractional part of `a`.|
 |!Math (exponential)|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `_e`||number|Euler's number ''e'' (approx. 2.71828).|
@@ -84,6 +91,7 @@ Some functions have multiple names, often to help them match up with popular spr
 | [`a`]`sec`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] secant.|
 | [`a`]`csc`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cosecant.|
 | [`a`]`cot`[`h`]|`(a)`|number|Get the [arc and/or hyperbolic] cotangent.|
+| `atan2`|`(y,x)`|number|Get the arctangent of `y`/`x`.<br/>This is useful for computing angles.|
 |!Math (Statistical)|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `rand`|`()`|number|Get a random number between 0 and 1.|
@@ -108,9 +116,9 @@ Some functions have multiple names, often to help them match up with popular spr
 |!Function|!Args|!Result|!Summary|
 | <<small regexreplace>>|`(s,R,b)`|text|Replace all `R` matches in `s` with `b`.|
 | <<small regexmatch>>|`(s,R)`|bool|Test whether `s` matches `R` at least once.|
-| <<small regexextract>>|`(s,R)`|array|Get all `R` matches in `s`.|
-| <<small regexextract1>>|`(s,R,d)`|text|Get the first `R` match in `s`.<br/>Result is `d` if there are no matches.|
-|!Note:| //`R` are regular expressions like in the `regexp` filter operator.// |<|<|
+| <<small regexextract>>|`(s,R)`<br/>`(s,R,i)`|array|Get all `R` matches in `s`.|
+| <<small regexextract1>>|`(s,R,d)`<br/><<small (s,R,d,i)>>|text|Get the first `R` match in `s`.<br/>Result is `d` if there are no matches.|
+|!Note:| //`R` are regular expressions like in the `regexp` filter operator.<br/>These must be strings with double-escaping, ex. `"\\s*"`.<br/>Supply `i` to get the `i`th [[capture group|https://www.regular-expressions.info/brackets.html]] in the regex.// |<|<|
 |!Comparison|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `exact`|`(a,b)`|boolean|Test whether `a` and `b` are exactly equal.|

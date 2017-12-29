@@ -1,0 +1,131 @@
+created: 20171221064018661
+modified: 20171229230331916
+tags: Explorable
+title: Real Projective Line
+type: text/vnd.tiddlywiki
+
+<$importvariables filter="[[Real Projective Line/Macros]]">
+
+<$tiddler tiddler="Real Projective Line/State">
+
+<div style="width: 640px; display: block; margin: auto;">
+
+!The Real Projective Line
+
+The ''Real Projective Line'' is a way to visualize all the real numbers as a continuous "loop".  We do this by stitching the ends together at a "point at infinity":
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -80 320 180" width="640" style="display: block; margin: auto;">
+<rect x=-160 y=-80 width=320 height=180 rx=5 fill=#001133/>
+<$formula-vars $noRefresh=true
+	unfold="{{!!unfold}}/100"
+	ang1="2*atan(1 *{{!!unfold}}%)"
+	strokeWidth="'stroke-width:'&.007*(3-2*{{!!unfold}}%)&';'"
+	zoom="'scale('&60/(3-2*{{!!unfold}}%)&')'"
+	inflate="'scale('&(3-2*{{!!unfold}}%)&')'"
+	>
+<g style="font-size:.1pt; font-weight: bold; align: center; text-anchor: middle;">
+<g style=<<strokeWidth>> transform=<<zoom>>>
+<<RPL_realLine>>
+<$formula-vars $noRefresh=true
+	lx1="if(<<unfold>>=0,-10,0)"
+	lx2="if(<<unfold>>=0,+10,0)"
+	pcr="if(<<unfold>>=0,0,1/<<unfold>>)"
+	pcy="if(<<unfold>>=0,100,1-1/<<unfold>>)"
+	zero="'translate(0, 1) ' & <<inflate>>"
+	inf="'translate(0,' & if(<<unfold>>=0,100,1-2/<<unfold>>) & ') ' & <<inflate>>"
+	pos1="'translate(' & (+1+cos(<<ang1>>)) & ',' & (1-sin(<<ang1>>)) & ') ' & <<inflate>>"
+	neg1="'translate(' & (-1-cos(<<ang1>>)) & ',' & (1-sin(<<ang1>>)) & ') ' & <<inflate>>"
+	>
+<line x1=<<lx1>> x2=<<lx2>> y1=1 y2=1 stroke=#FFFFFF/>
+<circle cx=0 cy=<<pcy>> r=<<pcr>> stroke=#FFFFFF fill=none/>
+<$list variable="n" filter="[[-5]] [[+5]] [[-3]] [[+3]] [[-2]] [[+2]]">
+<$formula-vars $noRefresh=true angN="2*atan(<<n>>*{{!!unfold}}%)">
+<$formula-vars $noRefresh=true posN="'translate(' & <<n>>*(+1+cos(<<angN>>)) & ',' & 1-<<n>>*sin(<<angN>>) & ') ' & <<inflate>>">
+	<$macrocall $name=RPL_orb transform=<<posN>> text=<<n>>/>
+</$formula-vars>
+</$formula-vars>
+</$list>
+<$macrocall $name=RPL_orb transform=<<zero>> text="0"/>
+<$macrocall $name=RPL_orb transform=<<pos1>> text="+1"/>
+<$macrocall $name=RPL_orb transform=<<neg1>> text="–1"/>
+<$macrocall $name=RPL_orb transform=<<inf>> text="∞" style="font-size: .14pt;"/>
+</$formula-vars>
+</g>
+</g>
+</$formula-vars>
+<<RPL_title "fig. 1: the real projective line.">>
+</svg>
+
+<div style="text-align:center;">
+
+<<slider unfold>>
+
+Drag this slider to transform the number line into the projective line.
+
+</div>
+
+
+We arrange all the "projective" numbers into a circle, then find the real number by shooting a ray from the apex of the circle, through the projective point, and onto the number line.
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -80 320 180" width="640" style="display: block; margin: auto;">
+<rect x=-160 y=-80 width=320 height=180 rx=5 fill=#001133/>
+<g style="font-size: .1pt; font-weight: bold; align: center; stroke-width:.007; text-anchor: middle;" transform=scale(60)>
+<<RPL_background>>
+<$formula-vars $noRefresh=true
+	theta="PI+PI*2*{{!!orientation}}%"
+	n="2*tan(.5*PI+PI*{{!!orientation}}%)"
+	>
+<$formula-vars $noRefresh=true
+	$toFixed=1
+	degrees="{{!!orientation}}%*180-90"
+	nshow="if(abs({{!!orientation}}-50)=50,'infinity',tan(.5*PI+PI*{{!!orientation}}%))"
+	>
+<$formula-vars $noRefresh=true
+	sin="sin(<<theta>>)"
+	cos="cos(<<theta>>)"
+	x1="-10*<<n>>" y1=-21
+	x2="+10*<<n>>" y2="19"
+	>
+<not-circle r=.35 stroke=#222222 fill=none/>
+<not-line x1=<<sin>> y1=<<cos>> x2=<<sin_in>> y2=<<cos_in>> stroke=#333333/>
+<line
+	x1=(= mix(0,<<n>>,-10) =) y1=(= mix(-1,1,-10) =)
+	x2=(= mix(0,<<n>>,+10) =) y2=(= mix(-1,1,+10) =) stroke=#666666/>
+<circle cx=<<sin>> cy=<<cos>> r=.02 fill=#FFFFFF/>
+<circle cx=<<n>> cy=1 r=.025 fill=#FFFFFF/>
+<text x=.02 y=-.02 fill=white>
+	<tspan><$text text=<<degrees>>/>°</tspan>
+	<tspan x="0" dy="1em"><$text text=<<nshow>>/></tspan>
+</text>
+</$formula-vars>
+</$formula-vars>
+</$formula-vars>
+<<RPL_foreground>>
+</g>
+<<RPL_title "fig. 2: projecting onto the real number line.">>
+</svg>
+
+<div style="text-align:center;">
+
+<<slider orientation>>
+
+<$button>flip horizontal<$action-setfield orientation=<<formula "100-{{!!orientation}}">>/>
+</$button>
+<$button>flip vertical<$action-setfield orientation=<<formula "if({{!!orientation}}>50,150,50)-{{!!orientation}}">>/>
+</$button>
+
+</div>
+
+<div style="text-align:center;">
+Use the slider to move the projective point around.
+</div>
+
+Notice how when you set the orientation to plus or minus 90 degrees, the number becomes infinite — the ray can never hit the number line.
+
+This numbering system has some fascinating properties.  Flipping the projective point left-to-right negates the real number, while flipping vertically results in its reciprocal.
+
+In projective mathematics, infinity and zero are reciprocals, and infinity isn't positive or negative — it's "just" infinity.
+
+By turning the projective circle into a sphere, we can model vectors in higher dimensions, or complex numbers.
+
+</div>

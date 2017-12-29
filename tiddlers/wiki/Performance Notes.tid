@@ -1,0 +1,9 @@
+created: 20171229044704323
+modified: 20171229044831933
+tags: 
+title: Performance Notes
+type: text/vnd.tiddlywiki
+
+* Lots of widgets execute twice when they don't need to.
+* Variable-related widgets initiate re-rendering of children because there's no selectivity for variables.
+* Re-rendering $macrocall is really expensive.

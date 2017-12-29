@@ -1,5 +1,5 @@
 created: 20171221184734665
-modified: 20171221191813321
+modified: 20171229211834620
 tags: [[Filter Operators]] [[Negatable Operators]]
 title: range Operator
 type: text/vnd.tiddlywiki
@@ -12,7 +12,7 @@ type: text/vnd.tiddlywiki
 <$list variable=n filter="[range[$range$]]"><<n>> </$list>
 \end
 
-The `range` operator allows a range of numbers to be enumerated, similar to a `for` loop in other programming languages.  It's useful in combination with [[Formulas]].
+The `range` operator allows a range of numbers to be enumerated, similar to a `for` loop in other programming languages.  It's useful in combination with the [[Formula Plugin]].
 
 |!Purpose|produce a range of numbers|
 |!Input|ignored.|

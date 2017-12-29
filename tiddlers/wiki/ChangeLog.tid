@@ -1,19 +1,34 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171222233208246
+modified: 20171229233602394
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
 
+!!! 0.1.7 — 2017 December 29
+
+* Add math functions styled after GLSL for visual calculations
+** `fract`, `modulo`/`mod`, `atan2`, `clamp`, `mix`, `step`, `smoothstep`
+* Add capture index to `regexextract` and `regexextract1` [[Functions]].
+* Fix [[FormulaWidget]] always parsing output in inline mode.
+** Make inline the default parsing mode for [[FormulaWidget]].
+* Add __experimental__ `$noRefresh` option in [[FormulaVarsWidget]].
+** This suppresses full-refreshing, resulting in a potentially significant performance boost ([[see|Harmonic Lattice]]) when variables change.
+** This can cause incorrect refresh behavior.
+* Add __experimental__ support for [[Formulas as Tag Attributes]].
+** Example: `<td colspan=(= 2+2 =)/>`
+** For now, this requires a [[second plugin|$:/plugins/ebalster/attribute-modules]] that modifies the TiddlyWiki core!
+
+
 !!! 0.1.6 — 2017 December 22
 
-* Add [[range Operator]] for counting.
 * ''[[FormulaWidget]] results are now wikified by default''.
 * Made filter behavior more consistent with TiddlyWiki
 ** Support compound filters with `+` and `-` (these break precedence rules).
 ** ''Arrays now convert to strings in TiddlyWiki list format.''
+* Add [[range Operator]] for counting.
 * Implement escape sequences in [[String Literal]].
 ** `\\`, `\'`, `\"`, `\n`, `\r`, `\t`, `\v`, `\f`, `\b`, `\0`, `\u1234` (unicode)
 * Add calendar functions: `is_leap_year(y)`, `days_in_year(y)`, `days_in_month(y,m)`
@@ -25,6 +40,7 @@ Potentially destructive changes are noted in bold.
 ** Logic functions supported: `if`
 ** (Still experimenting with this, and may go in a very different direction).
 * Implement operand constructors for more flexible/performant functions.
+* Prevented formulas from being recomputed twice on refresh in some cases.
 
 
 !!! 0.1.5 — 2017 December 20

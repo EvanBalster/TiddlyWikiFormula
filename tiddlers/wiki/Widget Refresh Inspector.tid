@@ -1,0 +1,77 @@
+created: 20171222015158308
+modified: 20171228042022519
+tags: 
+title: Widget Refresh Inspector
+type: text/vnd.tiddlywiki
+
+\define detectImplement(method)
+(= if(regexmatch({{!!text}}, "\\.\\s*prototype\\s*\\.\\s*$method$\\s*="),"Y","n") =)
+\end
+
+\define countSelfCalls(method)
+(= count(regexextract({{!!text}}, "(this|self)\\s*\\.\\s*$method$\\s*\\(")) =)
+\end
+
+\define allTest(method)
+<<detectImplement "$method$">> <<countSelfCalls "$method$">>
+\end
+
+\define widgetShortName(title)
+(= mid(regexextract1("$title$", "/[a-zA-Z0-9_-]+(?=\\.)", "uunknown"), 2, 999) =)
+\end
+
+\define inspectorRow()
+<tr>
+<th rowspan=2 style="width: 8em;"><$link><$macrocall $name=widgetShortName title={{!!title}}/></$link></th>
+<td><<countSelfCalls execute>></td>
+<td><<countSelfCalls refreshSelf>></td>
+<td><<countSelfCalls computeAttributes>></td>
+<td><<countSelfCalls renderChildren>></td>
+</tr>
+<tr>
+<td colspan=4>
+<$details summary="View Call Tree">
+<$formula outputType="text/plain" formula="""
+ textjoin("", true, regexextract(
+  textjoin("", true, regexextract({{!!text}},
+   "(\\n[^\\n]*prototype\\s*\\..+\\n|[^\\n]*(this|self)\\s*\\.\\s*[a-zA-Z0-9_]+\\([^\\n]*\\n)")),
+  "\\n[^\\n]*prototype\\s*\\.[^\\n]+\\n([\\t ][^\\n]*\\n)+"))
+"""/>
+</$details>
+</td>
+</tr>
+\end
+
+Check the number of calls to this.execute, this.refreshSelf, this.computeAttributes and this.renderChildren in each widget implementation.
+
+Expand the dropdowns to see //all// calls to methods on "this" or "self".  Methods without any this-calls are omitted.
+
+<table>
+<tr>
+<th>Widget</th>
+<th>execute</th>
+<th>refresh-<br/>Self</th>
+<th>compute-<br/>Attributes</th>
+<th>render-<br/>Children</th>
+</tr>
+<$list filter="[all[shadows]module-type[widget]suffix[widgets/widget.js]]">
+<<inspectorRow>>
+</$list>
+<$list filter="[all[shadows]module-type[widget]!suffix[widgets/widget.js]]">
+<<inspectorRow>>
+</$list>
+</table>
+
+Method implementation
+
+[[Widget Call Trees]]
+
+```
+<dl>
+<$list filter="[all[shadows+tiddlers]module-type[widget]]">
+<dt><$link><$macrocall $name=widgetShortName title={{!!title}}/></$link></dt>
+<dd>(= regexextract({{!!text}}, "\\.\\s*prototype\\s*\\.\\s*[a-zA-Z0-9_-]+\\s*=") =)</dd>
+<!-- <dd>(= regexextract({{!!text}}, "(this|self)\\s*\\.\\s*[a-zA-Z0-9_-]+\\s*\\(") =)</dd> -->
+</$list>
+</dl>
+```

@@ -1,0 +1,32 @@
+caption: Add Funcs
+created: 20171228045958921
+modified: 20171228050918928
+tags: $:/tags/SideBar
+title: Function Adder
+type: text/vnd.tiddlywiki
+
+<$tiddler tiddler="$:/temp/function-adder">
+
+|!Title|<$edit-text field="title-tmp"/>|
+|!Name(s)|<$edit-text field="names"/>|
+|!Parameters|<$edit-text field="params"/>|
+|!Param abbrev.|<$edit-text field="params-short"/>|
+|!Return Type|<$edit-text field="return-type"/>|
+|!Summary|<$edit-text field="summary" size=40/>|
+|!Categories|<$edit-text field="categories"/>|
+
+<$button>Create
+<$action-createtiddler
+  $basetitle={{!!title-tmp}}
+  tags="Function"
+  names={{!!names}}
+  params={{!!params}}
+  params-short={{!!params-short}}
+  return-type={{!!return-type}}
+  summary={{!!summary}}
+  categories={{!!categories}}/>
+</$button>
+
+<<<
+{{!!summary}}
+<<<

@@ -1,5 +1,5 @@
 created: 20171212074056811
-modified: 20171222214242746
+modified: 20171228040009207
 tags: Widget
 title: FormulaWidget
 type: text/vnd.tiddlywiki
@@ -14,7 +14,7 @@ The `<$formula>` widget computes a formula and returns its result as WikiText.
 |Attribute|Description|h
 |formula|The formula string to be evaluated.|
 |outputType|ContentType of the formula result. Defaults to WikiText.|
-|outputMode|Parse mode used on the formula result: `block` (the default) or `inline`.|
+|outputMode|Parse mode used on the formula result: `inline` (the default) or `block`.|
 |toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
 |toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
 |toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|

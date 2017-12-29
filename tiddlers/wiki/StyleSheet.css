@@ -5,7 +5,20 @@ pre, code, .tc-edit-texteditor
   line-height: 15pt;
 }
 
+.tiny-monospace
+{
+  font-family: Consolas, Monaco, monospace;
+  font-size: 8pt;
+  line-height: 120%;
+}
+
 .full-slider
 {
-  width: 100%;
+  width: 600px;
+}
+
+td.func_name
+{
+  width: 100px;
+  text-align: right;
 }

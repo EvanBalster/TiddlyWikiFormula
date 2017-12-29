@@ -1,21 +1,12 @@
 created: 20171216011600256
-modified: 20171216164441769
+modified: 20171229191746223
 tags: [[Planned Feature]]
 title: Formulas as an Attribute Type
 type: text/vnd.tiddlywiki
 
 Add support for the formula syntax as a tag or widget attribute.  As compared to the [[FormulaMacro]] this should improve performance and avoid "gotchas" with quoting.
 
-The code in [[Formulas as Tag Attributes]] would become something like this:
-
-```
-<svg
-  width=(=10*10=)
-  height=(=10*10=)
-  viewBox="0 0 100 100">
-<circle cx=50 cy=50 r=(=5*5=) />
-</svg>
-```
+This is now discussed in [[Formulas as Tag Attributes]].
 
 
 !!Implementation

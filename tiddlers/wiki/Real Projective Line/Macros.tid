@@ -1,0 +1,51 @@
+created: 20171223032458726
+modified: 20171229225909454
+tags: 
+title: Real Projective Line/Macros
+type: text/vnd.tiddlywiki
+
+\define formulaPrecision() 4
+
+\define RPL_realLine()
+<line x1=-10 x2=10 y1=1 y2=1 stroke=#999999/>
+<$list filter="[range[-5,5]]" variable="x">
+<line x1=<<x>> x2=<<x>> y1=.97 y2=1.03 stroke=#999999/>
+</$list>
+\end
+
+\define RPL_projLine()
+<circle r=1 stroke=#DDDDDD fill=none/>
+<circle cx=0 cy=-1 r=.035 stroke=#FFFFFF/>
+<circle cx=0 cy=+1 r=.035 stroke=#FFFFFF/>
+<circle cx=-1 cy=0 r=.035 stroke=#FFFFFF/>
+<circle cx=+1 cy=0 r=.035 stroke=#FFFFFF/>
+\end
+
+\define RPL_orb(transform, text, style:"")
+<g transform="""$transform$""" style="stroke-width: .007;">
+	<circle r=.12 stroke=#FFFFFF fill=#000000/>
+	<text x=0 y=.04 fill=white style="""$style$""">$text$</text>
+</g>
+\end
+
+\define RPL_projLabels()
+<text x=0 y=1.2 fill=white>0</text>
+<text x=-1.15 y=.035 fill=white>–1</text>
+<text x=1.15 y=.035 fill=white>+1</text>
+<text x=0 y=-1.12 fill=white style="font-size: .14pt;">∞</text>
+\end
+
+\define RPL_background()
+<<RPL_realLine>>
+<<RPL_projLine>>
+\end
+
+\define RPL_title(title)
+<text x=0 y=87 fill=white style="font-size:6pt; text-anchor:middle; font-weight:bold;">$title$</text>
+\end
+
+\define RPL_foreground()
+<<RPL_projLabels>>
+\end
+
+\define slider(field) <$edit-text field="$field$" class="full-slider" type=range/>

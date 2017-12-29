@@ -1,0 +1,72 @@
+created: 20171215221052525
+modified: 20171229233122976
+tags: 
+title: Harmonic Lattice
+type: text/vnd.tiddlywiki
+
+\define lattice-range() 1,$(lattice-depth)$
+
+\define slider(field) <$edit-text field="$field$" type=range/>
+
+\define redline()
+<line x1=<<x>> y1=<<y>> x2=<<x>> y2=2000 style="stroke-width: 1; stroke:#FFDDAA; opacity:.3;"/>
+<circle cx=<<x>> cy=<<y>> r=4 style="fill:#FFEEEA; opacity:.1"/>
+<circle cx=<<x>> cy=<<y>> r=2 style="fill:#FFFDFB; opacity:.3"/>
+<circle cx=<<x>> cy=<<y>> r=1 style="fill:#FFFEFD; opacity:.6"/>
+\end
+
+\define number_ball()
+<circle cx=<<x>> cy=<<y>> r=5 style="fill:#444444; stroke:#555555; opacity: 1;"/>
+<g transform="translate(0, 2)">
+<text x=<<x>> y=<<y>> text-anchor=middle fill=white><<num>>/<<den>></text>
+</g>
+\end
+
+<$tiddler tiddler="Harmonic Lattice/State">
+
+<$formula-vars $noRebuild=true lattice-depth="3+floor(50 * {{!!lattice-depth}}%^2)">
+
+Meet the "harmonic lattice".
+
+|!Interpolation|linear|<<slider interpolate>>|log|{{!!interpolate}}%|
+|!Lattice Depth|3|<<slider lattice-depth>>|53|1-<$text text=<<lattice-depth>> />|
+|!Show Grid|<$checkbox field="octaveList" checked="[range[-180,180,36]]" unchecked=""/> Octaves — <$checkbox field="semitoneList" checked="[range[-180,180,3]]" unchecked=""/> Semitones (equal)|<|<|<|
+|!$noRefresh|<$checkbox field="noRebuild" checked=true unchecked=false/> {{!!noRebuild}}|<|<|<|
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-180 -10 360 180" width="960">
+<g style="font-size: 4pt; font-weight: bold; align: center; stroke-width:1;">
+<rect x=-1000 y=-1000 width=2000 height=2000 fill=#001133/>
+<$list variable=x filter={{!!semitoneList}}>
+<line y1=-1000 y2=1000 x1=<<x>> x2=<<x>> style="stroke-width: .5; stroke:#222222;"/>
+</$list>
+<$list variable=y filter={{!!semitoneList}}>
+<line x1=-1000 x2=1000 y1=<<y>> y2=<<y>> style="stroke-width: .5; stroke:#222222;"/>
+</$list>
+<$list variable=x filter={{!!octaveList}}>
+<line y1=-1000 y2=1000 x1=<<x>> x2=<<x>> style="stroke-width: .5; stroke:#444444;"/>
+</$list>
+<$list variable=y filter={{!!octaveList}}>
+<line x1=-1000 x2=1000 y1=<<y>> y2=<<y>> style="stroke-width: .5; stroke:#444444;"/>
+</$list>
+<$vars lattice="[range<lattice-range>]">
+<$list variable="den" filter=<<lattice>> >
+<$list variable="num" filter=<<lattice>> >
+<$formula-vars
+  $noRebuild={{!!noRebuild}}
+  x="""mix(
+    50*(<<num>>/<<den>>)-145,
+    36*log2(<<num>>/<<den>>),
+    {{!!interpolate}}%)"""
+  y="""mix(
+    150-150*(1/max(<<num>>,<<den>>)),
+    36*log2(max(<<num>>,<<den>>)),
+    {{!!interpolate}}%)
+    + if(gcd(<<num>>, <<den>>)=1, 0, 1000)""">
+<<redline>>
+</$formula-vars>
+</$set>
+</$list>
+</$list>
+</$vars>
+</g>
+</svg>

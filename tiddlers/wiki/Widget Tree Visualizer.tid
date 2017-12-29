@@ -1,0 +1,24 @@
+created: 20171228042423876
+modified: 20171228045227341
+tags: 
+title: Widget Tree Visualizer
+type: text/vnd.tiddlywiki
+
+Tiddler: <$edit-text tiddler="$:/state/widget-tree-visualizer" field="target" size=40 />
+
+Widget tree:
+
+<$wikify name=tree output=widgettree text={{{ [title{$:/state/widget-tree-visualizer!!target}get[text]] }}} >
+<pre class=tiny-monospace><code class=tiny-monospace>
+<$formula formula="""
+regexreplace(
+regexreplace(
+regexreplace(
+  textjoin("", true, regexextract(<<tree>>,
+    "\\n[^\\n]+\"type\":[^\\n]+")),
+  "[ \\t]{1,4}", " "),
+  '"type": "', ""),
+  '",?', "")
+"""/>
+</code></pre>
+</$wikify>
