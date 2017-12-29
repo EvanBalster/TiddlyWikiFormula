@@ -1,0 +1,47 @@
+created: 20171228051427638
+modified: 20171229183535309
+tags: $:/tags/Macro
+title: $:/FormulasWiki/FunctionMacros
+type: text/vnd.tiddlywiki
+
+\define functionTableRow()
+<tr>
+<td class="func_name">
+<$list variable=name filter="[enlist{!!names}]" emptyMessage="no `names`?!">
+<code><$text text=<<name>>/></code><br/>
+</$list>
+</td>
+<td class="func_params">
+<code><$text text={{!!params-short}}/></code>
+</td>
+<td class="func_return">
+<code><$text text={{!!return-type}}/></code>
+</td>
+<td class="func_summary">
+{{!!summary}}
+</td>
+</tr>
+\end
+
+\define functionLabelRow()
+<tr>
+<th>Function</th>
+<th>Params.</th>
+<th>Result</th>
+<th>Summary</th>
+</tr>
+\end
+
+\define functionTable(filter)
+<table>
+<<functionLabelRow>>
+<<functionTableRow>>
+</table>
+\end
+
+\define functionTableSelf()
+<table>
+<<functionLabelRow>>
+<<functionTableRow>>
+</table>
+\end

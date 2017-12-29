@@ -1,0 +1,7 @@
+created: 20171225035721011
+description: Evaluates a formula as an attribute value string.
+modified: 20171225035808674
+module-type: attributevalue
+tags: 
+title: $:/plugins/ebalster/formula/widgets/attributes/formula.js
+type: application/javascript

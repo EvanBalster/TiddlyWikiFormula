@@ -1,0 +1,7 @@
+created: 20171229183351169
+modified: 20171229183541849
+tags: $:/tags/ViewTemplate
+title: $:/FormulasWiki/AutoSummarizeInView
+type: text/vnd.tiddlywiki
+
+<$list filter="[all[current]tags[]]" variable="prefix_tag"><$transclude tiddler=<<prefix_tag>> field="auto_prefix"/></$list>
