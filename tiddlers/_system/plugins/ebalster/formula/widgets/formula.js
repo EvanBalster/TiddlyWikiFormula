@@ -35,7 +35,7 @@ FormulaWidget.prototype.rerender = function(parent, nextSibling) {
 	// Parse the value, or, failing this, produce a text node.
 	var parser = this.wiki.parseText(
 		this.wikifyType, this.currentValue,
-		{parseAsInline: this.wikifyMode});
+		{parseAsInline: this.wikifyMode === "inline"});
 	var parseTreeNodes = (parser ? parser.tree : [{type: "text", text: this.currentValue}]);
 
 	// Construct and render the child widgets.
@@ -55,7 +55,7 @@ FormulaWidget.prototype.execute = function() {
 	this.debug     = this.getAttribute("debug");
 
 	this.wikifyType = this.getAttribute("outputType");
-	this.wikifyMode = this.getAttribute("outputMode","block");
+	this.wikifyMode = this.getAttribute("outputMode","inline");
 
 	this.formatOptions =
 	{
