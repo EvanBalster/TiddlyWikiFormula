@@ -1,6 +1,6 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171229233602394
+modified: 20171229234812698
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
@@ -11,7 +11,8 @@ Potentially destructive changes are noted in bold.
 
 * Add math functions styled after GLSL for visual calculations
 ** `fract`, `modulo`/`mod`, `atan2`, `clamp`, `mix`, `step`, `smoothstep`
-* Add capture index to `regexextract` and `regexextract1` [[Functions]].
+* Add capture group index to `regexextract` and `regexextract1` [[Functions]].
+** EG. `regexextract("cats, red cats, and blue cats", "([a-z]+) cats", 1)` results in `red` and `blue`.
 * Fix [[FormulaWidget]] always parsing output in inline mode.
 ** Make inline the default parsing mode for [[FormulaWidget]].
 * Add __experimental__ `$noRefresh` option in [[FormulaVarsWidget]].
@@ -20,6 +21,7 @@ Potentially destructive changes are noted in bold.
 * Add __experimental__ support for [[Formulas as Tag Attributes]].
 ** Example: `<td colspan=(= 2+2 =)/>`
 ** For now, this requires a [[second plugin|$:/plugins/ebalster/attribute-modules]] that modifies the TiddlyWiki core!
+** I've started a [[Pull Request|https://github.com/Jermolene/TiddlyWiki5/pull/3072]] that would add official support to TiddlyWiki core for extensions like this.
 
 
 !!! 0.1.6 — 2017 December 22
