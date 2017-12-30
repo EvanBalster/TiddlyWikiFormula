@@ -1,0 +1,8 @@
+created: 20171230040903429
+description: As the $vars widget, but each attribute is interpreted as a formula.
+modified: 20171230040911552
+module-type: widget
+revision: 0
+tags: 
+title: $:/plugins/ebalster/condition/widgets/elif.js
+type: application/javascript

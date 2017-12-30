@@ -1,5 +1,5 @@
 created: 20171215221052525
-modified: 20171229233122976
+modified: 20171230043930325
 tags: 
 title: Harmonic Lattice
 type: text/vnd.tiddlywiki
@@ -51,6 +51,7 @@ Meet the "harmonic lattice".
 <$vars lattice="[range<lattice-range>]">
 <$list variable="den" filter=<<lattice>> >
 <$list variable="num" filter=<<lattice>> >
+<$if value=<<formula "gcd(<<num>>, <<den>>)=1">>>
 <$formula-vars
   $noRebuild={{!!noRebuild}}
   x="""mix(
@@ -60,10 +61,11 @@ Meet the "harmonic lattice".
   y="""mix(
     150-150*(1/max(<<num>>,<<den>>)),
     36*log2(max(<<num>>,<<den>>)),
-    {{!!interpolate}}%)
-    + if(gcd(<<num>>, <<den>>)=1, 0, 1000)""">
+    {{!!interpolate}}%)"""
+    >
 <<redline>>
 </$formula-vars>
+</$if>
 </$set>
 </$list>
 </$list>

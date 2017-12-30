@@ -1,0 +1,8 @@
+created: 20171230002741585
+description: As the $vars widget, but each attribute is interpreted as a formula.
+modified: 20171230004310622
+module-type: widget
+revision: 0
+tags: 
+title: $:/plugins/ebalster/condition/widgets/if.js
+type: application/javascript

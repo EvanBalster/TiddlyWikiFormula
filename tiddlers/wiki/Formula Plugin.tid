@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20171229224802256
+modified: 20171230053901266
 tags: 
 title: Formula Plugin
 type: text/vnd.tiddlywiki
@@ -61,6 +61,7 @@ Drag-and-drop this to your wiki:
 ** [[FormulaVarsWidget]]
 ** [[FormulaMacro]]
 ** [[range Operator]]
+** [[Condition Plugin]] (if, else and else-if)
 * Under the hood
 ** [[ChangeLog]]
 ** [[Extending Formulas]]

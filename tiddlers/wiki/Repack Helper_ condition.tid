@@ -1,0 +1,14 @@
+created: 20171230044112191
+modified: 20171230044216963
+tags: 
+title: Repack Helper: condition
+type: text/vnd.tiddlywiki
+
+Repacking command (use this in the browser console to repack the plugin)
+
+<pre><code>$tw.utils.repackPlugin("$:/plugins/ebalster/condition", (= "[" & textjoin(",",
+ TRUE,
+ [prefix[$:/plugins/ebalster/condition/]addprefix["]addsuffix["]]) & "]" =));
+</code></pre>
+
+Version: <$edit-text tiddler="$:/plugins/ebalster/condition" field="version" />

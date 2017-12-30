@@ -1,0 +1,94 @@
+caption: readme
+created: 20171230044517252
+modified: 20171230052355854
+revision: 0
+tags: 
+title: $:/plugins/ebalster/condition/readme
+type: text/vnd.tiddlywiki
+
+The ''Condition'' plugin for TiddlyWiki, version {{$:/plugins/ebalster/condition!!version}}, by Evan Balster.
+
+This plugin defines widgets that will either show or hide their contents depending on a condition.
+
+Unlike the closely-related reveal widget, condition widgets do //not// retain their content, and do not support animation or popups.  Conditions may be based on variables, macros or filtered attributes.  It can also be used with the [[Formula Plugin]].
+
+
+!!Truthiness
+
+Truthiness is a simple rule for whether a value triggers an "if" widget or not.  Values are "truthy" if they do not match any of the "falsy" values below:
+
+* The number `0`, including any decimal point.
+* `false`
+* `undefined`
+* `null`
+* Blank (no text)
+
+This matching is case-insensitive, and any whitespace before or after the value will be ignored.
+
+
+!!If Widget
+
+The `$if` widget will show its content based on whether a value is "truthy", or matches another value.
+
+|Attribute|Meaning|h
+|value|''Required.'' Content is shown if `value` is truthy.|
+|match|Optional. If present, `value` and `match` must equal //exactly// for content to be shown. (Truthiness doesn't matter.)|
+|not|Inverts the condition, so the value will be shown if it would be hidden and vice versa.|
+
+For example,
+
+```
+<$if not value={{$:/StoryList}}>
+No tiddlers are open right now!
+</$if>
+```
+
+
+!!Else Widget
+
+The `$else` widget has no attributes.  It must be placed after one of the conditional widgets listed below, and will only show its contents if the preceding widget is //not// showing its content.
+
+|After...|Show contents when...|h
+|`$if`<br/>`$else-if`|None of the previous if-conditions was true.|
+|`$list`|The list is empty. `$else` can be used instead of emptyMessage.|
+|`$reveal`|The contents of the reveal widget are hidden.|
+|`$else`|An else after an else will //never// be shown.|
+
+For example:
+
+```
+<$if value={{{[tag[Note]]}}}>
+!!My notes:
+  <$list filter="[tag[Note]]">
+    - {{!!title}}
+  </$list>
+</$if>
+<$else>
+!!I don't have any notes...
+</$else>
+```
+
+Note that the else widget can't have any blank lines between it and the preceding widget.
+
+
+!!Else-If Widget
+
+The `$else-if` widget is a combination of the `$else` and `$if` widgets, and has the same attributes as the `$if` widget.  Its content will only be displayed if the previous widget is //not// showing its content //and// the `$if`-condition is true.
+
+`$else-if` widgets can be used to perform a "chain" of tests, showing some text based on the first condition that passes (or fails).  For example:
+
+```
+Something approaches...
+
+<$if      value={{!!animal}} match=cat>  Meow!  </$if>
+<$else-if value={{!!animal}} match=dog>  Bark!  </$else-if>
+<$else-if value={{!!animal}} match=bird> Tweet! </$else-if>
+<$else> This isn't like any animal you've seen before. </$else>
+```
+
+
+!!Help & Support
+
+This plugin is a work in progress; seek help with it on the TiddlyWiki Google Group:  https://groups.google.com/forum/#!forum/tiddlywiki
+
+Or E-mail me directly: [[evan@imitone.com|mailto://evan@imitone.com]]
