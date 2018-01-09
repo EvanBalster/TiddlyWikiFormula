@@ -236,7 +236,7 @@ exports.trunc = exports.rounddown;
 
 // Related functions
 exports.fract  = function(a)      {a = a.asNum(); return new V_Num(a-signedFloor(a));};
-exports.modulo = function(a,b)    {b = b.asNum(); return new V_Num(b*Math.floor(a/b));};
+exports.modulo = function(a,b)    {a = a.asNum(); b = b.asNum(); return new V_Num(a-b*Math.floor(a/b));};
 
 exports.mod = exports.modulo;
 
