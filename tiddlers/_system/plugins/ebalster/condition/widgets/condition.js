@@ -35,7 +35,7 @@ ConditionWidget.prototype.render = function(parent,nextSibling) {
     this.rerender(parent,nextSibling);
 };
 
-ConditionWidget.prototype.rerender = function(parent, nextSibling) {
+ConditionWidget.prototype.rerender = function(parent,nextSibling) {
 	this.removeChildDomNodes();
 	if (this.conditionError) {
 		// Show an error.
@@ -72,6 +72,7 @@ ConditionWidget.prototype.refresh = function(changedTiddlers) {
 	var changedAttributes = this.computeAttributes();
 	this.execute();
 	if(this.isOpen !== currentlyOpen) {
+		var nextSibling = this.findNextSiblingDomNode();
 		this.rerender(this.parentDomNode,nextSibling);
 		return true;
 	}
@@ -92,16 +93,15 @@ Utility: Find a preceding non-text widget for an "else" widget.
 ConditionWidget.prototype.findPrecedingConditionWidget = function() {
 	var siblings = (this.parentWidget ? this.parentWidget.children : null);
 	var sibling;
-	if (siblings) for (var i = 1; i < siblings.length; ++i) {
-		if (siblings[i] !== this) continue;
-		for (var j = i-1; j >= 0; --j) {
-			sibling = siblings[j];
+	if (siblings) {
+		for (var i = siblings.indexOf(this)-1; i >= 0; --i) {
+			sibling = siblings[i];
 			if (sibling.parseTreeNode.type == "text") continue;
 			if (sibling.isOpen != null || sibling.list != null) return sibling;
 			return null;
 		}
-		return null;
 	}
+	return null;
 };
 
 /*
@@ -140,7 +140,7 @@ ConditionWidget.prototype.executeIf = function(widgetName) {
 	this.triggerElse = false;
     // Re-check our "if" condition.
 	var value = this.getAttribute("value");
-	var match = this.getAttribute("equals");
+	var match = this.getAttribute("match");
 	if (value == null) {
 		this.conditionError = (widgetName||"$condition") + " widget requires a 'value' attribute.";
 		return;

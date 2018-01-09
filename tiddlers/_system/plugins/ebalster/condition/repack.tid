@@ -1,7 +1,8 @@
 created: 20171230044112191
-modified: 20171230044216963
+modified: 20171230165309317
+revision: 0
 tags: 
-title: Repack Helper: condition
+title: $:/plugins/ebalster/condition/repack
 type: text/vnd.tiddlywiki
 
 Repacking command (use this in the browser console to repack the plugin)

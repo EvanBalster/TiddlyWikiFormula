@@ -1,0 +1,16 @@
+created: 20171230164920491
+modified: 20171230165117169
+tags: 
+title: $:/plugins/ebalster/condition/changelog
+
+!!Version 0.1.1 — December 30, 2017
+
+* Fix an error when refreshing the condition widget.
+* Fix "match" attribute not working as expected.
+
+
+!!Version 0.1.0 — December 29, 2017
+
+* Initial implementation.
+* Includes $if, $else, $else-if
+* Common code in condition.js
