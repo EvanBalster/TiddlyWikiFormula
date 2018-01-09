@@ -78,7 +78,7 @@ exports.substr = exports.mid;
 
 
 // Substitute
-exports.substitute = function(s, f, r)    {return new V_Text(s.asString().replace(f.asString(), r.asString()));};
+exports.substitute = function(s, f, r)    {return new V_Text(s.asString().split(f.asString()).join(r.asString()));};
 
 // Replace (N/I)
 //exports.replace = function(s, p, l, r)    {return new V_Text(s.asString().splice(a.asString(), b.asString()));};
