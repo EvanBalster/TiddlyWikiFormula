@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20171229233023468
+modified: 20180112062854952
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -18,6 +18,13 @@ Some functions have multiple names, often to help them match up with popular spr
 
 !Functions
 
+|!Wiki Data & Interpretation|<|<|<|
+|!Function|!Args|!Result|!Summary|
+| `transclude`|`(title)`| text |Transclude a tiddler's text.|
+|~|`(t,f)`|~|Transclude a tiddler's field's text.|
+| <<small transclude_index>>|`(title)`| text |Transclude a text item from a data tiddler.|
+| `variable`|`(name)`| text |Get the text value of a variable.|
+| `datum`|`(text)`| * |Interpret some text as a [[Datum]].|
 |!Arithmetic & Operators|<|<|<|
 |!Function|!Args|!Result|!Summary|
 | `uplus`|`(a)`| * |Result is `a`.<br/>Same as `(+a)`.|
