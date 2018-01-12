@@ -447,7 +447,7 @@ function buildOperand(parser) {
 
   var char = parser.getChar();
 
-  if (char.match(/[0-9\.+=]/i))
+  if (char.match(/[0-9\.+]/i))
   {
     // Number constant
     term = parser.match_here(rxDecimal);
