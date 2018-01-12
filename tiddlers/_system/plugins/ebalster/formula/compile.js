@@ -4,7 +4,6 @@
 
 var Values    = require("$:/plugins/ebalster/formula/value.js");
 var Operands  = require("$:/plugins/ebalster/formula/operands.js");
-var Operators = require("$:/plugins/ebalster/formula/operators.js");
 
 var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
 var rxDatumIsTrue         = /^s*TRUE\s*$/i;
@@ -307,7 +306,7 @@ function buildExpression(parser, nested) {
 	var operand = null;
 	
 	var applyUnary = function(unary) {
-		operand = new Operators.CallOperator(unary.func_bind, [operand]);
+		operand = new Operands.Opd_CallJavascript(unary.func_bind, [operand]);
 	};
 
 	while (true)
@@ -377,7 +376,7 @@ function buildExpression(parser, nested) {
 			if (op.precedence != prec) {++i; continue;}
 
 			// Collapse the previous and next operands with this operator.
-			operands[i] = new Operators.CallOperator(op.func_bind, [operands[i], operands[i+1]]);
+			operands[i] = new Operands.Opd_CallJavascript(op.func_bind, [operands[i], operands[i+1]]);
 			operators.splice(i, 1);
 			operands.splice(i+1, 1);
 		}
@@ -498,14 +497,14 @@ function buildOperand(parser) {
 				// If a construct function is present, use it to generate an operand.
 				if (func.construct) return func.construct(args);
 
-				// If a select function is present, prepare to bind it with a CallOperator.
+				// If a select function is present, prepare to bind it with a Opd_CallJavascript.
 				func = func.select(args);
 			}
 			else {
 				throw "Function " + term[0] + " seems to be unusable.";
 			}
 
-			return new Operators.CallOperator(func, args);
+			return new Operands.Opd_CallJavascript(func, args);
 		}
 	}
 	else switch (char)

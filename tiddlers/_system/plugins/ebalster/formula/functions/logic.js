@@ -4,7 +4,7 @@
 /*global $tw: false */
 "use strict";
 
-var Operator = require("$:/plugins/ebalster/formula/operators.js").Operator;
+var Operand = require("$:/plugins/ebalster/formula/operands.js").Operand;
 var Val = require("$:/plugins/ebalster/formula/value.js");
 
 
@@ -27,7 +27,7 @@ function IfOp(pred, tval, fval) {
 	this.tval = tval;
 	this.fval = fval;
 }
-IfOp.prototype = new Operator();
+IfOp.prototype = new Operand();
 IfOp.prototype.name = "if";
 IfOp.prototype.compute = (function(widget, recur) {
 	return (this.pred.compute(widget, recur).get() ? this.tval.compute(widget, recur) : this.fval.compute(widget, recur));

@@ -37,6 +37,20 @@ exports.Opd_Error.prototype.compute = function(widget, recur)
 };
 
 
+// JavaScript function call operator.
+exports.Opd_CallJavascript = function Opd_CallJavascript(func, args) {
+  this.func = func;
+  this.args = args;
+};
+exports.Opd_CallJavascript.prototype = new exports.Operand();
+exports.Opd_CallJavascript.prototype.name = "function-call";
+exports.Opd_CallJavascript.prototype.compute = (function(widget, recur) {
+  var vals = [];
+  this.args.forEach(function(arg) {vals.push(arg.compute(widget, recur));});
+  return this.func.apply(null, vals);
+});
+
+
 // String constant operand.
 exports.Opd_Text = function(value) {
 	this.value = value;
