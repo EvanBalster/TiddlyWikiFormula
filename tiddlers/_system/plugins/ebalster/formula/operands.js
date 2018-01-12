@@ -38,13 +38,13 @@ exports.ThrowError.prototype.compute = function(widget, recur)
 
 
 // JavaScript function call operator.
-exports.CallJavascript = function CallJavascript(func, args) {
+exports.CallBuiltin = function CallBuiltin(func, args) {
   this.func = func;
   this.args = args;
 };
-exports.CallJavascript.prototype = new exports.Operand();
-exports.CallJavascript.prototype.name = "function-call";
-exports.CallJavascript.prototype.compute = (function(widget, recur) {
+exports.CallBuiltin.prototype = new exports.Operand();
+exports.CallBuiltin.prototype.name = "function-call";
+exports.CallBuiltin.prototype.compute = (function(widget, recur) {
   var vals = [];
   this.args.forEach(function(arg) {vals.push(arg.compute(widget, recur));});
   return this.func.apply(null, vals);
