@@ -5,7 +5,7 @@
 "use strict";
 
 var Formulas = require("$:/plugins/ebalster/formula/compile.js");
-var Nodes = require("$:/plugins/ebalster/formula/operands.js");
+var Nodes = require("$:/plugins/ebalster/formula/nodes.js");
 
 var FormulaAttribute = function(widget, node) {
 	this.widget = widget;

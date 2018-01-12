@@ -4,7 +4,7 @@
 /*global $tw: false */
 "use strict";
 
-var Operand = require("$:/plugins/ebalster/formula/operands.js").Operand;
+var Node = require("$:/plugins/ebalster/formula/nodes.js").Node;
 var Val = require("$:/plugins/ebalster/formula/value.js");
 
 
@@ -27,7 +27,7 @@ function IfNode(pred, tval, fval) {
 	this.tval = tval;
 	this.fval = fval;
 }
-IfNode.prototype = new Operand();
+IfNode.prototype = new Node();
 IfNode.prototype.name = "if";
 IfNode.prototype.compute = (function(widget, recur) {
 	return (this.pred.compute(widget, recur).get() ? this.tval.compute(widget, recur) : this.fval.compute(widget, recur));

@@ -1,9 +1,9 @@
 /*\
-title: $:/plugins/ebalster/formula/operands.js
+title: $:/plugins/ebalster/formula/nodes.js
 type: application/javascript
 module-type: macro
 
-Library defining formula operands.
+Library defining computation "nodes" used to build compiled formulas.
 Operands represent some value within the formula: an expression, datum, operator, constant or query...
 Operands may be constant, allowing the formula compiler to optimize them away.
 
@@ -14,21 +14,21 @@ Operands may be constant, allowing the formula compiler to optimize them away.
 
 var Values   = require("$:/plugins/ebalster/formula/value.js");
 
-exports.Operand = function() {
+exports.Node = function() {
 };
-exports.Operand.prototype.is_constant = false;
-exports.Operand.prototype.name = "unknown-operand";
-exports.Operand.prototype.toString = function()    {return "[Operand " + this.name + "]";};
+exports.Node.prototype.is_constant = false;
+exports.Node.prototype.name = "unknown-operand";
+exports.Node.prototype.toString = function()    {return "[Node " + this.name + "]";};
 
-// Operand::compute -- produce
-exports.Operand.prototype.compute = (function(widget, recur) {return new Values.V_Undefined();});
+// Node::compute -- produce
+exports.Node.prototype.compute = (function(widget, recur) {return new Values.V_Undefined();});
 
 
 // An operand that just throws an error.
 exports.ThrowError = function(exception) {
 	this.exception = exception;
 };
-exports.ThrowError.prototype = new exports.Operand();
+exports.ThrowError.prototype = new exports.Node();
 exports.ThrowError.prototype.name = "error";
 exports.ThrowError.prototype.compute = function(widget, recur)
 {
@@ -42,7 +42,7 @@ exports.CallBuiltin = function CallBuiltin(func, args) {
   this.func = func;
   this.args = args;
 };
-exports.CallBuiltin.prototype = new exports.Operand();
+exports.CallBuiltin.prototype = new exports.Node();
 exports.CallBuiltin.prototype.name = "function-call";
 exports.CallBuiltin.prototype.compute = (function(widget, recur) {
   var vals = [];
@@ -55,7 +55,7 @@ exports.CallBuiltin.prototype.compute = (function(widget, recur) {
 exports.Text = function(value) {
 	this.value = value;
 };
-exports.Text.prototype = new exports.Operand();
+exports.Text.prototype = new exports.Node();
 exports.Text.prototype.name = "string";
 exports.Text.prototype.is_constant = true;
 
@@ -70,7 +70,7 @@ exports.Text.prototype.compute = function(widget, recur)
 exports.Date = function(value) {
 	this.value = value;
 };
-exports.Date.prototype = new exports.Operand();
+exports.Date.prototype = new exports.Node();
 exports.Date.prototype.name = "date";
 exports.Date.prototype.is_constant = true;
 
@@ -85,7 +85,7 @@ exports.Date.prototype.compute = function(widget, recur)
 exports.Bool = function(value) {
 	this.value = value;
 };
-exports.Bool.prototype = new exports.Operand();
+exports.Bool.prototype = new exports.Node();
 exports.Bool.prototype.name = "boolean";
 exports.Bool.prototype.is_constant = true;
 
@@ -100,7 +100,7 @@ exports.Bool.prototype.compute = function(widget, recur)
 exports.Number = function(value) {
 	this.value = value;
 };
-exports.Number.prototype = new exports.Operand();
+exports.Number.prototype = new exports.Node();
 exports.Number.prototype.name = "number";
 exports.Number.prototype.is_constant = true;
 
@@ -120,7 +120,7 @@ exports.Datum = function(origin) {
 	this.text = null;
 	this.op = null;
 };
-exports.Datum.prototype = new exports.Operand();
+exports.Datum.prototype = new exports.Node();
 exports.Datum.prototype.name = "automatic";
 
 exports.Datum.prototype.compute = function(widget, recur) {
@@ -148,7 +148,7 @@ exports.Datum.prototype.compute = function(widget, recur) {
 exports.TranscludeText = function(title) {
 	this.title = title;
 };
-exports.TranscludeText.prototype = new exports.Operand();
+exports.TranscludeText.prototype = new exports.Node();
 exports.TranscludeText.prototype.name = "transclude";
 
 exports.TranscludeText.prototype.compute = function(widget, recur) {
@@ -160,7 +160,7 @@ exports.TranscludeField = function(title, field) {
 	this.title = title;
 	this.field = field;
 };
-exports.TranscludeField.prototype = new exports.Operand();
+exports.TranscludeField.prototype = new exports.Node();
 exports.TranscludeField.prototype.name = "transclude-field";
 
 exports.TranscludeField.prototype.compute = function(widget, recur) {
@@ -175,7 +175,7 @@ exports.TranscludeIndex = function(title, index) {
 	this.title = title;
 	this.index = index;
 };
-exports.TranscludeIndex.prototype = new exports.Operand();
+exports.TranscludeIndex.prototype = new exports.Node();
 exports.TranscludeIndex.prototype.name = "transclude-index";
 
 exports.TranscludeIndex.prototype.compute = function(widget, recur) {
@@ -189,7 +189,7 @@ exports.TranscludeIndex.prototype.compute = function(widget, recur) {
 exports.Variable = function(variable) {
 	this.variable = variable;
 };
-exports.Variable.prototype = new exports.Operand();
+exports.Variable.prototype = new exports.Node();
 exports.Variable.prototype.name = "variable";
 
 exports.Variable.prototype.compute = function(widget, recur) {
@@ -205,7 +205,7 @@ exports.Filter = function(filter) {
 	//this.array = [];
 	this.compileError = null;
 };
-exports.Filter.prototype = new exports.Operand();
+exports.Filter.prototype = new exports.Node();
 exports.Filter.prototype.name = "filter";
 
 exports.Filter.prototype.compute = function(widget, recur) {

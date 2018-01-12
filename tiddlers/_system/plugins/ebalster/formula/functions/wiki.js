@@ -5,7 +5,7 @@
 "use strict";
 
 var Val = require("$:/plugins/ebalster/formula/value.js");
-var Nodes = require("$:/plugins/ebalster/formula/operands.js");
+var Nodes = require("$:/plugins/ebalster/formula/nodes.js");
 
 var V_Text = Val.V_Text;
 

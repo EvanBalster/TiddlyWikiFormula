@@ -1,8 +1,7 @@
 created: 20171211183000431
 description: 
-modified: 20171211183031273
+modified: 20180112071139424
 module-type: library
-revision: 0
 tags: 
-title: $:/plugins/ebalster/formula/operands.js
+title: $:/plugins/ebalster/formula/nodes.js
 type: application/javascript

@@ -3,7 +3,7 @@
 "use strict";
 
 var Values = require("$:/plugins/ebalster/formula/value.js");
-var Nodes  = require("$:/plugins/ebalster/formula/operands.js");
+var Nodes  = require("$:/plugins/ebalster/formula/nodes.js");
 
 var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
 var rxDatumIsTrue         = /^s*TRUE\s*$/i;
