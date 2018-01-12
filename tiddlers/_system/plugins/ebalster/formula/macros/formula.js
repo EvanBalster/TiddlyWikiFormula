@@ -5,7 +5,7 @@
 "use strict";
 
 /*
-  Information about this macro
+	Information about this macro
 */
 
 exports.name = "formula";
@@ -16,14 +16,14 @@ Run the macro
 */
 exports.run = function(formula) {
 
-  var formulas = require("$:/plugins/ebalster/formula/compile.js");
+	var formulas = require("$:/plugins/ebalster/formula/compile.js");
 
-  try {
-    return formulas.evalFormula(formula, this);
-  }
-  catch (err) {
-    return "`" + String(err) + "`";
-  }
+	try {
+		return formulas.evalFormula(formula, this);
+	}
+	catch (err) {
+		return "`" + String(err) + "`";
+	}
 };
 
 })();

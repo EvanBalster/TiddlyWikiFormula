@@ -29,10 +29,10 @@ ConditionWidget.prototype = new Widget();
 Render this widget into the DOM
 */
 ConditionWidget.prototype.render = function(parent,nextSibling) {
-    this.parentDomNode = parent;
-    this.computeAttributes();
-    this.execute();
-    this.rerender(parent,nextSibling);
+	this.parentDomNode = parent;
+	this.computeAttributes();
+	this.execute();
+	this.rerender(parent,nextSibling);
 };
 
 ConditionWidget.prototype.rerender = function(parent,nextSibling) {
@@ -138,7 +138,7 @@ ConditionWidget.prototype.executeIf = function(widgetName) {
 	this.isOpen = false;
 	this.conditionError = null;
 	this.triggerElse = false;
-    // Re-check our "if" condition.
+	// Re-check our "if" condition.
 	var value = this.getAttribute("value");
 	var match = this.getAttribute("match");
 	if (value == null) {

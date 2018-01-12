@@ -31,80 +31,80 @@ exports.sign = function(a)    {var x = a.asNum(); return new V_Num(((x > 0) - (x
 // Min/max
 exports.min = function(a)
 {
-    var min = a.asNum();
-    for (var i = 1; i < arguments.length; ++i) min = Math.min(min, arguments[i].asNum());
-    return new V_Num(min);
+	var min = a.asNum();
+	for (var i = 1; i < arguments.length; ++i) min = Math.min(min, arguments[i].asNum());
+	return new V_Num(min);
 };
 exports.min.variadic = true;
 
 exports.max = function(a)
 {
-    var max = a.asNum();
-    for (var i = 1; i < arguments.length; ++i) max = Math.max(max, arguments[i].asNum());
-    return new V_Num(max);
+	var max = a.asNum();
+	for (var i = 1; i < arguments.length; ++i) max = Math.max(max, arguments[i].asNum());
+	return new V_Num(max);
 };
 exports.max.variadic = true;
 
 exports.clamp = function(a, min, max) {
-    return new V_Num(Math.min(Math.max(a.asNum(), min.asNum()), max.asNum()));
+	return new V_Num(Math.min(Math.max(a.asNum(), min.asNum()), max.asNum()));
 };
 
 
 /*
-    Series arithmetic
+	Series arithmetic
 */
 exports.sum =
 {
-    min_args : 1,
-    select : function(operands)
-    {
-        switch (operands)
-        {
-        case 1: return function(a) {return new V_Num(a.asSum());};
-        default: return function()
-            {
-                var sum = 0;
-                for (var i = 0; i < arguments.length; ++i) sum += arguments[i].asSum();
-                return new V_Num(sum);
-            };
-        }
-    }
+	min_args : 1,
+	select : function(operands)
+	{
+		switch (operands)
+		{
+		case 1: return function(a) {return new V_Num(a.asSum());};
+		default: return function()
+			{
+				var sum = 0;
+				for (var i = 0; i < arguments.length; ++i) sum += arguments[i].asSum();
+				return new V_Num(sum);
+			};
+		}
+	}
 };
 exports.average =
 {
-    min_args : 1,
-    select : function(operands)
-    {
-        switch (operands)
-        {
-        case 1: return function(a) {
-                if (a instanceof V_Array) return new V_Num(a.asSum()/a.get().length);
-                return a.asNum();
-            };
-        default: return function() {
-                var sum = 0, count = 0;
-                for (var i = 0; i < arguments.length; ++i)
-                {
-                    var a = arguments[i];
-                    sum += a.asSum();
-                    count += ((a instanceof V_Array) ? a.get().length : 1);
-                }
-                return new V_Num(sum/count);
-            };
-        }
-    }
+	min_args : 1,
+	select : function(operands)
+	{
+		switch (operands)
+		{
+		case 1: return function(a) {
+				if (a instanceof V_Array) return new V_Num(a.asSum()/a.get().length);
+				return a.asNum();
+			};
+		default: return function() {
+				var sum = 0, count = 0;
+				for (var i = 0; i < arguments.length; ++i)
+				{
+					var a = arguments[i];
+					sum += a.asSum();
+					count += ((a instanceof V_Array) ? a.get().length : 1);
+				}
+				return new V_Num(sum/count);
+			};
+		}
+	}
 };
 exports.product = function()
 {
-    var product = 1;
-    for (var i = 0; i < arguments.length; ++i) product *= arguments[i].asNum();
-    return new V_Num(product);
+	var product = 1;
+	for (var i = 0; i < arguments.length; ++i) product *= arguments[i].asNum();
+	return new V_Num(product);
 };
 exports.product.variadic = true;
 
 
 /*
-    Exponential
+	Exponential
 */
 
 // Exponentiation and logarithm
@@ -127,7 +127,7 @@ exports.cbrt = function(a)    {return new V_Num(Math.cbrt(a.asNum()));};
 
 
 /*
-    Trigonometry
+	Trigonometry
 */
 
 // Conversion
@@ -168,8 +168,8 @@ exports.asech = function(a)    {return new V_Num(Math.acosh(1/a.asNum()));};
 exports.acoth = function(a)    {return new V_Num(Math.atanh(1/a.asNum()));};
 
 /*
-    Rounding, ceiling and floor functions.
-        Special measures were taken to reproduce the conventions.
+	Rounding, ceiling and floor functions.
+		Special measures were taken to reproduce the conventions.
 */
 
 var signedFloor = Math.trunc || function(n) {return (n<0) ? Math.ceil (n) : Math.floor(n);};
@@ -177,59 +177,59 @@ var signedCeil  =               function(n) {return (n<0) ? Math.floor(n) : Math
 
 function genCeilFloor(operands, func)
 {
-    switch (operands.length)
-    {
-    case 1: return function(a)    {return new V_Num(func(a.asNum()));};
-    case 2: return function(a, b) {var prec = b.asNum(); return new V_Num(func(a.asNum()/prec) * prec);};
-    }
+	switch (operands.length)
+	{
+	case 1: return function(a)    {return new V_Num(func(a.asNum()));};
+	case 2: return function(a, b) {var prec = b.asNum(); return new V_Num(func(a.asNum()/prec) * prec);};
+	}
 }
 
 function genRound(operands, func)
 {
-    var lndigit = Math.log(0.1);
-    switch (operands.length)
-    {
-    case 1: return function(a)    {return new V_Num(func(a.asNum()));};
-    case 2: return function(a, b) {var prec = Math.exp(lndigit*b.asNum()); return new V_Num(func(a.asNum()/prec) * prec);};
-    }
+	var lndigit = Math.log(0.1);
+	switch (operands.length)
+	{
+	case 1: return function(a)    {return new V_Num(func(a.asNum()));};
+	case 2: return function(a, b) {var prec = Math.exp(lndigit*b.asNum()); return new V_Num(func(a.asNum()/prec) * prec);};
+	}
 }
 
 
 exports.floor =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genCeilFloor(operands, Math.floor);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genCeilFloor(operands, Math.floor);}
 };
 exports.ceil =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genCeilFloor(operands, Math.ceil);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genCeilFloor(operands, Math.ceil);}
 };
 
 /*exports.floor_precise =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genCeilFloor(operands, Math.floor);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genCeilFloor(operands, Math.floor);}
 };
 exports.ceil_precise =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genCeilFloor(operands, Math.ceil);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genCeilFloor(operands, Math.ceil);}
 };*/
 exports.round =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genRound(operands, Math.round);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genRound(operands, Math.round);}
 };
 exports.roundup =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genRound(operands, signedCeil);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genRound(operands, signedCeil);}
 };
 exports.rounddown =
 {
-    min_args : 1, max_args : 2,
-    select : function(operands) {return genRound(operands, signedFloor);}
+	min_args : 1, max_args : 2,
+	select : function(operands) {return genRound(operands, signedFloor);}
 };
 
 exports.trunc = exports.rounddown;
@@ -242,58 +242,58 @@ exports.mod = exports.modulo;
 
 
 /*
-    Interpolation
+	Interpolation
 */
 exports.mix = function(a,b,m) {
-    a = a.asNum();
-    b = b.asNum();
-    m = m.asNum();
-    return new V_Num(a + (b-a) * m);
+	a = a.asNum();
+	b = b.asNum();
+	m = m.asNum();
+	return new V_Num(a + (b-a) * m);
 };
 
 exports.step = function(e,x)    {return new V_Num((x.asNum()<e.asNum()) ? 0.0 : 1.0);};
 
 exports.smoothstep = function(e0,e1,x) {
-    x  = x .asNum();
-    e0 = e0.asNum();
-    e1 = e1.asNum();
-    if (x < e0) return new V_Num(0.0);
-    if (x > e1) return new V_Num(1.0);
-    x = (x-e0) / (e1-e0);
-    return new V_Num(3*x*x - 2*x*x*x);
+	x  = x .asNum();
+	e0 = e0.asNum();
+	e1 = e1.asNum();
+	if (x < e0) return new V_Num(0.0);
+	if (x > e1) return new V_Num(1.0);
+	x = (x-e0) / (e1-e0);
+	return new V_Num(3*x*x - 2*x*x*x);
 };
 
 
 
 /*
-    Algorithms
+	Algorithms
 */
 function compute_gcd(a, b) {
-    a = Math.abs(Math.round(a));
-    b = Math.abs(Math.round(b));
-    if (b > a) {var temp = a; a = b; b = temp;}
-    var limit = 1000;
-    while (true) {
-        if (b == 0) return a;
-        a %= b;
-        if (a == 0) return b;
-        b %= a;
-        if (--limit < 0) throw "GCD function is nonterminal!";
-    }
+	a = Math.abs(Math.round(a));
+	b = Math.abs(Math.round(b));
+	if (b > a) {var temp = a; a = b; b = temp;}
+	var limit = 1000;
+	while (true) {
+		if (b == 0) return a;
+		a %= b;
+		if (a == 0) return b;
+		b %= a;
+		if (--limit < 0) throw "GCD function is nonterminal!";
+	}
 }
 
 function compute_lcm(a, b) {
-    a = Math.abs(Math.round(a));
-    b = Math.abs(Math.round(b));
-    return (!a || !b) ? 0 : Math.abs((a * b) / compute_gcd(a, b));
+	a = Math.abs(Math.round(a));
+	b = Math.abs(Math.round(b));
+	return (!a || !b) ? 0 : Math.abs((a * b) / compute_gcd(a, b));
 }
 
 exports.gcd = function(a,b) {
-    return new V_Num(compute_gcd(a.asNum(), b.asNum()));
+	return new V_Num(compute_gcd(a.asNum(), b.asNum()));
 };
 
 exports.lcm = function(a,b) {
-    return new V_Num(compute_lcm(a.asNum(), b.asNum()));
+	return new V_Num(compute_lcm(a.asNum(), b.asNum()));
 };
 
 
