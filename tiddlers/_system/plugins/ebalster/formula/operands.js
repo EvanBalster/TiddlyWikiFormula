@@ -25,12 +25,12 @@ exports.Operand.prototype.compute = (function(widget, recur) {return new Values.
 
 
 // An operand that just throws an error.
-exports.Opd_Error = function(exception) {
+exports.ThrowError = function(exception) {
 	this.exception = exception;
 };
-exports.Opd_Error.prototype = new exports.Operand();
-exports.Opd_Error.prototype.name = "error";
-exports.Opd_Error.prototype.compute = function(widget, recur)
+exports.ThrowError.prototype = new exports.Operand();
+exports.ThrowError.prototype.name = "error";
+exports.ThrowError.prototype.compute = function(widget, recur)
 {
 	// Throw up
 	throw this.exception;
@@ -38,13 +38,13 @@ exports.Opd_Error.prototype.compute = function(widget, recur)
 
 
 // JavaScript function call operator.
-exports.Opd_CallJavascript = function Opd_CallJavascript(func, args) {
+exports.CallJavascript = function CallJavascript(func, args) {
   this.func = func;
   this.args = args;
 };
-exports.Opd_CallJavascript.prototype = new exports.Operand();
-exports.Opd_CallJavascript.prototype.name = "function-call";
-exports.Opd_CallJavascript.prototype.compute = (function(widget, recur) {
+exports.CallJavascript.prototype = new exports.Operand();
+exports.CallJavascript.prototype.name = "function-call";
+exports.CallJavascript.prototype.compute = (function(widget, recur) {
   var vals = [];
   this.args.forEach(function(arg) {vals.push(arg.compute(widget, recur));});
   return this.func.apply(null, vals);
@@ -52,14 +52,14 @@ exports.Opd_CallJavascript.prototype.compute = (function(widget, recur) {
 
 
 // String constant operand.
-exports.Opd_Text = function(value) {
+exports.Text = function(value) {
 	this.value = value;
 };
-exports.Opd_Text.prototype = new exports.Operand();
-exports.Opd_Text.prototype.name = "string";
-exports.Opd_Text.prototype.is_constant = true;
+exports.Text.prototype = new exports.Operand();
+exports.Text.prototype.name = "string";
+exports.Text.prototype.is_constant = true;
 
-exports.Opd_Text.prototype.compute = function(widget, recur)
+exports.Text.prototype.compute = function(widget, recur)
 {
 	// Returns a string value
 	return new Values.V_Text(this.value);
@@ -67,14 +67,14 @@ exports.Opd_Text.prototype.compute = function(widget, recur)
 
 
 // Date constant operand.
-exports.Opd_Date = function(value) {
+exports.Date = function(value) {
 	this.value = value;
 };
-exports.Opd_Date.prototype = new exports.Operand();
-exports.Opd_Date.prototype.name = "date";
-exports.Opd_Date.prototype.is_constant = true;
+exports.Date.prototype = new exports.Operand();
+exports.Date.prototype.name = "date";
+exports.Date.prototype.is_constant = true;
 
-exports.Opd_Date.prototype.compute = function(widget, recur)
+exports.Date.prototype.compute = function(widget, recur)
 {
 	// Returns a string value
 	return new Values.V_Date(this.value);
@@ -82,14 +82,14 @@ exports.Opd_Date.prototype.compute = function(widget, recur)
 
 
 // Boolean constant operand.
-exports.Opd_Bool = function(value) {
+exports.Bool = function(value) {
 	this.value = value;
 };
-exports.Opd_Bool.prototype = new exports.Operand();
-exports.Opd_Bool.prototype.name = "boolean";
-exports.Opd_Bool.prototype.is_constant = true;
+exports.Bool.prototype = new exports.Operand();
+exports.Bool.prototype.name = "boolean";
+exports.Bool.prototype.is_constant = true;
 
-exports.Opd_Bool.prototype.compute = function(widget, recur)
+exports.Bool.prototype.compute = function(widget, recur)
 {
 	// Returns a number value
 	return new Values.V_Bool(this.value);
@@ -97,14 +97,14 @@ exports.Opd_Bool.prototype.compute = function(widget, recur)
 
 
 // Number constant operand.
-exports.Opd_Number = function(value) {
+exports.Number = function(value) {
 	this.value = value;
 };
-exports.Opd_Number.prototype = new exports.Operand();
-exports.Opd_Number.prototype.name = "number";
-exports.Opd_Number.prototype.is_constant = true;
+exports.Number.prototype = new exports.Operand();
+exports.Number.prototype.name = "number";
+exports.Number.prototype.is_constant = true;
 
-exports.Opd_Number.prototype.compute = function(widget, recur)
+exports.Number.prototype.compute = function(widget, recur)
 {
 	// Returns a number value
 	return new Values.V_Num(this.value);
@@ -115,15 +115,15 @@ var Compile = require("$:/plugins/ebalster/formula/compile.js");
 
 
 // "Automatic" operand; a compiled string value
-exports.Opd_Datum = function(origin) {
+exports.Datum = function(origin) {
 	this.origin = origin;
 	this.text = null;
 	this.op = null;
 };
-exports.Opd_Datum.prototype = new exports.Operand();
-exports.Opd_Datum.prototype.name = "automatic";
+exports.Datum.prototype = new exports.Operand();
+exports.Datum.prototype.name = "automatic";
 
-exports.Opd_Datum.prototype.compute = function(widget, recur) {
+exports.Datum.prototype.compute = function(widget, recur) {
 
 	var newText = this.origin.compute(widget, recur).asString();
 
@@ -135,7 +135,7 @@ exports.Opd_Datum.prototype.compute = function(widget, recur) {
 		}
 		catch (err) {
 			// Save the error
-			this.op = new exports.Opd_Error(
+			this.op = new exports.ThrowError(
 				err + "\n  source: \"" + this.datum + "\"\n  from " + origin.name);
 		}
 	}
@@ -145,25 +145,25 @@ exports.Opd_Datum.prototype.compute = function(widget, recur) {
 
 
 // Transcluded text operand.
-exports.Opd_TranscludeText = function(title) {
+exports.TranscludeText = function(title) {
 	this.title = title;
 };
-exports.Opd_TranscludeText.prototype = new exports.Operand();
-exports.Opd_TranscludeText.prototype.name = "transclude";
+exports.TranscludeText.prototype = new exports.Operand();
+exports.TranscludeText.prototype.name = "transclude";
 
-exports.Opd_TranscludeText.prototype.compute = function(widget, recur) {
+exports.TranscludeText.prototype.compute = function(widget, recur) {
 	return new Values.V_Text(widget.wiki.getTiddlerText(this.title.compute(widget,recur).asString(),""));
 };
 
 // Transcluded field operand.
-exports.Opd_TranscludeField = function(title, field) {
+exports.TranscludeField = function(title, field) {
 	this.title = title;
 	this.field = field;
 };
-exports.Opd_TranscludeField.prototype = new exports.Operand();
-exports.Opd_TranscludeField.prototype.name = "transclude-field";
+exports.TranscludeField.prototype = new exports.Operand();
+exports.TranscludeField.prototype.name = "transclude-field";
 
-exports.Opd_TranscludeField.prototype.compute = function(widget, recur) {
+exports.TranscludeField.prototype.compute = function(widget, recur) {
 	var tiddler = widget.wiki.getTiddler(this.title.compute(widget,recur).asString()),
 		field = this.field.compute(widget,recur).asString();
 	return new Values.V_Text(
@@ -171,44 +171,44 @@ exports.Opd_TranscludeField.prototype.compute = function(widget, recur) {
 };
 
 // Transcluded index operand.
-exports.Opd_TranscludeIndex = function(title, index) {
+exports.TranscludeIndex = function(title, index) {
 	this.title = title;
 	this.index = index;
 };
-exports.Opd_TranscludeIndex.prototype = new exports.Operand();
-exports.Opd_TranscludeIndex.prototype.name = "transclude-index";
+exports.TranscludeIndex.prototype = new exports.Operand();
+exports.TranscludeIndex.prototype.name = "transclude-index";
 
-exports.Opd_TranscludeIndex.prototype.compute = function(widget, recur) {
+exports.TranscludeIndex.prototype.compute = function(widget, recur) {
 	return new Values.V_Text(widget.wiki.extractTiddlerDataItem(
 		this.title.compute(widget,recur).asString(),
 		this.index.compute(widget,recur).asString()),"");
 };
 
 
-// Opd_Variable operand.
-exports.Opd_Variable = function(variable) {
+// Variable operand.
+exports.Variable = function(variable) {
 	this.variable = variable;
 };
-exports.Opd_Variable.prototype = new exports.Operand();
-exports.Opd_Variable.prototype.name = "variable";
+exports.Variable.prototype = new exports.Operand();
+exports.Variable.prototype.name = "variable";
 
-exports.Opd_Variable.prototype.compute = function(widget, recur) {
+exports.Variable.prototype.compute = function(widget, recur) {
 	return new Values.V_Text(
 		widget.getVariable(this.variable.compute(widget,recur).asString()) || "");
 };
 
 
-// Opd_Filter operand, with some lazy-compile optimizations.
-exports.Opd_Filter = function(filter) {
+// Filter operand, with some lazy-compile optimizations.
+exports.Filter = function(filter) {
 	this.filter = filter;
 	this.elements = {}; // Each has count, op, value
 	//this.array = [];
 	this.compileError = null;
 };
-exports.Opd_Filter.prototype = new exports.Operand();
-exports.Opd_Filter.prototype.name = "filter";
+exports.Filter.prototype = new exports.Operand();
+exports.Filter.prototype.name = "filter";
 
-exports.Opd_Filter.prototype.compute = function(widget, recur) {
+exports.Filter.prototype.compute = function(widget, recur) {
 	// Apply the filter and compile each result
 	var i, expr, elem, exprs = widget.wiki.filterTiddlers(this.filter, widget);
 
@@ -229,7 +229,7 @@ exports.Opd_Filter.prototype.compute = function(widget, recur) {
 		}
 		catch (err) {
 			// Save the error
-			this.elements[expr] = new exports.Opd_Error(
+			this.elements[expr] = new exports.ThrowError(
 				err + "\n  source: \"" + expr + "\"\n  from \"" + this.filter + "\"");
 		}
 	}

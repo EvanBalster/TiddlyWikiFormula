@@ -2,8 +2,8 @@
 
 "use strict";
 
-var Values    = require("$:/plugins/ebalster/formula/value.js");
-var Operands  = require("$:/plugins/ebalster/formula/operands.js");
+var Values = require("$:/plugins/ebalster/formula/value.js");
+var Nodes  = require("$:/plugins/ebalster/formula/operands.js");
 
 var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
 var rxDatumIsTrue         = /^s*TRUE\s*$/i;
@@ -132,13 +132,13 @@ exports.compileDatum = function(datum) {
 
 	// Could be a TiddlyWiki date?
 	if (rxDatumIsTwDate.test(datum)) {
-		return new Operands.Opd_Date($tw.utils.parseDate(datum));
+		return new Nodes.Date($tw.utils.parseDate(datum));
 	}
 
 	// Could be a number?
 	if (rxDatumIsDecimal.test(datum)) {
 		// Treat as a number constant
-		return new Operands.Opd_Number(Number(datum));
+		return new Nodes.Number(Number(datum));
 	}
 
 	// Could be a formula?
@@ -159,8 +159,8 @@ exports.compileDatum = function(datum) {
 	}
 
 	// Booleans?
-	if (rxDatumIsFalse.test(datum)) return new Operands.Opd_Bool(false);
-	if (rxDatumIsTrue .test(datum)) return new Operands.Opd_Bool(true);
+	if (rxDatumIsFalse.test(datum)) return new Nodes.Bool(false);
+	if (rxDatumIsTrue .test(datum)) return new Nodes.Bool(true);
 
 	// Date?
 	if (rxDatumIsDate.test(datum))
@@ -175,14 +175,14 @@ exports.compileDatum = function(datum) {
 		}
 		if (parts.length)
 		{
-			return new Operands.Opd_Date(new Date(
+			return new Nodes.Date(new Date(
 				parts[0], (parts[1] || 1)-1, parts[2] || 1,
 				parts[3] || 0, parts[4] || 0, parts[5] || 0, parts[6] || 0));
 		}
 	}
 
 	// Otherwise, treat as a string constant
-	return new Operands.Opd_Text(datum);
+	return new Nodes.Text(datum);
 };
 
 exports.compileFormula = function(formulaString)
@@ -274,21 +274,21 @@ function parseOperator(parser, operatorGroup) {
 function buildTextReference(textReference) {
 	var tr = $tw.utils.parseTextReference(textReference);
 	var title;
-	if (tr.title) title = new Operands.Opd_Text(tr.title);
-	else          title = new Operands.Opd_Variable(new Operands.Opd_Text("currentTiddler"));
+	if (tr.title) title = new Nodes.Text(tr.title);
+	else          title = new Nodes.Variable(new Nodes.Text("currentTiddler"));
 	if (tr.field) {
 		if (tr.field == "title") {
 			return title;
 		}
 		else {
-			return new Operands.Opd_TranscludeField(title, new Operands.Opd_Text(tr.field));
+			return new Nodes.TranscludeField(title, new Nodes.Text(tr.field));
 		}
 	}
 	else if (tr.index) {
-		return new Operands.Opd_TranscludeIndex(title, new Operands.Opd_Text(tr.index));
+		return new Nodes.TranscludeIndex(title, new Nodes.Text(tr.index));
 	}
 	else {
-		return new Operands.Opd_TranscludeText(title);
+		return new Nodes.TranscludeText(title);
 	}
 }
 
@@ -306,7 +306,7 @@ function buildExpression(parser, nested) {
 	var operand = null;
 	
 	var applyUnary = function(unary) {
-		operand = new Operands.Opd_CallJavascript(unary.func_bind, [operand]);
+		operand = new Nodes.CallBuiltin(unary.func_bind, [operand]);
 	};
 
 	while (true)
@@ -376,7 +376,7 @@ function buildExpression(parser, nested) {
 			if (op.precedence != prec) {++i; continue;}
 
 			// Collapse the previous and next operands with this operator.
-			operands[i] = new Operands.Opd_CallJavascript(op.func_bind, [operands[i], operands[i+1]]);
+			operands[i] = new Nodes.CallBuiltin(op.func_bind, [operands[i], operands[i+1]]);
 			operators.splice(i, 1);
 			operands.splice(i+1, 1);
 		}
@@ -450,17 +450,17 @@ function buildOperand(parser) {
 	{
 		// Number constant
 		term = parser.match_here(rxDecimal);
-		if (term) return new Operands.Opd_Number(Number(term[0]));
+		if (term) return new Nodes.Number(Number(term[0]));
 		throw "Invalid number: " + parser.nextToken();
 	}
 	else if (char.match(/[a-z]/i))
 	{
 		// Cell name?
 		term = parser.match_here(rxCellName);
-		if (term) return new Operands.Opd_Datum(
-			new Operands.Opd_TranscludeIndex(
-				new Operands.Opd_Variable(new Operands.Opd_Text("currentTiddler")),
-				new Operands.Opd_Text(term[0])));
+		if (term) return new Nodes.Datum(
+			new Nodes.TranscludeIndex(
+				new Nodes.Variable(new Nodes.Text("currentTiddler")),
+				new Nodes.Text(term[0])));
 
 		// Function call?
 		term = parser.match_here(rxIdentifier);
@@ -497,14 +497,14 @@ function buildOperand(parser) {
 				// If a construct function is present, use it to generate an operand.
 				if (func.construct) return func.construct(args);
 
-				// If a select function is present, prepare to bind it with a Opd_CallJavascript.
+				// If a select function is present, prepare to bind it with a CallBuiltin.
 				func = func.select(args);
 			}
 			else {
 				throw "Function " + term[0] + " seems to be unusable.";
 			}
 
-			return new Operands.Opd_CallJavascript(func, args);
+			return new Nodes.CallBuiltin(func, args);
 		}
 	}
 	else switch (char)
@@ -544,22 +544,22 @@ function buildOperand(parser) {
 				default: throw "Invalid escape sequence: " + esc;
 			}
 		});
-		return new Operands.Opd_Text(term);
+		return new Nodes.Text(term);
 
 	case "[": // Filter operand
 		term = parser.match_here(rxOperandFilter);
-		if (term) return new Operands.Opd_Filter(term[0]);
+		if (term) return new Nodes.Filter(term[0]);
 		break;
 
 	case "{": // Transclusion operand
 		term = parser.match_here(rxOperandTransclusion);
-		if (term) return new Operands.Opd_Datum(buildTextReference(term[1]));
+		if (term) return new Nodes.Datum(buildTextReference(term[1]));
 		break;
 
 	case "<": // Variable operand
 		term = parser.match_here(rxOperandVariable);
-		if (term)  return new Operands.Opd_Datum(
-			new Operands.Opd_Variable(new Operands.Opd_Text(term[1])));
+		if (term)  return new Nodes.Datum(
+			new Nodes.Variable(new Nodes.Text(term[1])));
 		break;
 	}
 

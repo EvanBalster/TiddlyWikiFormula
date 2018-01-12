@@ -7,7 +7,6 @@
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
 var Formulas = require("$:/plugins/ebalster/formula/compile.js");
-var Operands = require("$:/plugins/ebalster/formula/operands.js");
 
 var FormulaWidget = function(parseTreeNode,options) {
 	this.initialise(parseTreeNode,options);
