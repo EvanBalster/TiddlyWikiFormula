@@ -1,6 +1,6 @@
 bnf: <Datum> ::= <DatumFormula> | <Transclusion> | <Variable> | <Date> | <Number> | <RawValue>
 created: 20171211224412729
-modified: 20171222230300787
+modified: 20180112055432323
 tags: Syntax
 title: Datum
 type: text/vnd.tiddlywiki
@@ -14,6 +14,7 @@ A ''Datum'' is some text that may be included into a formula by a [[Transclusion
 * Some other value, which is treated as a constant.
 ** A [[Number Literal]] such as `1.23`
 ** A [[Date Literal]] such as `2017-12-15`
-** Arbitrary text
+** A TiddlyWiki date as used in the created and modified fields.
+** Any other text
 
 A ''Datum'' is analog to a cell in spreadsheet software.

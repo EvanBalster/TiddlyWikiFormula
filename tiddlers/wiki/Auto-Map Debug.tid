@@ -1,0 +1,43 @@
+created: 20180107193147185
+modified: 20180110040752046
+tags: 
+title: Auto-Map Debug
+type: text/vnd.tiddlywiki
+
+\define formulaFixed() 2
+
+\define point_x(pointvar) regexextract1(<<$pointvar$>>,'([^,]+),','0',1) 
+\define point_y(pointvar) regexextract1(<<$pointvar$>>,',([^,]+)','0',1) 
+
+<$tiddler tiddler="$:/temp/self-organizing-map">
+
+Frame number: {{!!counter}}
+
+<ul>
+<$list variable=id filter="[all[current]indexes[]]">
+	<$vars p={{{ [all[current]getindex<id>] }}}>
+	<$formula-vars $noRebuild x=<<point_x p>> y=<<point_y p>> >
+		<li><<id>>: (<<p>>) => (<<x>>,<<y>>)</li>
+	</$formula-vars>
+	</$vars>
+</$list>
+</ul>
+
+Links
+
+<ul>
+<$list variable=a filter="[all[current]indexes[]]">
+<$list variable=b filter="[<a>links[]]">
+	<$vars
+		p_a={{{[all[current]getindex<a>]}}}
+		p_b={{{[all[current]getindex<b>]}}}>
+	<$formula-vars $noRebuild
+		x_a=<<point_x p_a>> y_a=<<point_y p_a>>
+		x_b=<<point_x p_b>> y_b=<<point_y p_b>>
+		>
+		<li><<a>>-<<b>>: (<<p_a>>) => (<<p_b>>)</li>
+	</$formula-vars>
+	</$vars>
+</$list>
+</$list>
+</ul>

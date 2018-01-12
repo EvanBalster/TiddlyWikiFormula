@@ -1,0 +1,57 @@
+created: 20180106181434935
+modified: 20180112061028395
+tags: [[Timer Plugin]] Demo
+title: Demo: Bouncy Bounce
+type: text/vnd.tiddlywiki
+
+This is a simple simulation meant to demonstrate the use of the [[Timer Plugin]] for iterative computing.
+
+<$tiddler tiddler="$:/temp/demo-physics">
+
+Simulation: <$button>Start<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(now(), .1))">> dt=.05 grav.y=60 /></$button>
+<$button>Stop<$action-setfield next-tick="" /></$button>
+
+Actions: <$button>Reset<$action-setfield pos.x=0 pos.y=0 vel.x=0 vel.y=0 grav.y=60 counter=0 /></$button>
+<$button>Kick<$action-setfield vel.x=(= randbetween(-100, 100) =) vel.y=(= randbetween(-140, 0) =) /></$button>
+
+Frame # {{!!counter}}  (<$link>State Tiddler</$link>)
+
+<svg width=500 viewBox="-110 -210 220 220">
+<rect x=-999 y=-999 width=9999 height=9999 style="fill:black;"/>
+<rect x=-105 y=-300 width=210 height=305 style="fill:white;"/>
+<circle cx={{!!pos.x}} cy={{!!pos.y}} r=5 style="fill:red;"/>
+<$list variable=offset filter="[range[-.025,.025,.005]]">
+<circle cx=(= {{!!pos.x}}+<<offset>>*{{!!vel.x}} =) cy=(= {{!!pos.y}}+<<offset>>*{{!!vel.y}}+<<offset>>^2*{{!!grav.y}} =) r=5 style="fill:red; opacity:.1"/>
+</$list>
+</svg>
+
+
+<!-- Simulation logic follows -->
+
+<$if value={{!!next-tick}}>
+
+<$timer interval={{!!dt}}> <!-- <$timer time={{!!next-tick}}> -->
+<$formula-vars $noRebuild
+	move-x=(= {{!!pos.x}}+{{!!vel.x}}*{{!!dt}} =)
+	move-y=(= {{!!pos.y}}+{{!!vel.y}}*{{!!dt}} =)
+	>
+<!-- Horizontal motion or bounce -->
+<$if value=(= abs(<<move-x>>) > 100 =)>
+	<$action-setfield pos.x=(= clamp(<<move-x>>,-100,100) =) vel.x=(= -.8*sign(<<move-x>>)*abs({{!!vel.x}}) =) />
+</$if>
+<$else>
+	<$action-setfield pos.x=<<move-x>> />
+</$else>
+<!-- Vertical motion or bounce -->
+<$if value=(= <<move-y>> > 0 =)>
+	<$action-setfield pos.y=0 vel.y=(= -.8*abs({{!!vel.y}}) =) />
+</$if>
+<$else>
+	<$action-setfield pos.y=<<move-y>> vel.y=(= {{!!vel.y}}+{{!!grav.y}}*{{!!dt}} =) />
+</$else>
+</$formula-vars>
+<$action-setfield counter=(= {{!!counter}}+1 =)/>
+<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(tw_date({{!!next-tick}}), {{!!dt}}))">> />
+</$timer>
+
+</$if>

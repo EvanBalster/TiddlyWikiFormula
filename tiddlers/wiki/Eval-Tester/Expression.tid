@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20171229234707237
+modified: 20180112061447036
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-sum([tag[Expenses]get[value]]) & ", = sum of " & [tag[Expenses]get[value]]
+round(5*sum([tag[Expenses]get[value]]), 2)

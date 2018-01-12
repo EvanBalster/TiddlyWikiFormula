@@ -1,0 +1,29 @@
+created: 20180106070709211
+modified: 20180106195245451
+tags: 
+title: Demo: Timed Counter
+type: text/vnd.tiddlywiki
+
+This is a demo of a non-interval timer.  It can't keep precise time because it re-sets the timer when the timer is activated.
+
+
+!!Method 1
+
+<$tiddler tiddler="$:/temp/counter">
+
+<$vars v={{$:/temp/search}}>
+
+<$button>Start<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(now(), 1))">> /></$button>
+<$button>Stop<$action-setfield next-tick="" /></$button>
+
+<$timer time={{!!next-tick}}>
+<$action-setfield counter=(= {{!!counter}}+1 =)/>
+<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(now(), 1))">> />
+</$timer>
+
+Next Tick: <$transclude field=next-tick>NOT SET</$transclude>
+
+Ticks counted: {{!!counter}}
+
+
+!!Method 2

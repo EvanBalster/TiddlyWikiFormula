@@ -1,5 +1,5 @@
 created: 20171210222937878
-modified: 20171222225306078
+modified: 20180110040512908
 title: Try Me
 type: text/vnd.tiddlywiki
 
@@ -12,6 +12,7 @@ Use this area to try out some formulas.
 
 ;Result:
 :<$formula formula={{Eval-Tester/Expression}} toFixed={{Eval-Tester/toFixed}} toPrecision={{Eval-Tester/toPrecision}}/>
+<!-- :<$formula-vars result={{Eval-Tester/Expression}} $toFixed={{Eval-Tester/toFixed}} $toPrecision={{Eval-Tester/toPrecision}}>With vars: <<result>></$formula-vars> -->
 
 Try these:
 

@@ -1,5 +1,5 @@
 created: 20171216220518577
-modified: 20171229215544529
+modified: 20180110042205149
 tags: Widget
 title: FormulaVarsWidget
 type: text/vnd.tiddlywiki
@@ -18,7 +18,7 @@ This offers some advantages over using `$vars` with [[Formulas as Tag Attributes
 |$toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
 |$toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
 |$dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.  (Defaults to variable `<<formulaDateFormat>>`.)|
-|$noRefresh|__Experimental__.  Prevents full DOM refresh when variables change.  This can boost performance substantially but will cause certain elements not to refresh.|
+|$noRebuild|__Experimental__.  Prevents full DOM rebuild when variables change.  This can boost performance substantially but will cause certain elements not to refresh.|
 
 
 !Examples

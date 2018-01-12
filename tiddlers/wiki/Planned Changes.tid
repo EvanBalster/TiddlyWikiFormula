@@ -1,17 +1,35 @@
 created: 20171222192325797
-modified: 20171222194136259
+modified: 20180109065809889
 tags: 
 title: Planned Changes
 type: text/vnd.tiddlywiki
 
-* Wikify formula output
-
 !! Major changes
 
-* Arrays stringify to TiddlyWiki lists
+Features
+
+* Add "let" functionality
+* Add "foreach" functionality
+** Implement as function
+* Add user-defined functions
+** Implement as compiled expression and "let" construct
+
+Architecture
+
 * Ditch value encapsulation
 ** Make functions accept operands to make lazy evaluation simpler
 ** Operands can have default conversion methods
+* Function signatures are <raw value> function(<operand>, ...)
+** get/asX replaced by compute/computeX.
+* Expressions may use local variables
+** No brackets required
+** Override TiddlyWiki variables?  (Necessary for proper transcludes)
+
+Changes
+
 * Smarter comparison of arrays
+
+Formatting
+
 * Add global format settings with clear defaults
 * Use format strings instead of toFixed/toPrecision

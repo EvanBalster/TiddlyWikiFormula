@@ -1,5 +1,5 @@
 created: 20171221064018661
-modified: 20171229230331916
+modified: 20180110042251199
 tags: Explorable
 title: Real Projective Line
 type: text/vnd.tiddlywiki
@@ -16,7 +16,7 @@ The ''Real Projective Line'' is a way to visualize all the real numbers as a con
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-160 -80 320 180" width="640" style="display: block; margin: auto;">
 <rect x=-160 y=-80 width=320 height=180 rx=5 fill=#001133/>
-<$formula-vars $noRefresh=true
+<$formula-vars $noRebuild
 	unfold="{{!!unfold}}/100"
 	ang1="2*atan(1 *{{!!unfold}}%)"
 	strokeWidth="'stroke-width:'&.007*(3-2*{{!!unfold}}%)&';'"
@@ -26,7 +26,7 @@ The ''Real Projective Line'' is a way to visualize all the real numbers as a con
 <g style="font-size:.1pt; font-weight: bold; align: center; text-anchor: middle;">
 <g style=<<strokeWidth>> transform=<<zoom>>>
 <<RPL_realLine>>
-<$formula-vars $noRefresh=true
+<$formula-vars $noRebuild
 	lx1="if(<<unfold>>=0,-10,0)"
 	lx2="if(<<unfold>>=0,+10,0)"
 	pcr="if(<<unfold>>=0,0,1/<<unfold>>)"
@@ -39,8 +39,8 @@ The ''Real Projective Line'' is a way to visualize all the real numbers as a con
 <line x1=<<lx1>> x2=<<lx2>> y1=1 y2=1 stroke=#FFFFFF/>
 <circle cx=0 cy=<<pcy>> r=<<pcr>> stroke=#FFFFFF fill=none/>
 <$list variable="n" filter="[[-5]] [[+5]] [[-3]] [[+3]] [[-2]] [[+2]]">
-<$formula-vars $noRefresh=true angN="2*atan(<<n>>*{{!!unfold}}%)">
-<$formula-vars $noRefresh=true posN="'translate(' & <<n>>*(+1+cos(<<angN>>)) & ',' & 1-<<n>>*sin(<<angN>>) & ') ' & <<inflate>>">
+<$formula-vars $noRebuild angN="2*atan(<<n>>*{{!!unfold}}%)">
+<$formula-vars $noRebuild posN="'translate(' & <<n>>*(+1+cos(<<angN>>)) & ',' & 1-<<n>>*sin(<<angN>>) & ') ' & <<inflate>>">
 	<$macrocall $name=RPL_orb transform=<<posN>> text=<<n>>/>
 </$formula-vars>
 </$formula-vars>
@@ -71,16 +71,16 @@ We arrange all the "projective" numbers into a circle, then find the real number
 <rect x=-160 y=-80 width=320 height=180 rx=5 fill=#001133/>
 <g style="font-size: .1pt; font-weight: bold; align: center; stroke-width:.007; text-anchor: middle;" transform=scale(60)>
 <<RPL_background>>
-<$formula-vars $noRefresh=true
+<$formula-vars $noRebuild
 	theta="PI+PI*2*{{!!orientation}}%"
 	n="2*tan(.5*PI+PI*{{!!orientation}}%)"
 	>
-<$formula-vars $noRefresh=true
+<$formula-vars $noRebuild
 	$toFixed=1
 	degrees="{{!!orientation}}%*180-90"
 	nshow="if(abs({{!!orientation}}-50)=50,'infinity',tan(.5*PI+PI*{{!!orientation}}%))"
 	>
-<$formula-vars $noRefresh=true
+<$formula-vars $noRebuild
 	sin="sin(<<theta>>)"
 	cos="cos(<<theta>>)"
 	x1="-10*<<n>>" y1=-21

@@ -1,11 +1,24 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20171229234812698
+modified: 20180112060421038
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
+
+!!! 0.2.0
+
+* Added [[Functions]] for importing values as text: `transclude`, `transclude_index`, `variable`
+* Added `datum` function for interpreting text as a [[Datum]].
+* Datum parsing now recognizes 14- and 17-digit TiddlyWiki dates (eg. created & modified fields).
+* Widgets now display errors in the TiddlyWiki style.
+** `$formula-vars` will display any errors instead of its normal content.
+** `$formula` uses `tc-error` styling.
+* Fixed doc error: `$noRebuild` option is not called `$noRefresh`
+* The `substitute` function now properly substitutes all occurrences.
+* Fixed implementation of the `modulo` function.
+
 
 !!! 0.1.7 — 2017 December 29
 

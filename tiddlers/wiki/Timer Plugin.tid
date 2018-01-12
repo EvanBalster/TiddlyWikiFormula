@@ -1,0 +1,17 @@
+created: 20180107215241247
+modified: 20180107223350559
+title: Timer Plugin
+type: text/vnd.tiddlywiki
+
+''Timer Plugin'' (version {{$:/plugins/ebalster/timer!!version}}).
+
+It can trigger ActionWidgets at regular intervals or at a specific point in time.
+
+
+!Get the Plugin
+
+<<<
+Drag-and-drop this to your wiki:
+
+{{$:/plugins/ebalster/timer||$:/core/ui/Components/plugin-info}}
+<<<

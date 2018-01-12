@@ -1,0 +1,110 @@
+created: 20180107173851197
+modified: 20180110043546433
+tags: [[Formula Plugin]] [[Timer Plugin]] Demo
+title: Auto-Map
+type: text/vnd.tiddlywiki
+
+\define formulaFixed() 2
+
+\define point_x(pointvar) regexextract1(<<$pointvar$>>,'([^,]+),','0',1) 
+\define point_y(pointvar) regexextract1(<<$pointvar$>>,',([^,]+)','0',1) 
+
+This tiddler creates a dynamically-generated map of tiddlers in the host wiki which link directly or indirectly to the original one, [[Formula Plugin]].
+
+Uses:
+
+* [[Formula Plugin]]
+* [[Timer Plugin]]
+* [[Condition Plugin]]
+
+<$tiddler tiddler="$:/temp/self-organizing-map">
+
+Build:
+<$button>Set up
+	<$action-setfield indirection=0 />
+	<$action-setfield text="""{"Formula Plugin": "0,0"}""" type="application/json" />
+</$button>
+<$button>Add a level
+	<$action-setfield indirection=(= {{!!indirection}}+1 =) />
+	<$list variable=a filter="[all[current]indexes[]]">
+	<$list variable=b filter="[<a>links[]!is[system]] -[all[current]indexes[]]">
+		<$action-setfield $index=<<b>> $value=(= randbetween(-100, 100) & ',' & randbetween(-100,100) =) />
+	</$list>
+	</$list>
+</$button>
+<$if value={{!!indirection}}>
+Organize:
+<$button>Start<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(now(), .1))">> dt=.05 /></$button>
+<$button>Stop<$action-setfield next-tick="" dt=0/></$button>
+</$if>
+
+(Levels of indirection: {{!!indirection}})
+
+<svg width=500 viewBox="-100 -100 200 200">
+<g style="fill: white; stroke: black; stroke-width: .5;">
+<rect x=-100 y=-100 width=200 height=200/>
+<$list variable=a filter="[all[current]indexes[]]">
+<$list variable=b filter="[<a>links[]] -[<a>]">
+	<$vars
+		p_a={{{[all[current]getindex<a>]}}}
+		p_b={{{[all[current]getindex<b>]}}}>
+	<$formula-vars $noRebuild
+		x_a=<<point_x p_a>> y_a=<<point_y p_a>>
+		x_b=<<point_x p_b>> y_b=<<point_y p_b>>
+		>
+		<line x1=<<x_a>> y1=<<y_a>> x2=<<x_b>> y2=<<y_b>>/>
+	</$formula-vars>
+	</$vars>
+</$list>
+</$list>
+<$list variable=id filter="[all[current]indexes[]]">
+	<$vars p={{{[all[current]getindex<id>]}}}>
+	<$formula-vars $noRebuild x=<<point_x p>> y=<<point_y p>> >
+		<circle cx=<<x>> cy=<<y>> r=5/>
+	</$formula-vars>
+	</$vars>
+</$list>
+</g>
+</svg>
+
+
+Debugging info here:  [[Auto-Map Debug]] / <$link>State Tiddler</$link>
+
+
+<!-- Simulation logic follows -->
+
+<$if value={{!!dt}}>
+
+<$timer interval={{!!dt}}>
+<$list variable=a filter="[all[current]indexes[]]">
+<$vars p_a={{{[all[current]getindex<a>]}}}>
+<$formula-vars $noRebuild x_a=<<point_x p_a>> y_a=<<point_y p_a>> >
+	<!-- Attraction -->
+	<$formula-vars $noRebuild b="nth([<a>links[]]-[<a>], randbetween(1,count([<a>links[]]-[<a>])))">
+	<$vars p_b={{{[all[current]getindex<b>]}}}>
+	<$formula-vars $noRebuild x_b=<<point_x p_b>> y_b=<<point_y p_b>> >
+		<$if value=(= (<<x_b>>-<<x_a>>)^2+(<<y_b>>-<<y_a>>)^2 > 300 =)>
+			<$action-setfield $index=<<a>> $value=(= mix(<<x_a>>,<<x_b>>,.05) & ',' & mix(<<y_a>>,<<y_b>>,.05) =)/>
+		</$if>
+	</$formula-vars>
+	</$vars>
+	</$formula-vars>
+	<!-- Repulsion -->
+	<$list variable=b filter="[all[current]indexes[]] -[<a>]">
+	<$vars p_b={{{[all[current]getindex<b>]}}}>
+	<$formula-vars $noRebuild x_b=<<point_x p_b>> y_b=<<point_y p_b>> >
+	<$formula-vars $noRebuild dist2="(<<x_a>>-<<x_b>>)^2+(<<y_a>>-<<y_b>>)^2" dir="atan2(<<y_a>>-<<y_b>>,<<x_a>>-<<x_b>>)" >
+		<$if value=(= <<dist2>> < 200 =)>
+			<$action-setfield $index=<<a>> $value=(= <<x_a>>+5*cos(<<dir>>)+randbetween(-3,3) & ',' & <<y_a>>+5*sin(<<dir>>)+randbetween(-3,3) =)/>
+		</$if>
+	</$formula-vars>
+	</$formula-vars>
+	</$vars>
+	</$list>
+</$formula-vars>
+</$vars>
+</$list>
+<$action-setfield counter=(= {{!!counter}}+1 =)/>
+</$timer>
+
+</$if>

@@ -1,5 +1,5 @@
 created: 20171230052133191
-modified: 20171230052248246
+modified: 20171230054027050
 tags: Plugin
 title: Condition Plugin
 type: text/vnd.tiddlywiki
@@ -11,5 +11,5 @@ type: text/vnd.tiddlywiki
 <<<
 Drag-and-drop this to your wiki:
 
-{{$:/plugins/ebalster/formula||$:/core/ui/Components/plugin-info}}
+{{$:/plugins/ebalster/condition||$:/core/ui/Components/plugin-info}}
 <<<

@@ -1,0 +1,14 @@
+created: 20180106071137168
+modified: 20180106071232220
+tags: 
+title: Repack Helper: timer
+type: text/vnd.tiddlywiki
+
+Repacking command (use this in the browser console to repack the plugin)
+
+<pre><code>$tw.utils.repackPlugin("$:/plugins/ebalster/timer", (= "[" & textjoin(",",
+ TRUE,
+ [prefix[$:/plugins/ebalster/timer/]addprefix["]addsuffix["]]) & "]" =));
+</code></pre>
+
+Version: <$edit-text tiddler="$:/plugins/ebalster/timer" field="version" />

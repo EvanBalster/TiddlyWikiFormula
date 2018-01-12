@@ -1,0 +1,39 @@
+created: 20180107215224430
+modified: 20180107233617512
+tags: [[Timer Plugin]] Demo
+title: Pomodoro Timer
+type: text/vnd.tiddlywiki
+
+\define formulaFixed() 0
+
+<$tiddler tiddler="$:/temp/pomo-timer">
+
+<h1>
+<$if value={{!!time-end}}>Time Left: {{!!time-left}}</$if>
+<$else>Timer Off</$else>
+</h1>
+
+Pomodoros logged: {{!!block-count}}
+
+<$button>Start (25 min)
+<$action-setfield time-end=(= to_tw_date(add_minutes(now(), 25)) =) />
+</$button>
+<$button>Start (1 min)
+<$action-setfield time-end=(= to_tw_date(add_minutes(now(), 1)) =) />
+</$button>
+<$button>Cancel
+<$action-setfield time-end="" />
+</$button>
+
+<!-- Actual timer -->
+<$timer time={{!!time-end}}>
+<$action-setfield time-end="" />
+<$action-setfield block-count=(= {{!!block-count}}+1 =) />
+</$timer>
+
+<!-- Compute clock display -->
+<$if value={{!!time-end}}>
+<$timer interval=1>
+<$action-setfield time-left=(= floor(minutes(now(), tw_date({{!!time-end}}))) & ":" & modulo(floor(seconds(now(), tw_date({{!!time-end}}))), 60) =) />
+</$timer>
+</$if>
