@@ -32,11 +32,23 @@ FormulaWidget.prototype.rerender = function(parent, nextSibling) {
 
 	this.removeChildDomNodes();
 
-	// Parse the value, or, failing this, produce a text node.
-	var parser = this.wiki.parseText(
-		this.wikifyType, this.currentValue,
-		{parseAsInline: this.wikifyMode === "inline"});
-	var parseTreeNodes = (parser ? parser.tree : [{type: "text", text: this.currentValue}]);
+	var parseTreeNodes;
+
+	if (this.formulaError) {
+		// Show an error as a tc-error span.
+		parseTreeNodes = [{type: "element", tag: "span", attributes: {
+			"class": {type: "string", value: "tc-error"}
+		}, children: [
+			{type: "text", text: this.formulaError}
+		]}];
+	}
+	else {
+		// Parse the value, or, failing this, produce a text node.
+		var parser = this.wiki.parseText(
+			this.wikifyType, this.currentValue,
+			{parseAsInline: this.wikifyMode === "inline"});
+		parseTreeNodes = (parser ? parser.tree : [{type: "text", text: this.currentValue}]);
+	}
 
 	// Construct and render the child widgets.
 	this.makeChildWidgets(parseTreeNodes);
@@ -64,25 +76,33 @@ FormulaWidget.prototype.execute = function() {
 		dateFormat: (this.getAttribute("dateFormat")  || this.getVariable("formulaDateFormat")),
 	};
 
+	// Clear the error flag
+	this.formulaError = null;
+
 	// Compile the formula, if it has changed, yielding compiledFormula
 	if(this.formula !== oldFormula) {
+		this.compiledFormula = null;
 		if (this.formula) {
-			try
-			{
+			try {
 				this.compiledFormula = Formulas.compileFormula(this.formula);
 			}
-			catch (err) {this.compiledFormula = new Operands.Opd_Error(err);}
-		}
-		else {
-			this.compiledFormula = null;
+			catch (err) {
+				this.formulaError = String(err);
+			}
 		}
 	}
 
 	// Compute the formula, yielding currentValue
 	if(this.compiledFormula) {
-		this.currentValue = Formulas.computeFormula(this.compiledFormula, this, this.formatOptions, Boolean(this.debug));
-	} else {
-		this.currentValue = "`Error: formula not assigned`";
+		try {
+			this.currentValue = Formulas.computeFormula(this.compiledFormula, this, this.formatOptions, Boolean(this.debug));
+		}
+		catch (err) {
+			this.formulaError = String(err);
+		}
+	}
+	else if (!this.formulaError) {
+		this.formulaError = "Error: formula not assigned";
 	}
 };
 
@@ -92,9 +112,9 @@ Selectively refreshes the widget if needed. Returns true if the widget or any of
 FormulaWidget.prototype.refresh = function(changedTiddlers) {
 	// Re-execute the filter to get the count
 	this.computeAttributes();
-	var oldValue = this.currentValue;
+	var oldValue = this.currentValue, oldError = this.formulaError;
 	this.execute();
-	if(this.currentValue !== oldValue) {
+	if(this.oldError !== this.formulaError || this.currentValue !== oldValue) {
 		// Regenerate and rerender the widget and replace the existing DOM node
 		//   We DON'T call refreshSelf() because it call execute() again
 		var nextSibling = this.findNextSiblingDomNode();

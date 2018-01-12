@@ -18,7 +18,12 @@ exports.run = function(formula) {
 
   var formulas = require("$:/plugins/ebalster/formula/compile.js");
 
-  return formulas.evalFormula(formula, this);
+  try {
+    return formulas.evalFormula(formula, this);
+  }
+  catch (err) {
+    return "`" + String(err) + "`";
+  }
 };
 
 })();

@@ -28,6 +28,21 @@ FormulaVarsWidget.prototype.render = function(parent,nextSibling) {
 	this.parentDomNode = parent;
 	this.computeAttributes();
 	this.execute();
+
+	if (this.formulaError) {
+		// Show an error.
+		var parseTreeNodes = [{type: "element", tag: "span", attributes: {
+			"class": {type: "string", value: "tc-error"}
+		}, children: [
+			{type: "text", text: this.formulaError}
+		]}];
+		this.makeChildWidgets(parseTreeNodes);
+	}
+	else {
+		// Construct and render the child widgets.
+		this.makeChildWidgets();
+	}
+
 	this.renderChildren(parent,nextSibling);
 };
 
@@ -53,28 +68,42 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 		this.formulaComp = {};
 	}
 
-	$tw.utils.each(this.attributes,function(val,key) {
-		if(key.charAt(0) !== "$") {
-			// Recompile if necessary
-			if (self.formulaSrc[key] != val) {
-				self.formulaSrc[key] = val;
-				try {
-					self.formulaComp[key] = Formulas.compileFormula(self.formulaSrc[key]);
+	this.formulaError = null;
+
+	try {
+		if (this.getAttribute("$noRefresh")) throw "Illegal $noRefresh attribute; use $noRebuild instead.";
+
+		$tw.utils.each(this.attributes,function(val,key) {
+			if(key.charAt(0) !== "$") {
+				// Recompile if necessary
+				if (self.formulaSrc[key] != val) {
+					self.formulaSrc[key] = val;
+					try {
+						self.formulaComp[key] = Formulas.compileFormula(self.formulaSrc[key]);
+					}
+					catch (err) {
+						 throw "Variable " + key + ": " + String(err);
+					}
 				}
-				catch (err) {
-					self.formulaComp[key] = new Operands.Opd_Error(err);
+				// Recompute the formula
+				if (self.formulaComp[key]) {
+					try {
+						self.currentValues[key] = Formulas.computeFormula(
+							self.formulaComp[key], self, self.formatOptions);
+					}
+					catch (err) {
+						throw "Variable " + key + ": " + String(err);
+					}
+				}
+				else {
+					throw "Variable " + key + ": Formula not assigned";
 				}
 			}
-			// Recompute the formula
-			if (self.formulaComp[key]) {
-				self.currentValues[key] = Formulas.computeFormula(
-					self.formulaComp[key], self, self.formatOptions);
-			}
-			else {
-				self.currentValues[key] = "Error: formula not assigned";
-			}
-		}
-	});
+		});
+	}
+	catch (err) {
+		this.formulaError = String(err);
+	}
 };
 
 /*
@@ -84,12 +113,11 @@ FormulaVarsWidget.prototype.execute = function() {
 	// Recompute formulas
 	this.formula_recompute();
 
-	for (var key in this.currentValues) {
-		this.setVariable(key, this.currentValues[key]);
+	if (!this.formulaError) {
+		for (var key in this.currentValues) {
+			this.setVariable(key, this.currentValues[key]);
+		}
 	}
-
-	// Construct the child widgets
-	this.makeChildWidgets();
 };
 
 /*
@@ -97,7 +125,7 @@ Refresh the widget by ensuring our attributes are up to date
 */
 FormulaVarsWidget.prototype.refresh = function formulaVarsRefresh(changedTiddlers) {
 	this.computeAttributes();
-	var oldValues = Object.assign({}, this.currentValues || {});
+	var oldValues = Object.assign({}, this.currentValues || {}), oldError = this.formulaError;
 	this.formula_recompute();
 
 	// Did any computed values change?
@@ -109,7 +137,9 @@ FormulaVarsWidget.prototype.refresh = function formulaVarsRefresh(changedTiddler
 		}
 	}
 
+	// Option to suppress full refreshing
 	if (this.getAttribute("$noRebuild") === "true") changedValues = false;
+	if (this.formulaError !== oldError) changedValues = true;
 
 	if(changedValues) {
 		// Regenerate and rerender the widget and replace the existing DOM node
