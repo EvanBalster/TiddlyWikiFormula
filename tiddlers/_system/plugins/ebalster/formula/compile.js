@@ -13,9 +13,9 @@ var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 var rxSkipWhitespace    = /\s*/g;
 var rxNotWhitespace     = /[^\s]+/g;
 var rxOperandFilter     = /\[(([^\[\]]|\[[^\[\]]*\])+(\](\s*[+-])?\s*\[)?)+\]/g;
-var rxOperandTransclusion =     /\{\{[^\{\}]+\}\}/g;
-var rxDatumIsTransclusion = /^\s*\{\{[^\{\}]+\}\}\s*$/;
-var rxOperandVariable     =     /<<[^<>]+>>/g;
+var rxOperandTransclusion =     /\{\{([^\{\}]+)\}\}/g;
+var rxDatumIsTransclusion = /^\s*\{\{([^\{\}]+)\}\}\s*$/;
+var rxOperandVariable     =     /<<([^<>]+)>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
 var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
@@ -26,6 +26,7 @@ var rxDatumIsDecimal  = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
 
 var rxDate            =     /\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d+)?)?)?/g;
 var rxDatumIsDate     = /^\s*\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d{3})?)?)?\s*$/;
+var rxDatumIsTwDate   = /^([0-9]{4})(1[0-2]|0[1-9])(3[01]|[12][0-9]|0[1-9])(2[0-3]|[01][0-9])([0-5][0-9])([0-5][0-9])([0-9]{3})?$/;
 var rxDateFragment    = /\d+/g;
 
 var rxString          = /("(\\.|[^"\\])*"|'(\\.|[^'\\])*')/g;
@@ -125,9 +126,14 @@ exports.compileDatum = function(datum) {
 
   // Short-hand formula
   if (datum.charAt(0) == "=") {
-  	parser = new Parser(datum);
+    parser = new Parser(datum);
     parser.pos = 1;
     return buildExpression(parser);
+  }
+
+  // Could be a TiddlyWiki date?
+  if (rxDatumIsTwDate.test(datum)) {
+    return new Operands.Opd_Date($tw.utils.parseDate(datum));
   }
 
   // Could be a number?
@@ -187,7 +193,7 @@ exports.compileFormula = function(formulaString)
   {
     return exports.compileExpression(formulaString);
   }
-  catch (err)    {return new Operands.Opd_Text("`FormulaError: " + err + "`");}
+  catch (err)    {throw "FormulaError: " + err;}
 };
 
 var numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);};};
@@ -213,7 +219,7 @@ exports.computeFormula = function(compiledFormula, widget, formatOptions, debug)
   {
     value = compiledFormula.compute(widget, 0);
   }
-  catch (err)    {return "`ComputeError: " + String(err) + "\noperand: " + String(compiledFormula) + "`";}
+  catch (err)    {throw "ComputeError: " + String(err) + "\noperand: " + JSON.stringify(compiledFormula);}
 
   // Format the root operand as a string.
   try
@@ -221,7 +227,7 @@ exports.computeFormula = function(compiledFormula, widget, formatOptions, debug)
     if (debug) return value.asString() + "\n - Val:" + String(value) + ", Op:" + compiledFormula.name;
     else       return value.asString();
   }
-  catch (err)    {return "`ValueError: " + String(err) + "\nvalue: " + String(value) + "`";}
+  catch (err)    {throw "ValueError: " + String(err) + "\nvalue: " + JSON.stringify(value);}
 };
 
 exports.evalFormula = function(formulaString, widget, formatOptions, debug) {
@@ -233,7 +239,7 @@ exports.evalFormula = function(formulaString, widget, formatOptions, debug) {
   {
     compiledFormula = exports.compileExpression(formulaString);
   }
-  catch (err)    {return "`FormulaError: " + String(err) + "`";}
+  catch (err)    {throw "FormulaError: " + String(err);}
 
   // Compute the formula
   return exports.computeFormula(compiledFormula, widget, formatOptions, debug);
@@ -263,6 +269,28 @@ function parseOperator(parser, operatorGroup) {
   if (result) parser.pos += result.operator.length;
 
   return result;
+}
+
+// Parse a text reference.  This function is pased on $tw.utils.getTextReference.
+function buildTextReference(textReference) {
+  var tr = $tw.utils.parseTextReference(textReference);
+  var title;
+  if (tr.title) title = new Operands.Opd_Text(tr.title);
+  else          title = new Operands.Opd_Variable(new Operands.Opd_Text("currentTiddler"));
+  if (tr.field) {
+    if (tr.field == "title") {
+      return title;
+    }
+    else {
+      return new Operands.Opd_TranscludeField(title, new Operands.Opd_Text(tr.field));
+    }
+  }
+  else if (tr.index) {
+    return new Operands.Opd_TranscludeIndex(title, new Operands.Opd_Text(tr.index));
+  }
+  else {
+    return new Operands.Opd_TranscludeText(title);
+  }
 }
 
 // Parse a formula.
@@ -302,7 +330,7 @@ function buildExpression(parser, nested) {
     {
       var token = parser.nextToken();
       if (token && token[0] != ")" && token[0] != ",")
-        throw "invalid operand\"" + token + "\"";
+        throw "invalid operand \"" + token + "\"";
       else if (operators.length)
         throw "missing operand after \"" + operators[operators.length-1].operator + "\"";
       else throw "empty expression";
@@ -430,7 +458,10 @@ function buildOperand(parser) {
   {
     // Cell name?
     term = parser.match_here(rxCellName);
-    if (term) return new Operands.Opd_Transclude("##" + term[0]);
+    if (term) return new Operands.Opd_Datum(
+      new Operands.Opd_TranscludeIndex(
+        new Operands.Opd_Variable(new Operands.Opd_Text("currentTiddler")),
+        new Operands.Opd_Text(term[0])));
 
     // Function call?
     term = parser.match_here(rxIdentifier);
@@ -523,12 +554,13 @@ function buildOperand(parser) {
 
   case "{": // Transclusion operand
     term = parser.match_here(rxOperandTransclusion);
-    if (term) return new Operands.Opd_Transclude(term[0].substring(2, term[0].length-2));
+    if (term) return new Operands.Opd_Datum(buildTextReference(term[1]));
     break;
 
   case "<": // Variable operand
     term = parser.match_here(rxOperandVariable);
-    if (term) return new Operands.Opd_Variable(term[0].substring(2, term[0].length-2));
+    if (term)  return new Operands.Opd_Datum(
+      new Operands.Opd_Variable(new Operands.Opd_Text(term[1])));
     break;
   }
 
