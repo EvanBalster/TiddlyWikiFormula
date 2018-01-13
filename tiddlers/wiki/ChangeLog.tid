@@ -1,6 +1,6 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20180112060421038
+modified: 20180112064915792
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
@@ -18,6 +18,10 @@ Potentially destructive changes are noted in bold.
 * Fixed doc error: `$noRebuild` option is not called `$noRefresh`
 * The `substitute` function now properly substitutes all occurrences.
 * Fixed implementation of the `modulo` function.
+
+The internal code was reworked:
+
+* Eliminated Operator, Operand and Value types in favor of a consolidated "Node" type.
 
 
 !!! 0.1.7 — 2017 December 29

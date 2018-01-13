@@ -1,6 +1,6 @@
 bnf: <Datum> ::= <DatumFormula> | <Transclusion> | <Variable> | <Date> | <Number> | <RawValue>
 created: 20171211224412729
-modified: 20180112055432323
+modified: 20180113011731684
 tags: Syntax
 title: Datum
 type: text/vnd.tiddlywiki
@@ -16,5 +16,7 @@ A ''Datum'' is some text that may be included into a formula by a [[Transclusion
 ** A [[Date Literal]] such as `2017-12-15`
 ** A TiddlyWiki date as used in the created and modified fields.
 ** Any other text
+
+|!<div style="width:30px;">{{$:/core/images/warning}}</div>|A 14- or 17-digit number may be interpreted as a TiddlyWiki date, but only if the month, day, hour, minute and second are within acceptable ranges.  The chance of this happening randomly is about <$formula formula=100*.12*.31*.24*.60*.60 toPrecision=3/>%.|
 
 A ''Datum'' is analog to a cell in spreadsheet software.
