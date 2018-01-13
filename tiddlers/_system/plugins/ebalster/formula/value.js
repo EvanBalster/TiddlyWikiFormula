@@ -138,17 +138,4 @@ exports.V_Num.prototype.asString = function()    {return (exports.NumberFormatFu
 exports.V_Num.prototype.asNum    = function()    {return this.value;};
 exports.V_Num.prototype.asSum    = function()    {return this.value;};
 
-
-// Percentage value.
-exports.V_Percent = function(value) {
-	this.name = "percentage";
-
-	this.value = value;
-};
-exports.V_Percent.prototype = new exports.V_Num();
-exports.V_Percent.prototype.asString = function()
-{
-	return (exports.NumberFormatFunc || String)(100*this.value) + "%";
-};
-
 })();
