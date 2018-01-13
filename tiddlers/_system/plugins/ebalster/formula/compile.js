@@ -216,7 +216,7 @@ exports.computeFormula = function(compiledFormula, widget, formatOptions, debug)
 	// Compute a value from the root operand of the compiled formula.
 	try
 	{
-		value = compiledFormula.compute(widget, 0);
+		value = compiledFormula.compute(new Nodes.Context(widget));
 	}
 	catch (err)    {throw "ComputeError: " + String(err) + "\noperand: " + JSON.stringify(compiledFormula);}
 

@@ -29,8 +29,8 @@ function IfNode(pred, tval, fval) {
 }
 IfNode.prototype = new Node();
 IfNode.prototype.name = "if";
-IfNode.prototype.compute = (function(widget, recur) {
-	return (this.pred.compute(widget, recur).get() ? this.tval.compute(widget, recur) : this.fval.compute(widget, recur));
+IfNode.prototype.compute = (function(ctx) {
+	return (this.pred.compute(ctx).get() ? this.tval.compute(ctx) : this.fval.compute(ctx));
 });
 exports.if = {
 	min_args: 3, max_args: 3,

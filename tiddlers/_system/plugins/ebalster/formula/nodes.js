@@ -14,6 +14,21 @@ Operands may be constant, allowing the formula compiler to optimize them away.
 
 var Values   = require("$:/plugins/ebalster/formula/value.js");
 
+
+// A Context has all the information necessary for computations.
+exports.Context = function(widget, formats, locals, depth, maxDepth) {
+	this.widget = widget;
+	this.formats = formats || {};
+	this.locals = locals || {};
+	this.depth = depth || 1;
+	this.maxDepth = maxDepth || 256;
+	if (this.maxDepth < this.depth) throw "Formula recursion exceeds limit of " + this.maxDepth + ".  Infinite regress?";
+};
+exports.Context.prototype.sub          = function()        {return new exports.Context(this.widget,this.formats,this.locals,this.depth+1,this.maxDepth);};
+exports.Context.prototype.wiki         = function()        {return this.widget.wiki;};
+exports.Context.prototype.wikiVariable = function(name)    {return this.widget.getVariable(name);};
+
+
 exports.Node = function() {
 };
 exports.Node.prototype.is_constant = false;
@@ -21,7 +36,7 @@ exports.Node.prototype.name = "unknown-operand";
 exports.Node.prototype.toString = function()    {return "[Node " + this.name + "]";};
 
 // Node::compute -- produce
-exports.Node.prototype.compute = (function(widget, recur) {return new Values.V_Undefined();});
+exports.Node.prototype.compute = (function(ctx) {return new Values.V_Undefined();});
 
 
 // An operand that just throws an error.
@@ -30,7 +45,7 @@ exports.ThrowError = function(exception) {
 };
 exports.ThrowError.prototype = new exports.Node();
 exports.ThrowError.prototype.name = "error";
-exports.ThrowError.prototype.compute = function(widget, recur)
+exports.ThrowError.prototype.compute = function(ctx)
 {
 	// Throw up
 	throw this.exception;
@@ -44,9 +59,9 @@ exports.CallBuiltin = function CallBuiltin(func, args) {
 };
 exports.CallBuiltin.prototype = new exports.Node();
 exports.CallBuiltin.prototype.name = "function-call";
-exports.CallBuiltin.prototype.compute = (function(widget, recur) {
+exports.CallBuiltin.prototype.compute = (function(ctx) {
   var vals = [];
-  this.args.forEach(function(arg) {vals.push(arg.compute(widget, recur));});
+  this.args.forEach(function(arg) {vals.push(arg.compute(ctx));});
   return this.func.apply(null, vals);
 });
 
@@ -59,7 +74,7 @@ exports.Text.prototype = new exports.Node();
 exports.Text.prototype.name = "string";
 exports.Text.prototype.is_constant = true;
 
-exports.Text.prototype.compute = function(widget, recur)
+exports.Text.prototype.compute = function(ctx)
 {
 	// Returns a string value
 	return new Values.V_Text(this.value);
@@ -74,7 +89,7 @@ exports.Date.prototype = new exports.Node();
 exports.Date.prototype.name = "date";
 exports.Date.prototype.is_constant = true;
 
-exports.Date.prototype.compute = function(widget, recur)
+exports.Date.prototype.compute = function(ctx)
 {
 	// Returns a string value
 	return new Values.V_Date(this.value);
@@ -89,7 +104,7 @@ exports.Bool.prototype = new exports.Node();
 exports.Bool.prototype.name = "boolean";
 exports.Bool.prototype.is_constant = true;
 
-exports.Bool.prototype.compute = function(widget, recur)
+exports.Bool.prototype.compute = function(ctx)
 {
 	// Returns a number value
 	return new Values.V_Bool(this.value);
@@ -104,7 +119,7 @@ exports.Number.prototype = new exports.Node();
 exports.Number.prototype.name = "number";
 exports.Number.prototype.is_constant = true;
 
-exports.Number.prototype.compute = function(widget, recur)
+exports.Number.prototype.compute = function(ctx)
 {
 	// Returns a number value
 	return new Values.V_Num(this.value);
@@ -123,9 +138,9 @@ exports.Datum = function(origin) {
 exports.Datum.prototype = new exports.Node();
 exports.Datum.prototype.name = "automatic";
 
-exports.Datum.prototype.compute = function(widget, recur) {
+exports.Datum.prototype.compute = function(ctx) {
 
-	var newText = this.origin.compute(widget, recur).asString();
+	var newText = this.origin.compute(ctx).asString();
 
 	if (newText != this.text)
 	{
@@ -140,7 +155,7 @@ exports.Datum.prototype.compute = function(widget, recur) {
 		}
 	}
 
-	return this.op.compute(widget, recur+1);
+	return this.op.compute(ctx.sub());
 };
 
 
@@ -151,8 +166,8 @@ exports.TranscludeText = function(title) {
 exports.TranscludeText.prototype = new exports.Node();
 exports.TranscludeText.prototype.name = "transclude";
 
-exports.TranscludeText.prototype.compute = function(widget, recur) {
-	return new Values.V_Text(widget.wiki.getTiddlerText(this.title.compute(widget,recur).asString(),""));
+exports.TranscludeText.prototype.compute = function(ctx) {
+	return new Values.V_Text(ctx.wiki().getTiddlerText(this.title.compute(ctx).asString(),""));
 };
 
 // Transcluded field operand.
@@ -163,9 +178,9 @@ exports.TranscludeField = function(title, field) {
 exports.TranscludeField.prototype = new exports.Node();
 exports.TranscludeField.prototype.name = "transclude-field";
 
-exports.TranscludeField.prototype.compute = function(widget, recur) {
-	var tiddler = widget.wiki.getTiddler(this.title.compute(widget,recur).asString()),
-		field = this.field.compute(widget,recur).asString();
+exports.TranscludeField.prototype.compute = function(ctx) {
+	var tiddler = ctx.wiki().getTiddler(this.title.compute(ctx).asString()),
+		field = this.field.compute(ctx).asString();
 	return new Values.V_Text(
 		(tiddler && $tw.utils.hop(tiddler.fields,field)) ? tiddler.getFieldString(field) : "");
 };
@@ -178,10 +193,10 @@ exports.TranscludeIndex = function(title, index) {
 exports.TranscludeIndex.prototype = new exports.Node();
 exports.TranscludeIndex.prototype.name = "transclude-index";
 
-exports.TranscludeIndex.prototype.compute = function(widget, recur) {
-	return new Values.V_Text(widget.wiki.extractTiddlerDataItem(
-		this.title.compute(widget,recur).asString(),
-		this.index.compute(widget,recur).asString()),"");
+exports.TranscludeIndex.prototype.compute = function(ctx) {
+	return new Values.V_Text(ctx.wiki().extractTiddlerDataItem(
+		this.title.compute(ctx).asString(),
+		this.index.compute(ctx).asString()),"");
 };
 
 
@@ -192,9 +207,9 @@ exports.Variable = function(variable) {
 exports.Variable.prototype = new exports.Node();
 exports.Variable.prototype.name = "variable";
 
-exports.Variable.prototype.compute = function(widget, recur) {
+exports.Variable.prototype.compute = function(ctx) {
 	return new Values.V_Text(
-		widget.getVariable(this.variable.compute(widget,recur).asString()) || "");
+		ctx.wikiVariable(this.variable.compute(ctx).asString()) || "");
 };
 
 
@@ -208,9 +223,9 @@ exports.Filter = function(filter) {
 exports.Filter.prototype = new exports.Node();
 exports.Filter.prototype.name = "filter";
 
-exports.Filter.prototype.compute = function(widget, recur) {
+exports.Filter.prototype.compute = function(ctx) {
 	// Apply the filter and compile each result
-	var i, expr, elem, exprs = widget.wiki.filterTiddlers(this.filter, widget);
+	var i, expr, elem, exprs = ctx.wiki().filterTiddlers(this.filter, ctx.widget);
 
 	// Clear the array and mark all existing elements for removal
 	for (expr in this.elements) this.elements[expr].count = 0;
@@ -238,7 +253,7 @@ exports.Filter.prototype.compute = function(widget, recur) {
 	for (expr in this.elements) {
 		elem = this.elements[expr];
 		if (elem.count === 0) delete this.elements[expr];
-		else elem.val = elem.op.compute(widget, recur+1);
+		else elem.val = elem.op.compute(ctx.sub());
 	}
 
 	// Return value computes an array of datum values.
