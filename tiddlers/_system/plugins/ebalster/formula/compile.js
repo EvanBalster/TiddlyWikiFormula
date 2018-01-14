@@ -533,11 +533,12 @@ function buildFunction(parser) {
 	++parser.pos;
 
 	// Compile the body expression, with parameters as locals.  Closures are NOT currently supported.
+	var body;
 	{
 		var restoreLocals = parser.locals;
 		parser.locals = {};
 		for (var i = 0; i < params.length; ++i) parser.locals[params[i]] = true;
-		var body = buildExpression(parser, true);
+		body = buildExpression(parser, true);
 		parser.locals = restoreLocals;
 	}
 
@@ -545,9 +546,13 @@ function buildFunction(parser) {
 	if (parser.getChar() !== ")") throw "Expect ')' after function body.";
 	++parser.pos;
 
-	// Create the function object
-	var func = function(ctx) {return body.compute(ctx);};
-	func.params = params;
+	// Create the function object (must be called with this = context)
+	var func = function() {
+		var locals = {};
+		for (var i = 0; i < arguments.length; ++i) locals[params[i]] = arguments[i];
+		return body.compute(this.let(locals));
+	};
+	//func.params = params;
 	func.min_args = params.length;
 	func.max_args = params.length;
 	func.formulaSrc = parser.src.substring(srcBegin, parser.pos);

@@ -98,12 +98,10 @@ exports.CallFunc.prototype.compute = (function(ctx) {
 	if (this.args.length < func.min_args) throw "Too few parameters for function";
 	if (this.args.length > func.max_args) throw "Too many parameters for function";
 	// Compute arguments.
-	var locals = {};
-	for (var i = 0; i < this.args.length; ++i) {
-		locals[func.params[i]] = this.args[i].compute(ctx);
-	}
+	var vals = [];
+	for (var i = 0; i < this.args.length; ++i) vals.push(this.args[i].compute(ctx));
 	// Call the function!
-	return func(ctx.let(locals));
+	return func.apply(ctx, vals);
 });
 
 // JavaScript function call with possible coercion.
