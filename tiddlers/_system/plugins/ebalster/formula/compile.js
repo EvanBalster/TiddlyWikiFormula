@@ -19,6 +19,7 @@ var rxOperandVariable     =     /<<([^<>]+)>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
 var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
+var rxKeyword             = /(function|let)/gi;
 
 var rxUnsignedDecimal =          /((\d+(\.\d*)?)|(\.\d+))/g;
 var rxDecimal         =     /[+-]?((\d+(\.\d*)?)|(\.\d+))/g;
@@ -308,6 +309,7 @@ function buildLetStatement(parser) {
 		id = parser.match_here(rxIdentifier);
 		if (!id) throw "Expect name after '" + after + "'.";
 		id = id[0];
+		if (rxKeyword.test(id)) throw "Illegal name for LET: " + id;
 		
 		// Look for an equals, then an expression.
 		parser.skipWhitespace();
@@ -315,8 +317,8 @@ function buildLetStatement(parser) {
 		++parser.pos;
 
 		// Build the expression...  Each let can use the ones before it.
-		letVars[id[0]] = buildExpression(parser, true);
-		parser.locals[id[0]] = true;
+		letVars[id] = buildExpression(parser, true);
+		parser.locals[id] = true;
 		
 		// Stop on a semicolon.
 		c = parser.getChar(); ++parser.pos;
@@ -347,7 +349,7 @@ function buildExpression(parser, nested) {
 	var operands = [];
 	var operators = [];
 	var precedences = [];
-	var operand = null;
+	var operand = null, callArgs;
 	
 	// Unary stacking function
 	var applyUnary = function(unary) {
@@ -380,6 +382,10 @@ function buildExpression(parser, nested) {
 			else throw "empty expression";
 		}
 
+		// Check for a function call (precedes all operators).
+		callArgs = buildArguments(parser);
+		if (callArgs) operand = new Nodes.CallFunc(operand, callArgs);
+
 		// Postfix operators
 		while (true)
 		{
@@ -390,6 +396,7 @@ function buildExpression(parser, nested) {
 
 		unaries.forEach(applyUnary);
 
+		// Operand is complete.
 		operands.push(operand);
 
 		// Infix operators
@@ -473,10 +480,8 @@ function buildArguments(parser) {
 		// Compile an expression.
 		results.push(buildExpression(parser, true));
 
-		// Skip more whitespace
-		parser.skipWhitespace();
-
 		// Expect ) or , after argument.
+		parser.skipWhitespace();
 		var char = parser.getChar();
 		++parser.pos;
 		if (char == ")") break;
@@ -484,6 +489,69 @@ function buildArguments(parser) {
 	}
 
 	return results;
+}
+
+// Build a function (parser starts after the keyword "function")
+function buildFunction(parser) {
+	// Skip whitespace
+	parser.skipWhitespace();
+
+	var srcBegin = parser.pos;
+
+	// Argument list present?
+	if (parser.getChar() !== "(") throw "Expect '(' after 'function'.";
+	++parser.pos;
+
+	parser.skipWhitespace();
+
+	// Build the parameter list, if any.
+	var params = [];
+	if (parser.getChar() === ")") {++parser.pos;}
+	else while (true)
+	{
+		// Get a parameter name (identifier).
+		var param = parser.match_here(rxIdentifier);
+		if (!param) throw "Expect list of parameter names after 'function'.";
+		param = param[0];
+		if (rxKeyword.test(param)) throw "Illegal parameter name: " + param;
+		params.push(param);
+
+		// Expect ) or , after argument.
+		parser.skipWhitespace();
+		var char = parser.getChar();
+		++parser.pos;
+		if (char == ")") break;
+		if (char != ",") throw "Expect ',' or ')' after function parameter name.";
+	}
+
+	parser.skipWhitespace();
+	if (parser.getChar() !== ":") throw "Expect ':' after function parameter list.";
+	++parser.pos;
+
+	parser.skipWhitespace();
+	if (parser.getChar() !== "(") throw "Expect function body beginning with '(' after ':'.";
+	++parser.pos;
+
+	// Compile the body expression, with parameters as locals.  Closures are NOT currently supported.
+	{
+		var restoreLocals = parser.locals;
+		parser.locals = {};
+		for (var i = 0; i < params.length; ++i) parser.locals[params[i]] = true;
+		var body = buildExpression(parser, true);
+		parser.locals = restoreLocals;
+	}
+
+	parser.skipWhitespace();
+	if (parser.getChar() !== ")") throw "Expect ')' after function body.";
+	++parser.pos;
+
+	// Create the function object
+	var func = function(ctx) {return body.compute(ctx);};
+	func.params = params;
+	func.min_args = params.length;
+	func.max_args = params.length;
+	func.formulaSrc = parser.src.substring(srcBegin, parser.pos);
+	return new Nodes.Function(func);
 }
 
 // Compile an operand into a function returning the operand value.
@@ -523,9 +591,17 @@ function buildOperand(parser) {
 			// Scoped variable.
 			return new Nodes.ScopeVar(term[0]);
 		}
+
+		var termLower = term[0].toLowerCase();
+		if (termLower == "function")
+		{
+			// Function declaration.
+			return buildFunction(parser);
+		}
 		else
 		{
-			var func = formulaFunctions[term[0].toLowerCase()];
+			// Function call.
+			var func = formulaFunctions[termLower];
 
 			if (!func) throw "unknown function: " + term[0];
 

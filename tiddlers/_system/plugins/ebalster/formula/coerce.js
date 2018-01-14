@@ -41,7 +41,7 @@ var _ToText = {
 	"string"    : function(v,ctx) {return v;},
 	"number"    : function(v,ctx) {return (ctx.formats.number || String)(v);},
 	"symbol"    : function(v,ctx) {return String(v);},
-	"function"  : function(v,ctx) {return "function";},
+	"function"  : function(v,ctx) {return "function" + (v.formulaSrc || " [built-in]");},
 	"boolean"   : function(v,ctx) {return (v ? "TRUE" : "FALSE");},
 	"object"    : function(v,ctx) {
 		if (v instanceof Date)   return (ctx.formats.date || String)(v);
@@ -91,6 +91,10 @@ exports.ToArray = function ToArray(v,ctx) {
 	if (v instanceof Array) return v;
 	throw "Cannot auto-convert \"" + ToText(v,ctx) + "\" to an array!";
 };
+exports.ToFunc = function ToFunc(v,ctx) {
+	if (v instanceof Function) return v;
+	throw "Cannot convert \"" + ToText(v,ctx) + "\" to a function!";
+};
 // Maybe add ToRegex
 
 
@@ -101,6 +105,7 @@ var CoerceFuncs = {
 	B: exports.ToBool,
 	A: exports.ToArray,
 	D: exports.ToDate,
+	F: exports.ToFunc,
 	_: exports.ToSelf,
 };
 

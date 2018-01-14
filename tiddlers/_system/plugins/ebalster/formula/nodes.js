@@ -45,6 +45,7 @@ exports.Node.prototype.computeText  = function(ctx) {return Coerce.ToText (this.
 exports.Node.prototype.computeBool  = function(ctx) {return Coerce.ToBool (this.compute(ctx), ctx);};
 exports.Node.prototype.computeDate  = function(ctx) {return Coerce.ToDate (this.compute(ctx), ctx);};
 exports.Node.prototype.computeArray = function(ctx) {return Coerce.ToArray(this.compute(ctx), ctx);};
+exports.Node.prototype.computeFunc  = function(ctx) {return Coerce.ToFunc (this.compute(ctx), ctx);};
 
 
 // An operand that just throws an error.
@@ -84,9 +85,30 @@ exports.LetVars.prototype.compute = function(ctx) {
 	return this.expr.compute(ctx);
 };
 
+// Call a function by reference.
+exports.CallFunc = function CallFunc(func, args) {
+	this.func = func;
+	this.args = args;
+};
+exports.CallFunc.prototype = new exports.Node();
+exports.CallFunc.prototype.name = "function-builtin";
+exports.CallFunc.prototype.compute = (function(ctx) {
+	// Check the function parameters.
+	var func = this.func.computeFunc(ctx);
+	if (this.args.length < func.min_args) throw "Too few parameters for function";
+	if (this.args.length > func.max_args) throw "Too many parameters for function";
+	// Compute arguments.
+	var locals = {};
+	for (var i = 0; i < this.args.length; ++i) {
+		locals[func.params[i]] = this.args[i].compute(ctx);
+	}
+	// Call the function!
+	return func(ctx.let(locals));
+});
+
 // JavaScript function call with possible coercion.
 exports.CallJS = function CallJS(func, args) {
-	this.jfunc = func;
+	this.func = func;
 	this.args = args;
 	this.coerce = Coerce.GetCoerceFuncs(func, args);
 	this.n_noerce = Math.min(args.length, this.coerce.length);
@@ -98,68 +120,44 @@ exports.CallJS.prototype.compute = (function(ctx) {
 	var i = 0;
 	for (; i < this.n_coerce; ++i) vals.push(this.coerce[i](this.args[i].compute(ctx), ctx));
 	for (; i < this.args.length; ++i) vals.push(this.args[i].compute(ctx));
-	return this.jfunc.apply(ctx, vals);
+	return this.func.apply(ctx, vals);
 });
 
 
+// Function declaration operand.
+exports.Function = function(value) {this.value = value;};
+exports.Function.prototype = new exports.Node();
+exports.Function.prototype.name = "function";
+exports.Function.prototype.is_constant = true;
+exports.Function.prototype.compute = function(ctx) {return this.value;};
+
 // String constant operand.
-exports.Text = function(value) {
-	this.value = value;
-};
+exports.Text = function(value) {this.value = value;};
 exports.Text.prototype = new exports.Node();
 exports.Text.prototype.name = "string";
 exports.Text.prototype.is_constant = true;
-
-exports.Text.prototype.compute = function(ctx)
-{
-	// Returns a string value
-	return this.value;
-};
-
+exports.Text.prototype.compute = function(ctx) {return this.value;};
 
 // Date constant operand.
-exports.Date = function(value) {
-	this.value = value;
-};
+exports.Date = function(value) {this.value = value;};
 exports.Date.prototype = new exports.Node();
 exports.Date.prototype.name = "date";
 exports.Date.prototype.is_constant = true;
-
-exports.Date.prototype.compute = function(ctx)
-{
-	// Returns a string value
-	return this.value;
-};
-
+exports.Date.prototype.compute = function(ctx) {return this.value;};
 
 // Boolean constant operand.
-exports.Bool = function(value) {
-	this.value = value;
-};
+exports.Bool = function(value) {this.value = value;};
 exports.Bool.prototype = new exports.Node();
 exports.Bool.prototype.name = "boolean";
 exports.Bool.prototype.is_constant = true;
-
-exports.Bool.prototype.compute = function(ctx)
-{
-	// Returns a number value
-	return this.value;
-};
-
+exports.Bool.prototype.compute = function(ctx) {return this.value;};
 
 // Number constant operand.
-exports.Number = function(value) {
-	this.value = value;
-};
+exports.Number = function(value) {this.value = value;};
 exports.Number.prototype = new exports.Node();
 exports.Number.prototype.name = "number";
 exports.Number.prototype.is_constant = true;
-
-exports.Number.prototype.compute = function(ctx)
-{
-	// Returns a number value
-	return this.value;
-};
+exports.Number.prototype.compute = function(ctx) {return this.value;};
 
 
 var Compile = require("$:/plugins/ebalster/formula/compile.js");
