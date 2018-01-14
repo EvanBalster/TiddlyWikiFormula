@@ -2,10 +2,11 @@ created: 20171229233125420
 interpolate: 100
 lattice-depth: 54
 minormax: 0
-modified: 20180113022608047
+modified: 20180114000317875
+noRebuild: true
 norebuild: false
-octavelist: [range[-60,60,12]]
-semitonelist: [range[-60,60,1]]
+octavelist: 
+semitonelist: 
 title: Harmonic Lattice/State
 type: text/vnd.tiddlywiki
 

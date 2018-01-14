@@ -1,11 +1,11 @@
 created: 20171213021420297
-modified: 20171219000800262
+modified: 20180114000749649
 tags: Developer
 title: Extending Formulas
 type: text/vnd.tiddlywiki
 
 <<<
-''Warning'': The internal code of the Formulas plugin is still in flux.  Your extensions may "break" with future updates.
+''Warning'': The internal code of the Formulas may still change in a way that breaks extensions.  Be prepared to maintain your additions if necessary.
 <<<
 
 !Defining new functions
@@ -19,9 +19,12 @@ Formula-Functions are usually expressed as JavaScript functions accepting some [
 Formula-Functions that behave differently based on the arguments are expressed as objects with the following fields:
 
 |Property|Meaning|h
-|select|Required.  Function taking one argument, "operands", that returns the function to be used.  The selection is usually based on the number of arguments.|
+|select|Function taking one argument, "operands", that returns the function to be used.  The selection is usually based on the number of arguments.|
+|construct||
 |min_args|Optional minimum number of arguments.  Defaults to zero.|
 |min_args|Optional maximum number of arguments.  Defaults to unlimited.|
+
+Either select or construct must be defined.
 
 See the existing function tiddlers for a starting point:
 

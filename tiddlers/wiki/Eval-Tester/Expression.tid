@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20180112063157771
+modified: 20180114085218354
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-round(5*sum([tag[Expenses]get[value]]), 2)
+map(function(s):('Bought a '&s&'...'), [tag[Expenses]])

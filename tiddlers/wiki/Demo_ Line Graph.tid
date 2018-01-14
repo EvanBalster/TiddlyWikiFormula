@@ -1,5 +1,5 @@
 created: 20180103070200897
-modified: 20180103071909550
+modified: 20180114090703567
 tags: 
 title: Demo: Line Graph
 type: text/vnd.tiddlywiki
@@ -7,9 +7,7 @@ type: text/vnd.tiddlywiki
 <svg viewBox="0 -50 500 100">
 <rect x=0 y=-50 width=500 height=100 stroke=black fill=none/>
 <path d=(=
-"M 0 0 l 0 "
-& textjoin(" 10 ", true, [range[-5,5,.4]])
-& " 10 "
-& textjoin(" 10 ", true, [range[5,-5,.4]])
+"M " & textjoin(' ', true,
+  map(function(x):(x&' '&(sin(x/10))*(x*x)/5000), [range[0,500,1]]))
 =) stroke=black stroke-width=1 fill=none/>
 </svg>

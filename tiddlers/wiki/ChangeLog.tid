@@ -1,28 +1,48 @@
 created: 20171216221810025
 list: readme settings license
-modified: 20180112064915792
+modified: 20180114082105794
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
 
-!!! 0.2.0
+!!! 0.2.0 — Unreleased
 
-* Added [[Functions]] for importing values as text: `transclude`, `transclude_index`, `variable`
-* Added `datum` function for interpreting text as a [[Datum]].
-* Datum parsing now recognizes 14- and 17-digit TiddlyWiki dates (eg. created & modified fields).
-* Widgets now display errors in the TiddlyWiki style.
+Introduced some major enhancements for functional programming.  Overhauled the internal code to reverse some bad decisions.
+
+* Added `let` [[statement|Let Statement]] for making local variables.
+* Added `function` [[declaration|Function Declaration]].
+
+* Enhanced support for imported values.
+** Added [[Functions]] for importing values as text: `transclude`, `transclude_index`, `variable`
+** Added `datum` function for interpreting text as a [[Datum]].
+** ''Datum parsing now recognizes TiddlyWiki dates'' (eg. created & modified fields).
+
+* ''Widgets now display errors in the TiddlyWiki style'', <span class=tc-error> like this.</span>
 ** `$formula-vars` will display any errors instead of its normal content.
 ** `$formula` uses `tc-error` styling.
+
+* ''Value conversion behaviors have changed.''
+** Non-array values will not be treated as single-element arrays.
+
+* Enhanced array functions `sum`, `average`, `product` and `count`.
+** Multi-dimensional array values are properly supported.
+** ''`count` ignores empty values.'' New function `counta` counts empty values.
+
+* Internal implementation was changed.  ''This will break customizations.''
+** Consolidated "Node" type replaces Operator, Operand and Value.
+** Removed Value "boxing" and percentage values.
+** Implemented a new type cast mechanism, making custom JavaScript functions simpler to write.
+** Computation now uses a "context" object.
+
 * Fixed doc error: `$noRebuild` option is not called `$noRefresh`
-* The `substitute` function now properly substitutes all occurrences.
+* The `substitute` and `trim` functions now process all occurrences, not just one.
 * Fixed implementation of the `modulo` function.
+* ''Percentages produced by `%` no longer display differently.''
+* ''`+`, `-`, `add` and `subtract` no longer auto-sum their operands.''
 
-The internal code was reworked:
-
-* Eliminated Operator, Operand and Value types in favor of a consolidated "Node" type.
-
+-----
 
 !!! 0.1.7 — 2017 December 29
 

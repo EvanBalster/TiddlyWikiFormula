@@ -1,5 +1,5 @@
 created: 20171210222937878
-modified: 20180110040512908
+modified: 20180114085231317
 title: Try Me
 type: text/vnd.tiddlywiki
 
@@ -24,6 +24,7 @@ sum([tag[Expenses]get[value]])
 20 + 3^3 * 1000
 "$" & {{Candy-Bar!!value}}
 "This is ''bold text''!"
+map(function(s):('Bought a '&s&'...'), [tag[Expenses]])
 ```
 <<<
 

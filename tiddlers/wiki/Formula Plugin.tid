@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20180107223308909
+modified: 20180114083816030
 tags: 
 title: Formula Plugin
 type: text/vnd.tiddlywiki
@@ -39,6 +39,8 @@ Drag-and-drop this to your wiki:
 <<example "complex<br/>formulas" "(= round(5*sum([tag[Expenses]get[value]]), 2) =)">>
 <<example strings """(= "hello" =)""">>
 <<example concatenation """(= '$' & 45.23*12 & " cost" =)""">>
+<<example locals """(= let answer = 6*7 ; 'answer: ' & answer =)""">>
+<<example functions """(= let square = function(x):(x*x) ; square(2) =)""">>
 </table>
 
 (Precision set to <<formulaFixed>> decimal places)
