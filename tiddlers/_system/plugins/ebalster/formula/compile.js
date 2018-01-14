@@ -2,7 +2,6 @@
 
 "use strict";
 
-var Values = require("$:/plugins/ebalster/formula/value.js");
 var Nodes  = require("$:/plugins/ebalster/formula/nodes.js");
 
 var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
@@ -188,11 +187,12 @@ exports.compileDatum = function(datum) {
 exports.compileFormula = function(formulaString)
 {
 	// Process the formula string into a root operand
-	try
-	{
+	try {
 		return exports.compileExpression(formulaString);
 	}
-	catch (err)    {throw "FormulaError: " + err;}
+	catch (err) {
+		throw "CompileError: " + err;
+	}
 };
 
 var numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);};};
@@ -206,27 +206,31 @@ var numberFormatSelect    = function(settings)
 
 exports.computeFormula = function(compiledFormula, widget, formatOptions, debug) {
 	
-	var value;
+	var value, context;
 	
 	formatOptions = formatOptions || {};
 
-	Values.NumberFormatFunc = numberFormatSelect(formatOptions);
-	Values.DateFormat = formatOptions.dateFormat || "0hh:0mm, DDth MMM YYYY";
+	var dateFormat = formatOptions.dateFormat || "0hh:0mm, DDth MMM YYYY";
 
-	// Compute a value from the root operand of the compiled formula.
-	try
-	{
-		value = compiledFormula.compute(new Nodes.Context(widget));
-	}
-	catch (err)    {throw "ComputeError: " + String(err) + "\noperand: " + JSON.stringify(compiledFormula);}
+	var formats = {
+		number: numberFormatSelect(formatOptions),
+		date:   function(date) {$tw.utils.formatDateString(date, dateFormat);},
+	};
 
-	// Format the root operand as a string.
-	try
-	{
-		if (debug) return value.asString() + "\n - Val:" + String(value) + ", Op:" + compiledFormula.name;
-		else       return value.asString();
+	context = new Nodes.Context(widget, formats);
+
+	// Compute a value from the root node of the compiled formula.
+	try {
+		value = compiledFormula.computeText(context);
 	}
-	catch (err)    {throw "ValueError: " + String(err) + "\nvalue: " + JSON.stringify(value);}
+	catch (err) {
+		throw "ComputeError: " + String(err) + (err.fileName || "") + (err.lineNumber || "")
+			+ (debug ? "\nNodes: " + JSON.stringify(compiledFormula) : "");
+	}
+
+	// Format the root node as a string.
+	if (debug) return value + "\n - Val:" + String(value) + ", Op:" + compiledFormula.name;
+	else       return value;
 };
 
 exports.evalFormula = function(formulaString, widget, formatOptions, debug) {
@@ -234,11 +238,12 @@ exports.evalFormula = function(formulaString, widget, formatOptions, debug) {
 	var compiledFormula;
 
 	// Compile the formula
-	try
-	{
+	try {
 		compiledFormula = exports.compileExpression(formulaString);
 	}
-	catch (err)    {throw "FormulaError: " + String(err);}
+	catch (err) {
+		throw "CompileError: " + String(err);
+	}
 
 	// Compute the formula
 	return exports.computeFormula(compiledFormula, widget, formatOptions, debug);
@@ -306,7 +311,7 @@ function buildExpression(parser, nested) {
 	var operand = null;
 	
 	var applyUnary = function(unary) {
-		operand = new Nodes.CallBuiltin(unary.func_bind, [operand]);
+		operand = new Nodes.CallJS(unary.func_bind, [operand]);
 	};
 
 	while (true)
@@ -376,7 +381,7 @@ function buildExpression(parser, nested) {
 			if (op.precedence != prec) {++i; continue;}
 
 			// Collapse the previous and next operands with this operator.
-			operands[i] = new Nodes.CallBuiltin(op.func_bind, [operands[i], operands[i+1]]);
+			operands[i] = new Nodes.CallJS(op.func_bind, [operands[i], operands[i+1]]);
 			operators.splice(i, 1);
 			operands.splice(i+1, 1);
 		}
@@ -453,7 +458,7 @@ function buildOperand(parser) {
 		if (term) return new Nodes.Number(Number(term[0]));
 		throw "Invalid number: " + parser.nextToken();
 	}
-	else if (char.match(/[a-z]/i))
+	else if (char.match(/[a-z_]/i))
 	{
 		// Cell name?
 		term = parser.match_here(rxCellName);
@@ -497,14 +502,14 @@ function buildOperand(parser) {
 				// If a construct function is present, use it to generate an operand.
 				if (func.construct) return func.construct(args);
 
-				// If a select function is present, prepare to bind it with a CallBuiltin.
+				// If a select function is present, prepare to bind it with a CallJS.
 				func = func.select(args);
 			}
 			else {
 				throw "Function " + term[0] + " seems to be unusable.";
 			}
 
-			return new Nodes.CallBuiltin(func, args);
+			return new Nodes.CallJS(func, args);
 		}
 	}
 	else switch (char)

@@ -12,7 +12,7 @@ Operands may be constant, allowing the formula compiler to optimize them away.
 
 "use strict";
 
-var Values   = require("$:/plugins/ebalster/formula/value.js");
+var Coerce = require("$:/plugins/ebalster/formula/coerce.js");
 
 
 // A Context has all the information necessary for computations.
@@ -24,7 +24,7 @@ exports.Context = function(widget, formats, locals, depth, maxDepth) {
 	this.maxDepth = maxDepth || 256;
 	if (this.maxDepth < this.depth) throw "Formula recursion exceeds limit of " + this.maxDepth + ".  Infinite regress?";
 };
-exports.Context.prototype.sub          = function()        {return new exports.Context(this.widget,this.formats,this.locals,this.depth+1,this.maxDepth);};
+exports.Context.prototype.sub          = function()        {return new exports.Context(this.widget,this.formats,null,this.depth+1,this.maxDepth);};
 exports.Context.prototype.wiki         = function()        {return this.widget.wiki;};
 exports.Context.prototype.wikiVariable = function(name)    {return this.widget.getVariable(name);};
 
@@ -35,8 +35,15 @@ exports.Node.prototype.is_constant = false;
 exports.Node.prototype.name = "unknown-operand";
 exports.Node.prototype.toString = function()    {return "[Node " + this.name + "]";};
 
-// Node::compute -- produce
-exports.Node.prototype.compute = (function(ctx) {return new Values.V_Undefined();});
+// Compute the Node's value.
+exports.Node.prototype.compute = function(ctx) {return undefined;};
+
+// Compute a specific type of value, with coercion if necessary.
+exports.Node.prototype.computeNum   = function(ctx) {return Coerce.ToNum  (this.compute(ctx), ctx);};
+exports.Node.prototype.computeText  = function(ctx) {return Coerce.ToText (this.compute(ctx), ctx);};
+exports.Node.prototype.computeBool  = function(ctx) {return Coerce.ToBool (this.compute(ctx), ctx);};
+exports.Node.prototype.computeDate  = function(ctx) {return Coerce.ToDate (this.compute(ctx), ctx);};
+exports.Node.prototype.computeArray = function(ctx) {return Coerce.ToArray(this.compute(ctx), ctx);};
 
 
 // An operand that just throws an error.
@@ -52,17 +59,21 @@ exports.ThrowError.prototype.compute = function(ctx)
 };
 
 
-// JavaScript function call operator.
-exports.CallBuiltin = function CallBuiltin(func, args) {
-  this.func = func;
-  this.args = args;
+// JavaScript function call with possible coercion.
+exports.CallJS = function CallJS(func, args) {
+	this.jfunc = func;
+	this.args = args;
+	this.coerce = Coerce.GetCoerceFuncs(func, args);
+	this.n_noerce = Math.min(args.length, this.coerce.length);
 };
-exports.CallBuiltin.prototype = new exports.Node();
-exports.CallBuiltin.prototype.name = "function-call";
-exports.CallBuiltin.prototype.compute = (function(ctx) {
-  var vals = [];
-  this.args.forEach(function(arg) {vals.push(arg.compute(ctx));});
-  return this.func.apply(null, vals);
+exports.CallJS.prototype = new exports.Node();
+exports.CallJS.prototype.name = "function-builtin";
+exports.CallJS.prototype.compute = (function(ctx) {
+	var vals = [];
+	var i = 0;
+	for (; i < this.n_coerce; ++i) vals.push(this.coerce[i](this.args[i].compute(ctx), ctx));
+	for (; i < this.args.length; ++i) vals.push(this.args[i].compute(ctx));
+	return this.jfunc.apply(ctx, vals);
 });
 
 
@@ -77,7 +88,7 @@ exports.Text.prototype.is_constant = true;
 exports.Text.prototype.compute = function(ctx)
 {
 	// Returns a string value
-	return new Values.V_Text(this.value);
+	return this.value;
 };
 
 
@@ -92,7 +103,7 @@ exports.Date.prototype.is_constant = true;
 exports.Date.prototype.compute = function(ctx)
 {
 	// Returns a string value
-	return new Values.V_Date(this.value);
+	return this.value;
 };
 
 
@@ -107,7 +118,7 @@ exports.Bool.prototype.is_constant = true;
 exports.Bool.prototype.compute = function(ctx)
 {
 	// Returns a number value
-	return new Values.V_Bool(this.value);
+	return this.value;
 };
 
 
@@ -122,7 +133,7 @@ exports.Number.prototype.is_constant = true;
 exports.Number.prototype.compute = function(ctx)
 {
 	// Returns a number value
-	return new Values.V_Num(this.value);
+	return this.value;
 };
 
 
@@ -140,7 +151,7 @@ exports.Datum.prototype.name = "automatic";
 
 exports.Datum.prototype.compute = function(ctx) {
 
-	var newText = this.origin.compute(ctx).asString();
+	var newText = this.origin.computeText(ctx);
 
 	if (newText != this.text)
 	{
@@ -167,7 +178,7 @@ exports.TranscludeText.prototype = new exports.Node();
 exports.TranscludeText.prototype.name = "transclude";
 
 exports.TranscludeText.prototype.compute = function(ctx) {
-	return new Values.V_Text(ctx.wiki().getTiddlerText(this.title.compute(ctx).asString(),""));
+	return ctx.wiki().getTiddlerText(this.title.computeText(ctx),"");
 };
 
 // Transcluded field operand.
@@ -179,10 +190,9 @@ exports.TranscludeField.prototype = new exports.Node();
 exports.TranscludeField.prototype.name = "transclude-field";
 
 exports.TranscludeField.prototype.compute = function(ctx) {
-	var tiddler = ctx.wiki().getTiddler(this.title.compute(ctx).asString()),
-		field = this.field.compute(ctx).asString();
-	return new Values.V_Text(
-		(tiddler && $tw.utils.hop(tiddler.fields,field)) ? tiddler.getFieldString(field) : "");
+	var tiddler = ctx.wiki().getTiddler(this.title.computeText(ctx)),
+		field = this.field.computeText(ctx);
+	return (tiddler && $tw.utils.hop(tiddler.fields,field)) ? tiddler.getFieldString(field) : "";
 };
 
 // Transcluded index operand.
@@ -194,9 +204,9 @@ exports.TranscludeIndex.prototype = new exports.Node();
 exports.TranscludeIndex.prototype.name = "transclude-index";
 
 exports.TranscludeIndex.prototype.compute = function(ctx) {
-	return new Values.V_Text(ctx.wiki().extractTiddlerDataItem(
-		this.title.compute(ctx).asString(),
-		this.index.compute(ctx).asString()),"");
+	return ctx.wiki().extractTiddlerDataItem(
+		this.title.computeText(ctx),
+		this.index.computeText(ctx),"");
 };
 
 
@@ -208,8 +218,7 @@ exports.Variable.prototype = new exports.Node();
 exports.Variable.prototype.name = "variable";
 
 exports.Variable.prototype.compute = function(ctx) {
-	return new Values.V_Text(
-		ctx.wikiVariable(this.variable.compute(ctx).asString()) || "");
+	return ctx.wikiVariable(this.variable.computeText(ctx)) || "";
 };
 
 
@@ -262,7 +271,7 @@ exports.Filter.prototype.compute = function(ctx) {
 		expr = exprs[i];
 		results.push(this.elements[expr].val);
 	}
-	return new Values.V_Array(results);
+	return results;
 };
 
 })();

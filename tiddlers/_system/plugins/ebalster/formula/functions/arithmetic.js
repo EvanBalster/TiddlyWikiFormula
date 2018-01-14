@@ -4,23 +4,27 @@
 /*global $tw: false */
 "use strict";
 
-var Val = require("$:/plugins/ebalster/formula/value.js");
-
 
 // Unary sign operators
 exports.uplus  = function(a)    {return a;};
-exports.uminus = function(a)    {return new Val.V_Num(-a.asNum());};
+exports.uminus = function(a)    {return -a;};
+exports.uminus.inCast = 'N';
 
 // Add
-exports.add = function(a, b)    {return new Val.V_Num(a.asSum() + b.asSum());};
-exports.sub = function(a, b)    {return new Val.V_Num(a.asSum() - b.asSum());};
+exports.add = function(a, b)    {return a + b;};
+exports.add.inCast = 'NN';
+exports.sub = function(a, b)    {return a - b;};
+exports.sub.inCast = 'NN';
 
 // Multiply
-exports.mul = function(a, b)    {return new Val.V_Num(a.asNum() * b.asNum());};
-exports.div = function(a, b)    {return new Val.V_Num(a.asNum() / b.asNum());};
+exports.mul = function(a, b)    {return a * b;};
+exports.mul.inCast = 'NN';
+exports.div = function(a, b)    {return a / b;};
+exports.div.inCast = 'NN';
 
 // Percent -- TODO make this a different value-type
-exports.percent = function(a, b)    {return new Val.V_Num(a.asNum() / 100);};
+exports.percent = function(a)    {return a / 100;};
+exports.percent.inCast = 'N';
 
 
 // Aliases

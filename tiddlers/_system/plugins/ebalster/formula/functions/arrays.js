@@ -4,35 +4,54 @@
 /*global $tw: false */
 "use strict";
 
-var Val = require("$:/plugins/ebalster/formula/value.js");
-
-var V_Array = Val.V_Array;
-var V_Num   = Val.V_Num;
-
 
 exports.nth = function(a, i) {
-	if (! (a instanceof V_Array)) throw "NTH(a,i) function requires a is array!";
-	a = a.get();
-	i = Math.floor(i.asNum());
-	if (i < 1 || i > a.length) return new Val.V_Undefined();
+	i = Math.floor(i);
+	if (i < 1 || i > a.length) return undefined;
 	return a[i-1];
 };
+exports.nth.inCast = 'AN';
 
 exports.first = function(a) {
-	if (! (a instanceof V_Array)) throw "FIRST(a) function requires a is array!";
-	a = a.get();
 	if (a.length) return a[0];
-	return new Val.V_Undefined();
+	return undefined;
 };
+exports.first.inCast = 'A';
 
 exports.last = function(a) {
-	if (! (a instanceof V_Array)) throw "LAST(a) function requires a is array!";
-	a = a.get();
 	if (a.length) return a[a.length-1];
-	return new Val.V_Undefined();
+	return undefined;
 };
+exports.last.inCast = 'A';
 
-// COUNT function, currently counts everything
+
+/*
+	Counting subroutines...
+		countA counts every non-array value
+		countS counts every non-array value but null, undefined and empty strings.
+*/
+function countS(a) {
+	if (!(a instanceof Array)) return (a == null || a.length === 0) ? 0 : 1;
+	var n = 0;
+	for (var i = 0; i < a.length; ++i) n += countS(a[i]);
+	return n;
+}
+function countA(a) {
+	if (!(a instanceof Array)) return 1;
+	var n = 0;
+	for (var i = 0; i < a.length; ++i) n += countA(a[i]);
+	return n;
+}
+function countS_multi() {
+	var n = 0;
+	for (var i = 0; i < arguments.length; ++i) n += countS(arguments[i]);
+	return n;
+}
+function countA_multi() {
+	var n = 0;
+	for (var i = 0; i < arguments.length; ++i) n += countA(arguments[i]);
+	return n;
+}
 exports.count =
 {
 	min_args : 1,
@@ -40,19 +59,20 @@ exports.count =
 	{
 		switch (operands)
 		{
-		case 1: return function(a) {
-				if (a instanceof V_Array) return new V_Num(a.get().length);
-				return 1;
-			};
-		default: return function() {
-				var count = 0;
-				for (var i = 0; i < arguments.length; ++i)
-				{
-					var a = arguments[i];
-					count += ((a instanceof V_Array) ? a.get().length : 1);
-				}
-				return new V_Num(count);
-			};
+		case 1: return countS;
+		default: return countS_multi;
+		}
+	}
+};
+exports.counta =
+{
+	min_args : 1,
+	select : function(operands)
+	{
+		switch (operands)
+		{
+		case 1: return countA;
+		default: return countA_multi;
 		}
 	}
 };

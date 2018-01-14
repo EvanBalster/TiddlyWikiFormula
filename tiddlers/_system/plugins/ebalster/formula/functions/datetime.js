@@ -4,13 +4,6 @@
 /*global $tw: false */
 "use strict";
 
-var Val = require("$:/plugins/ebalster/formula/value.js");
-
-var V_Bool = Val.V_Bool;
-var V_Date = Val.V_Date;
-var V_Num  = Val.V_Num;
-var V_Text = Val.V_Text;
-
 
 var MS_PER_DAY = 86400000;
 var MS_PER_HOUR = 3600000;
@@ -87,108 +80,136 @@ function dateDelta(date1, date2) {
 
 
 // Get the current time
-exports.now         = function()     {return new V_Date(new Date(Date.now()));};
+exports.now         = function()     {return new Date(Date.now());};
 
 // Decompose dates
-exports.year        = function(d)    {return new V_Num(d.asDate().getFullYear());};
-exports.month       = function(d)    {return new V_Num(d.asDate().getMonth()+1);};
-exports.day         = function(d)    {return new V_Num(d.asDate().getDate());};
-exports.hour        = function(d)    {return new V_Num(d.asDate().getHours());};
-exports.minute      = function(d)    {return new V_Num(d.asDate().getMinutes());};
-exports.second      = function(d)    {return new V_Num(d.asDate().getSeconds());};
-exports.millisecond = function(d)    {return new V_Num(d.asDate().getMilliseconds());};
+exports.year        = function(d)    {return (d.getFullYear());};
+exports.year.inCast = 'D';
+exports.month       = function(d)    {return (d.getMonth()+1);};
+exports.month.inCast = 'D';
+exports.day         = function(d)    {return (d.getDate());};
+exports.day.inCast = 'D';
+exports.hour        = function(d)    {return (d.getHours());};
+exports.hour.inCast = 'D';
+exports.minute      = function(d)    {return (d.getMinutes());};
+exports.minute.inCast = 'D';
+exports.second      = function(d)    {return (d.getSeconds());};
+exports.second.inCast = 'D';
+exports.millisecond = function(d)    {return (d.getMilliseconds());};
+exports.millisecond.inCast = 'D';
 
 // Week functions
-exports.weekday     = function(d)    {return new V_Num(d.asDate().getDay()+1);};
-exports.weeknum     = function(d)    {return new V_Num(isoWeekOfYear(d.asDate(), 1));};
-exports.isoweekday  = function(d)    {return new V_Num((d.asDate().getDay()+6) % 7 + 1);};
-exports.isoweeknum  = function(d)    {return new V_Num(isoWeekOfYear(d.asDate()));};
+exports.weekday     = function(d)    {return (d.getDay()+1);};
+exports.weekday.inCast = 'D';
+exports.weeknum     = function(d)    {return (isoWeekOfYear(d, 1));};
+exports.weeknum.inCast = 'D';
+exports.isoweekday  = function(d)    {return ((d.getDay()+6) % 7 + 1);};
+exports.isoweekday.inCast = 'D';
+exports.isoweeknum  = function(d)    {return (isoWeekOfYear(d));};
+exports.isoweeknum.inCast = 'D';
 
 
 /*
 	Date math
 */
 function makeTimeDiffFunction(milliseconds) {
-	return function(a, b) {return new V_Num((b.asDate().getTime() - a.asDate().getTime()) / milliseconds);};
+	var f = function(a, b) {return (b.getTime() - a.getTime()) / milliseconds;};
+	f.inCast = 'DD';
+	return f;
 }
 function makeTimeAddFunction(milliseconds) {
-	return function(a, b) {return new V_Date(new Date(a.asDate().getTime() + b.asNum() * milliseconds));};
+	var f = function(a, b) {return new Date(a.getTime() + b * milliseconds);};
+	f.inCast = 'DN';
+	return f;
 }
 
-exports.years  = function(a, b) {return new V_Num(dateDelta(a.asDate(), b.asDate()).years);};
-exports.months = function(a, b) {return new V_Num(dateDelta(a.asDate(), b.asDate()).months);};
+exports.years  = function(a, b) {return dateDelta(a, b).years;};
+exports.years.inCast = 'DD';
+exports.months = function(a, b) {return dateDelta(a, b).months;};
+exports.months.inCast = 'DD';
 exports.days            = makeTimeDiffFunction(MS_PER_DAY);
 exports.hours           = makeTimeDiffFunction(MS_PER_HOUR);
 exports.minutes         = makeTimeDiffFunction(MS_PER_MINUTE);
 exports.seconds         = makeTimeDiffFunction(MS_PER_SECOND);
 exports.milliseconds    = makeTimeDiffFunction(1);
 
-exports.add_years  = function(a, b) {return new V_Date(dateAddMonths(a.asDate(), 0, b.asNum()));};
-exports.add_months = function(a, b) {return new V_Date(dateAddMonths(a.asDate(), b.asNum()));};
+exports.add_years  = function(a, b) {return dateAddMonths(a, 0, b);};
+exports.add_years.inCast = 'DN';
+exports.add_months = function(a, b) {return dateAddMonths(a, b);};
+exports.add_months.inCast = 'DN';
 exports.add_days         = makeTimeAddFunction(MS_PER_DAY);
 exports.add_hours        = makeTimeAddFunction(MS_PER_HOUR);
 exports.add_minutes      = makeTimeAddFunction(MS_PER_MINUTE);
 exports.add_seconds      = makeTimeAddFunction(MS_PER_SECOND);
 exports.add_milliseconds = makeTimeAddFunction(1);
 
-exports.is_leap_year  = function(year)       {return new V_Bool(isLeapYear(year.asNum()));};
-exports.days_in_year  = function(year)       {return new V_Num(daysInYear(year.asNum()));};
-exports.days_in_month = function(yr, mon)    {return new V_Num(daysInMonth(yr.asNum(), mon.asNum()-1));};
+exports.is_leap_year  = function(year)       {return (isLeapYear(year));};
+exports.is_leap_year.inCast = 'N';
+exports.days_in_year  = function(year)       {return (daysInYear(year));};
+exports.days_in_year.inCast = 'N';
+exports.days_in_month = function(yr, mon)    {return (daysInMonth(yr, mon-1));};
+exports.days_in_month.inCast = 'NN';
 
 /*exports.datedif = function(a, b, c) {
-	a = a.asDate();
-	b = b.asDate();
-	switch (c.asString().toUpperCase())
+	switch (c.toUpperCase())
 	{
-	case "D": return new V_Num((b.getTime() - a.getTime()) / MS_PER_DAY);
+	case "D": return ((b.getTime() - a.getTime()) / MS_PER_DAY);
 	case "M": {var d=dateDelta(a, b); return d.months+12*d.years;}
 	case "Y": return dateDelta(a, b).years;
 	case "YM": return dateDelta(a, b).months;
 	case "MD": return dateDelta(a, b).days;
 	}
-};*/
+};
+exports.datedif.inCast = 'DDT';*/
 
 
 // Parse TiddlyWiki date
 exports.tw_date = function(timestamp) {
-	var date = $tw.utils.parseDate(timestamp.asString());
+	var date = $tw.utils.parseDate(timestamp);
 	if (!date) throw "Bad timestamp: \"" + date + "\"";
-	return new V_Date(date);
+	return (date);
 };
+exports.tw_date.inCast = 'T';
 
 // Stringify as TiddlyWiki date
 exports.to_tw_date = function(date) {
-	return new V_Text($tw.utils.stringifyDate(date.asDate()));
+	return $tw.utils.stringifyDate(date);
 };
+exports.to_tw_date.inCast = 'D';
 
 // Create ISO date
 exports.make_date = function(year, month, day) {
-	return new V_Date(new Date(year.asNum(), month.asNum()-1, day.asNum()));
+	return (new Date(year, month-1, day));
 };
+exports.make_date.inCast = 'NNN';
 
 // Create ISO time
 exports.make_time = function(hour, minute, second) {
-	return new V_Date(new Date(0, 0, 0, hour.asNum(), minute.asNum(), second.asNum()));
+	return (new Date(0, 0, 0, hour, minute, second));
 };
+exports.make_time.inCast = 'NNN';
 
 // Create from julian
 exports.julian = function(julian) {
-	return new V_Date(new Date((julian.asNum() - UNIX_EPOCH_JULIAN_DAY) * MS_PER_DAY));
+	return (new Date((julian - UNIX_EPOCH_JULIAN_DAY) * MS_PER_DAY));
 };
+exports.julian.inCast = 'N';
 
 // Convert to julian
 exports.to_julian = function(date) {
-	return new V_Num(UNIX_EPOCH_JULIAN_DAY + (date.asDate().getTime() / MS_PER_DAY));
+	return (UNIX_EPOCH_JULIAN_DAY + (date.getTime() / MS_PER_DAY));
 };
+exports.to_julian.inCast = 'D';
 
 exports.time = exports.make_time;
 
 
 // Cast the incoming value into a date.
 function interpret_date(a) {
-	if (a instanceof V_Date) return a;
+	if (a instanceof Date) return a;
 	return exports.tw_date(a);
 }
+interpret_date.inCast = 'D';
 
 
 // Consruct a date from a TiddlyWiki timestamp or a set of parts

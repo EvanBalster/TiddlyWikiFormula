@@ -4,18 +4,16 @@
 /*global $tw: false */
 "use strict";
 
-var Val = require("$:/plugins/ebalster/formula/value.js");
-
 
 // Equality
-exports.eq  = function(a, b)    {return new Val.V_Bool(a.get() == b.get());};
-exports.ne  = function(a, b)    {return new Val.V_Bool(a.get() != b.get());};
+exports.eq  = function(a, b)    {return a == b;};
+exports.ne  = function(a, b)    {return a != b;};
 
 // Inequality
-exports.gt  = function(a, b)    {return new Val.V_Bool(a.get() >  b.get());};
-exports.gte = function(a, b)    {return new Val.V_Bool(a.get() >= b.get());};
-exports.lt  = function(a, b)    {return new Val.V_Bool(a.get() <  b.get());};
-exports.lte = function(a, b)    {return new Val.V_Bool(a.get() <= b.get());};
+exports.gt  = function(a, b)    {return a >  b;};
+exports.gte = function(a, b)    {return a >= b;};
+exports.lt  = function(a, b)    {return a <  b;};
+exports.lte = function(a, b)    {return a <= b;};
 
 
 // Aliases
