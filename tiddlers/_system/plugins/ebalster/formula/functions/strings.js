@@ -31,14 +31,12 @@ exports.textjoin = function(delimiter, ignore_empty, a) {
 	var i = 1;
 	if (typeof ignore_empty === "boolean") {
 		i = 2;
-		ignore_empty = ignore_empty.get();
 	}
 	else ignore_empty = true;
 	for (; i < arguments.length; ++i)
 	{
 		var arg = arguments[i];
 		if (arg instanceof Array) {
-			arg = arg.get();
 			for (var j = 0; j < arg.length; ++j) {
 				if (s.length) s += delimiter;
 				s += T(arg[j]);
