@@ -25,6 +25,7 @@ exports.Context = function(widget, formats, locals, depth, maxDepth) {
 	if (this.maxDepth < this.depth) throw "Formula recursion exceeds limit of " + this.maxDepth + ".  Infinite regress?";
 };
 exports.Context.prototype.sub          = function()        {return new exports.Context(this.widget,this.formats,null,this.depth+1,this.maxDepth);};
+exports.Context.prototype.let          = function(locals)  {return new exports.Context(this.widget,this.formats,locals,this.depth,this.maxDepth);};
 exports.Context.prototype.wiki         = function()        {return this.widget.wiki;};
 exports.Context.prototype.wikiVariable = function(name)    {return this.widget.getVariable(name);};
 
@@ -58,6 +59,30 @@ exports.ThrowError.prototype.compute = function(ctx)
 	throw this.exception;
 };
 
+// Scoped variable node.
+exports.ScopeVar = function(name) {
+	this.name = name;
+};
+exports.ScopeVar.prototype = new exports.Node();
+//exports.ScopeVar.prototype.name = "scope-var";
+exports.ScopeVar.prototype.compute = function(ctx) {return ctx.locals[this.name];};
+
+// Scoped variable assignment node.
+exports.LetVars = function(assigns, expr) {
+	this.assigns = assigns;
+	this.expr = expr;
+};
+exports.LetVars.prototype = new exports.Node();
+exports.LetVars.prototype.name = "let";
+exports.LetVars.prototype.compute = function(ctx) {
+	// Each let-expression can access the ones before it.
+	var locals = Object.assign({}, ctx.locals);
+	ctx = ctx.let(locals);
+	for (var id in this.assigns) {
+		locals[id] = this.assigns[id].compute(ctx);
+	}
+	return this.expr.compute(ctx);
+};
 
 // JavaScript function call with possible coercion.
 exports.CallJS = function CallJS(func, args) {

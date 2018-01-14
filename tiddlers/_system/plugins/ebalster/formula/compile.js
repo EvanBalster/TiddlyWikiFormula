@@ -8,6 +8,8 @@ var rxDatumIsFormula      = /^\s*\(=.*=\)\s*$/;
 var rxDatumIsTrue         = /^s*TRUE\s*$/i;
 var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 
+var rxLet               = /let/gi;
+
 var rxSkipWhitespace    = /\s*/g;
 var rxNotWhitespace     = /[^\s]+/g;
 var rxOperandFilter     = /\[(([^\[\]]|\[[^\[\]]*\])+(\](\s*[+-])?\s*\[)?)+\]/g;
@@ -41,6 +43,7 @@ function Parser(src)
 	this.src = src;
 	this.pos = 0;
 	this.end = src.length;
+	this.locals = {};
 }
 Parser.prototype.getChar = function()
 {
@@ -297,6 +300,34 @@ function buildTextReference(textReference) {
 	}
 }
 
+function buildLetStatement(parser) {
+	var letVars = {}, id, c, after = "LET";
+	while (true) {
+		parser.skipWhitespace();
+		// Look for a name (identifier)
+		id = parser.match_here(rxIdentifier);
+		if (!id) throw "Expect name after '" + after + "'.";
+		id = id[0];
+		
+		// Look for an equals, then an expression.
+		parser.skipWhitespace();
+		if (parser.getChar() !== '=') throw "Expect '=' after LET value.";
+		++parser.pos;
+
+		// Build the expression...  Each let can use the ones before it.
+		letVars[id[0]] = buildExpression(parser, true);
+		parser.locals[id[0]] = true;
+		
+		// Stop on a semicolon.
+		c = parser.getChar(); ++parser.pos;
+		after = ',';
+		if (c === ';') break;
+		if (c === ',') continue;
+		throw "Expect ',' or ';' after LET value.";
+	}
+	return letVars;
+}
+
 // Parse a formula.
 function buildExpression(parser, nested) {
 	
@@ -305,11 +336,20 @@ function buildExpression(parser, nested) {
 
 	parser.skipWhitespace();
 
+	// "Let" expression if any...  And store locals to protect parent expressions
+	var letVars = null, oldLocals = parser.locals;
+	if (parser.match_here(rxLet)) {
+		parser.locals = Object.assign({}, parser.locals);
+		letVars = buildLetStatement(parser);
+	}
+
+	// Expression compiler state
 	var operands = [];
 	var operators = [];
 	var precedences = [];
 	var operand = null;
 	
+	// Unary stacking function
 	var applyUnary = function(unary) {
 		operand = new Nodes.CallJS(unary.func_bind, [operand]);
 	};
@@ -402,6 +442,13 @@ function buildExpression(parser, nested) {
 		}
 	}
 
+	// Possibly apply a LET expression
+	if (letVars) {
+		parser.locals = oldLocals;
+		return new Nodes.LetVars(letVars, operands[0]);
+	}
+	
+	// Otherwise return the operand directly
 	return operands[0];
 }
 
@@ -412,12 +459,12 @@ function buildArguments(parser) {
 	parser.skipWhitespace();
 
 	// Argument list present?
-	if (parser.getChar() != "(") return null;
+	if (parser.getChar() !== "(") return null;
 	++parser.pos;
 
 	// Zero arguments?
 	parser.skipWhitespace();
-	if (parser.getChar() == ")") {++parser.pos; return [];}
+	if (parser.getChar() === ")") {++parser.pos; return [];}
 	
 	var results = [];
 
@@ -467,10 +514,16 @@ function buildOperand(parser) {
 				new Nodes.Variable(new Nodes.Text("currentTiddler")),
 				new Nodes.Text(term[0])));
 
-		// Function call?
+		// Identifier?
 		term = parser.match_here(rxIdentifier);
+		if (!term) return null;
 
-		if (term)
+		if (parser.locals[term])
+		{
+			// Scoped variable.
+			return new Nodes.ScopeVar(term[0]);
+		}
+		else
 		{
 			var func = formulaFunctions[term[0].toLowerCase()];
 
@@ -518,7 +571,7 @@ function buildOperand(parser) {
 		++parser.pos;
 		var parentheses = buildExpression(parser, true);
 		parser.skipWhitespace();
-		if (parser.getChar() != ")")
+		if (parser.getChar() !== ")")
 		{
 			if (parser.pos == parser.end) throw "missing ')' at end of formula";
 			else                          throw "expected ')', got \"" + parser.nextToken() + "\"";
