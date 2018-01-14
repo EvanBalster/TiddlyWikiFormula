@@ -75,11 +75,10 @@ FormulaWidget.prototype.execute = function() {
 		dateFormat: (this.getAttribute("dateFormat")  || this.getVariable("formulaDateFormat")),
 	};
 
-	// Clear the error flag
-	this.formulaError = null;
-
 	// Compile the formula, if it has changed, yielding compiledFormula
 	if(this.formula !== oldFormula) {
+		// Clear the error flag
+		this.formulaError = null;
 		this.compiledFormula = null;
 		if (this.formula) {
 			try {

@@ -33,7 +33,12 @@ FormulaAttribute.prototype.compute = function() {
 		dateFormat: (this.widget.getVariable("formulaDateFormat")),
 	};
 	// Execute the formula.
-	return Formulas.computeFormula(this.compiledFormula, this.widget, this.formatOptions);
+	try {
+		return Formulas.computeFormula(this.compiledFormula, this.widget, this.formatOptions);
+	}
+	catch (err) {
+		return "";
+	}
 };
 
 FormulaAttribute.prototype.refresh = function(changedTiddlers) {

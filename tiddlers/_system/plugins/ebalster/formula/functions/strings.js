@@ -4,6 +4,8 @@
 /*global $tw: false */
 "use strict";
 
+var Coerce = require("$:/plugins/ebalster/formula/coerce.js");
+
 
 // Cast to text.  Second argument not yet supported.
 exports.t = function(a)    {return a;};
@@ -39,12 +41,12 @@ exports.textjoin = function(delimiter, ignore_empty, a) {
 		if (arg instanceof Array) {
 			for (var j = 0; j < arg.length; ++j) {
 				if (s.length) s += delimiter;
-				s += T(arg[j]);
+				s += Coerce.ToText(arg[j],this);
 			}
 		}
 		else {
 			if (s.length) s += delimiter;
-			s += T(arg);
+			s += Coerce.ToText(arg,this);
 		}
 	}
 	return s;
