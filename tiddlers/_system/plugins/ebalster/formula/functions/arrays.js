@@ -29,9 +29,7 @@ exports.map = function(f, a) {
 	if (f.min_args > 1 || f.max_args < 1) throw "MAP requires single-argument function.";
 	var result = [];
 	var func = f.bind(this);
-	for (var i = 0; i < a.length; ++i) {
-		result.push(func(a[i]));
-	}
+	for (var i = 0; i < a.length; ++i) result.push(func(a[i]));
 	return result;
 };
 exports.map.inCast = 'FA';

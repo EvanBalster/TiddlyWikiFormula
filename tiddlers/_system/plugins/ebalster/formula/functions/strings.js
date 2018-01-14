@@ -56,13 +56,7 @@ exports.textjoin.inCast = 'T';
 
 // Split string to array
 exports.split = function(str, delimiter) {
-	delimiter = delimiter;
-	var split = str.split(delimiter);
-	var results = [];
-	for (var i = 0; i < split.length; ++i) {
-		if (split[i].length) results.push(split[i]);
-	}
-	return results;
+	return str.split(delimiter);
 };
 exports.split.inCast = 'T';
 

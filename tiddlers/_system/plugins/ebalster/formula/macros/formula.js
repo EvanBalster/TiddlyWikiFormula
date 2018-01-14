@@ -4,6 +4,8 @@
 /*global $tw: false */
 "use strict";
 
+var Compute = require("$:/plugins/ebalster/formula/compute.js");
+
 /*
 	Information about this macro
 */
@@ -16,10 +18,8 @@ Run the macro
 */
 exports.run = function(formula) {
 
-	var formulas = require("$:/plugins/ebalster/formula/compile.js");
-
 	try {
-		return formulas.evalFormula(formula, this);
+		return Compute.evalFormula(formula, this);
 	}
 	catch (err) {
 		return "`" + String(err) + "`";

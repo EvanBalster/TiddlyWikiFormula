@@ -6,7 +6,8 @@
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
-var Formulas = require("$:/plugins/ebalster/formula/compile.js");
+var Compile = require("$:/plugins/ebalster/formula/compile.js");
+var Compute = require("$:/plugins/ebalster/formula/compute.js");
 
 var FormulaVarsWidget = function(parseTreeNode,options) {
 	// Call the constructor
@@ -54,10 +55,15 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 
 	this.formatOptions =
 	{
-		fixed:      (this.getAttribute("$toFixed")     || this.parentWidget.getVariable("formulaFixed")),
-		precision:  (this.getAttribute("$toPrecision") || this.parentWidget.getVariable("formulaPrecision")),
-		dateFormat: (this.getAttribute("$dateFormat")  || this.parentWidget.getVariable("formulaDateFormat")),
+		fixed:        (this.getAttribute("$fixed")        || this.parentWidget.getVariable("formulaFixed")),
+		precision:    (this.getAttribute("$precision")    || this.parentWidget.getVariable("formulaPrecision")),
+		numberFormat: (this.getAttribute("$numberFormat") || this.parentWidget.getVariable("formulaNumberFormat")),
+		dateFormat:   (this.getAttribute("$dateFormat")   || this.parentWidget.getVariable("formulaDateFormat")),
 	};
+
+	// Deprecation
+	if (this.getAttribute("$toFixed")) {this.formulaError = "Change '$toFixed' to '$fixed'."; return;}
+	if (this.getAttribute("$toPrecision")) {this.formulaError = "Change '$toPrecision' to '$precision'."; return;}
 
 	if (!this.currentValues)
 	{
@@ -78,7 +84,7 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 				if (self.formulaSrc[key] != val) {
 					self.formulaSrc[key] = val;
 					try {
-						self.formulaComp[key] = Formulas.compileFormula(self.formulaSrc[key]);
+						self.formulaComp[key] = Compile.compileFormula(self.formulaSrc[key]);
 					}
 					catch (err) {
 						 throw "Variable " + key + ": " + String(err);
@@ -87,7 +93,7 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 				// Recompute the formula
 				if (self.formulaComp[key]) {
 					try {
-						self.currentValues[key] = Formulas.computeFormula(
+						self.currentValues[key] = Compute.computeFormula(
 							self.formulaComp[key], self, self.formatOptions);
 					}
 					catch (err) {

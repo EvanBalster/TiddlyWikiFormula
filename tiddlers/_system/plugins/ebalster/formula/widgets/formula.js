@@ -6,7 +6,8 @@
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
-var Formulas = require("$:/plugins/ebalster/formula/compile.js");
+var Compile = require("$:/plugins/ebalster/formula/compile.js");
+var Compute = require("$:/plugins/ebalster/formula/compute.js");
 
 var FormulaWidget = function(parseTreeNode,options) {
 	this.initialise(parseTreeNode,options);
@@ -70,10 +71,15 @@ FormulaWidget.prototype.execute = function() {
 
 	this.formatOptions =
 	{
-		fixed:      (this.getAttribute("toFixed")     || this.getVariable("formulaFixed")),
-		precision:  (this.getAttribute("toPrecision") || this.getVariable("formulaPrecision")),
-		dateFormat: (this.getAttribute("dateFormat")  || this.getVariable("formulaDateFormat")),
+		fixed:        (this.getAttribute("fixed")        || this.getVariable("formulaFixed")),
+		precision:    (this.getAttribute("precision")    || this.getVariable("formulaPrecision")),
+		numberFormat: (this.getAttribute("numberFormat") || this.getVariable("formulaNumberFormat")),
+		dateFormat:   (this.getAttribute("dateFormat")   || this.getVariable("formulaDateFormat")),
 	};
+
+	// Deprecation
+	if (this.getAttribute("toFixed")) {this.formulaError = "Change 'toFixed' to 'fixed'."; return;}
+	if (this.getAttribute("toPrecision")) {this.formulaError = "Change 'toPrecision' to 'precision'."; return;}
 
 	// Compile the formula, if it has changed, yielding compiledFormula
 	if(this.formula !== oldFormula) {
@@ -82,10 +88,11 @@ FormulaWidget.prototype.execute = function() {
 		this.compiledFormula = null;
 		if (this.formula) {
 			try {
-				this.compiledFormula = Formulas.compileFormula(this.formula);
+				this.compiledFormula = Compile.compileFormula(this.formula);
 			}
 			catch (err) {
 				this.formulaError = String(err);
+				return;
 			}
 		}
 	}
@@ -93,13 +100,13 @@ FormulaWidget.prototype.execute = function() {
 	// Compute the formula, yielding currentValue
 	if(this.compiledFormula) {
 		try {
-			this.currentValue = Formulas.computeFormula(this.compiledFormula, this, this.formatOptions, Boolean(this.debug));
+			this.currentValue = Compute.computeFormula(this.compiledFormula, this, this.formatOptions, Boolean(this.debug));
 		}
 		catch (err) {
 			this.formulaError = String(err);
 		}
 	}
-	else if (!this.formulaError) {
+	else {
 		this.formulaError = "Error: formula not assigned";
 	}
 };

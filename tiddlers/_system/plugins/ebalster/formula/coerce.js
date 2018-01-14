@@ -23,29 +23,17 @@ Additional types that may be coerced:
 "use strict";
 
 
-// Utility function, converting an array to text.
-function ArrayToText(arr,ctx) {
-	var result = "";
-	for (var i = 0; i < arr.length; ++i) {
-		var part = exports.ToText(arr[i],ctx);
-		if (i && part.length) result += " ";
-		if (part.indexOf(/\s/g) >= 0) result += "[[" + part + "]]";
-		else result += part;
-	}
-	return result;
-}
-
 // Value-to-text coercion.
 var _ToText = {
 	"undefined" : function(v,ctx) {return "undefined";},
 	"string"    : function(v,ctx) {return v;},
-	"number"    : function(v,ctx) {return (ctx.formats.number || String)(v);},
+	"number"    : function(v,ctx) {return ctx.formats.number(v);},
 	"symbol"    : function(v,ctx) {return String(v);},
 	"function"  : function(v,ctx) {return "function" + (v.formulaSrc || " [built-in]");},
 	"boolean"   : function(v,ctx) {return (v ? "TRUE" : "FALSE");},
 	"object"    : function(v,ctx) {
-		if (v instanceof Date)   return (ctx.formats.date || String)(v);
-		if (v instanceof Array)  return (ctx.formats.array || ArrayToText)(v,ctx);
+		if (v instanceof Date)   return ctx.formats.date(v);
+		if (v instanceof Array)  return ctx.formats.array(v,ctx);
 		if (v instanceof RegExp) return String(v);
 		if (v instanceof Error)  throw v;
 		return JSON.stringify(v); // Last resort

@@ -19,7 +19,7 @@ var rxOperandVariable     =     /<<([^<>]+)>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
 var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
-var rxKeyword             = /(function|let)/gi;
+var rxKeyword             = /(function|let|for|foreach|if|then|else|while|do)/gi;
 
 var rxUnsignedDecimal =          /((\d+(\.\d*)?)|(\.\d+))/g;
 var rxDecimal         =     /[+-]?((\d+(\.\d*)?)|(\.\d+))/g;
@@ -49,6 +49,13 @@ function Parser(src)
 Parser.prototype.getChar = function()
 {
 	return this.src.charAt(this.pos);
+};
+Parser.prototype.nextGlyph = function()
+{
+	this.skipWhitespace();
+	if (this.pos >= this.end) return '';
+	++this.pos;
+	return this.src.charAt(this.pos-1);
 };
 Parser.prototype.remaining = function()
 {
@@ -199,61 +206,6 @@ exports.compileFormula = function(formulaString)
 	}
 };
 
-var numberFormatFixed     = function(vFixed)     {return function(num) {return num.toFixed    (vFixed);};};
-var numberFormatPrecision = function(vPrecision) {return function(num) {return num.toPrecision(vPrecision);};};
-var numberFormatSelect    = function(settings)
-{
-	if (!isNaN(settings.fixed))     return numberFormatFixed    (settings.fixed);
-	if (!isNaN(settings.precision)) return numberFormatPrecision(settings.precision);
-	return String;
-};
-
-exports.computeFormula = function(compiledFormula, widget, formatOptions, debug) {
-	
-	var value, context;
-	
-	formatOptions = formatOptions || {};
-
-	var dateFormat = formatOptions.dateFormat || "0hh:0mm, DDth MMM YYYY";
-
-	var formats = {
-		number: numberFormatSelect(formatOptions),
-		date:   function(date) {$tw.utils.formatDateString(date, dateFormat);},
-	};
-
-	context = new Nodes.Context(widget, formats);
-
-	// Compute a value from the root node of the compiled formula.
-	try {
-		value = compiledFormula.computeText(context);
-	}
-	catch (err) {
-		throw "ComputeError: " + String(err) + (err.fileName || "") + (err.lineNumber || "")
-			+ (debug ? "\nNodes: " + JSON.stringify(compiledFormula) : "");
-	}
-
-	// Format the root node as a string.
-	if (debug) return value + "\n - Val:" + String(value) + ", Op:" + compiledFormula.name;
-	else       return value;
-};
-
-exports.evalFormula = function(formulaString, widget, formatOptions, debug) {
-	
-	var compiledFormula;
-
-	// Compile the formula
-	try {
-		compiledFormula = exports.compileExpression(formulaString);
-	}
-	catch (err) {
-		throw "CompileError: " + String(err);
-	}
-
-	// Compute the formula
-	return exports.computeFormula(compiledFormula, widget, formatOptions, debug);
-};
-
-
 
 // Compile an operator
 function parseOperator(parser, operatorGroup) {
@@ -301,35 +253,6 @@ function buildTextReference(textReference) {
 	}
 }
 
-function buildLetStatement(parser) {
-	var letVars = {}, id, c, after = "LET";
-	while (true) {
-		parser.skipWhitespace();
-		// Look for a name (identifier)
-		id = parser.match_here(rxIdentifier);
-		if (!id) throw "Expect name after '" + after + "'.";
-		id = id[0];
-		if (rxKeyword.test(id)) throw "Illegal name for LET: " + id;
-		
-		// Look for an equals, then an expression.
-		parser.skipWhitespace();
-		if (parser.getChar() !== '=') throw "Expect '=' after LET value.";
-		++parser.pos;
-
-		// Build the expression...  Each let can use the ones before it.
-		letVars[id] = buildExpression(parser, true);
-		parser.locals[id] = true;
-		
-		// Stop on a semicolon.
-		c = parser.getChar(); ++parser.pos;
-		after = ',';
-		if (c === ';') break;
-		if (c === ',') continue;
-		throw "Expect ',' or ';' after LET value.";
-	}
-	return letVars;
-}
-
 // Parse a formula.
 function buildExpression(parser, nested) {
 	
@@ -337,13 +260,6 @@ function buildExpression(parser, nested) {
 	if (!formulaFunctions) initialize();
 
 	parser.skipWhitespace();
-
-	// "Let" expression if any...  And store locals to protect parent expressions
-	var letVars = null, oldLocals = parser.locals;
-	if (parser.match_here(rxLet)) {
-		parser.locals = Object.assign({}, parser.locals);
-		letVars = buildLetStatement(parser);
-	}
 
 	// Expression compiler state
 	var operands = [];
@@ -448,12 +364,6 @@ function buildExpression(parser, nested) {
 			throw "expected operator, got \"" + parser.nextToken() + "\"";
 		}
 	}
-
-	// Possibly apply a LET expression
-	if (letVars) {
-		parser.locals = oldLocals;
-		return new Nodes.LetVars(letVars, operands[0]);
-	}
 	
 	// Otherwise return the operand directly
 	return operands[0];
@@ -491,16 +401,57 @@ function buildArguments(parser) {
 	return results;
 }
 
+// Build a let or foreach expression (parser starts after the keyword)
+function buildLetExpression(parser) {
+
+	if (parser.nextGlyph() !== "(") throw "Expect '(' after LET.";
+
+	var assigns = {}, id, c;
+	while (true) {
+		// Look for a name (identifier)
+		parser.skipWhitespace();
+		id = parser.match_here(rxIdentifier);
+		if (!id) throw "Expected name in LET assignment, got '" + parser.nextToken() + "'.";
+		id = id[0];
+		if (rxKeyword.test(id)) throw "Illegal name for LET: " + id;
+		
+		// Look for an equals, then an expression.
+		if (parser.nextGlyph() !== '=') throw "Expect '=' after LET value.";
+
+		// Build the expression...  Each let can use the ones before it.
+		assigns[id] = buildExpression(parser, true);
+		parser.locals[id] = true;
+
+		// Expect ) or , after argument.
+		var char = parser.nextGlyph();
+		if (char == ")") break;
+		if (char != ",") throw "Expect ',' or ')' after LET assignment.";
+	}
+
+	if (parser.nextGlyph() !== ":") throw "Expect ':' after LET assignment list.";
+	if (parser.nextGlyph() !== "(") throw "Expect LET expression in parentheses after ':'.";
+
+	// Compile the body expression, with additional locals.
+	var body;
+	{
+		var restoreLocals = parser.locals;
+		parser.locals = Object.assign({}, parser.locals);
+		for (var name in assigns) parser.locals[name] = true;
+		body = buildExpression(parser, true);
+		parser.locals = restoreLocals;
+	}
+
+	if (parser.nextGlyph() !== ")") throw "Expect ')' after LET expression.";
+
+	return new Nodes.LetVars(assigns,body);
+}
+
 // Build a function (parser starts after the keyword "function")
 function buildFunction(parser) {
-	// Skip whitespace
-	parser.skipWhitespace();
-
+	
 	var srcBegin = parser.pos;
 
-	// Argument list present?
-	if (parser.getChar() !== "(") throw "Expect '(' after 'function'.";
-	++parser.pos;
+	if (parser.nextGlyph() !== "(") throw "Expect '(' after 'function'.";
 
 	parser.skipWhitespace();
 
@@ -517,20 +468,13 @@ function buildFunction(parser) {
 		params.push(param);
 
 		// Expect ) or , after argument.
-		parser.skipWhitespace();
-		var char = parser.getChar();
-		++parser.pos;
+		var char = parser.nextGlyph();
 		if (char == ")") break;
 		if (char != ",") throw "Expect ',' or ')' after function parameter name.";
 	}
 
-	parser.skipWhitespace();
-	if (parser.getChar() !== ":") throw "Expect ':' after function parameter list.";
-	++parser.pos;
-
-	parser.skipWhitespace();
-	if (parser.getChar() !== "(") throw "Expect function body beginning with '(' after ':'.";
-	++parser.pos;
+	if (parser.nextGlyph() !== ":") throw "Expect ':' after function parameter list.";
+	if (parser.nextGlyph() !== "(") throw "Expect function body beginning with '(' after ':'.";
 
 	// Compile the body expression, with parameters as locals.  Closures are NOT currently supported.
 	var body;
@@ -542,9 +486,7 @@ function buildFunction(parser) {
 		parser.locals = restoreLocals;
 	}
 
-	parser.skipWhitespace();
-	if (parser.getChar() !== ")") throw "Expect ')' after function body.";
-	++parser.pos;
+	if (parser.nextGlyph() !== ")") throw "Expect ')' after function body.";
 
 	// Create the function object (must be called with this = context)
 	var func = function() {
@@ -598,13 +540,17 @@ function buildOperand(parser) {
 		}
 
 		var termLower = term[0].toLowerCase();
-		if (termLower == "function")
+		switch (termLower)
 		{
+		case "let":
+			// LET expression.
+			return buildLetExpression(parser);
+
+		case "function":
 			// Function declaration.
 			return buildFunction(parser);
-		}
-		else
-		{
+
+		default:
 			// Function call.
 			var func = formulaFunctions[termLower];
 
