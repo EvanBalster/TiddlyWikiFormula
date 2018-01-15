@@ -1,25 +1,35 @@
+bnf: <LetStatement> ::=
 created: 20171216221810025
 list: readme settings license
-modified: 20180114082105794
+modified: 20180114201842604
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
 
-!!! 0.2.0 — Unreleased
+!!! 0.2.0 — January 14, 2018
 
-Introduced some major enhancements for functional programming.  Overhauled the internal code to reverse some bad decisions.
+A substantial re-write of the formulas plugin that introduces various improvements and improves support for functional programming.  Various minor compatibility-breaking changes were made.
 
-* Added `let` [[statement|Let Statement]] for making local variables.
-* Added `function` [[declaration|Function Declaration]].
+* Introduced (lambda) functions and formula-local variables.
+** Added `let` [[construct|LetConstruct]] for making local variables.
+** Added `function` [[declaration|Function]].  Closures are not supported yet.
+
+* Added `map` [[function|Functions]] for manipulating array elements.
+
+* Improved number formatting.
+** Default number formatting no longer displays tiny imprecisions.
+** Number formats may be specified with [[numeral.js|http://numeraljs.com/]], enabling thousands separators, k/m/b notation and greater control over digits.
+** ''Renamed some [[FormulaWidget]] and [[FormulaVarsWidget]] attributes.''
+** Original number formatting can still be used by specifying `precision` (no value).
 
 * Enhanced support for imported values.
 ** Added [[Functions]] for importing values as text: `transclude`, `transclude_index`, `variable`
 ** Added `datum` function for interpreting text as a [[Datum]].
-** ''Datum parsing now recognizes TiddlyWiki dates'' (eg. created & modified fields).
+** ''Datum parsing now recognizes qualifying 14- and 17-digit numbers as TiddlyWiki dates.'' (eg. created & modified fields).
 
-* ''Widgets now display errors in the TiddlyWiki style'', <span class=tc-error> like this.</span>
+* ''Widgets now display errors in the TiddlyWiki style'', <span class=tc-error>like this.</span>
 ** `$formula-vars` will display any errors instead of its normal content.
 ** `$formula` uses `tc-error` styling.
 
@@ -28,7 +38,8 @@ Introduced some major enhancements for functional programming.  Overhauled the i
 
 * Enhanced array functions `sum`, `average`, `product` and `count`.
 ** Multi-dimensional array values are properly supported.
-** ''`count` ignores empty values.'' New function `counta` counts empty values.
+** ''`count` ignores empty values.''
+** New function `counta` counts empty values.
 
 * Internal implementation was changed.  ''This will break customizations.''
 ** Consolidated "Node" type replaces Operator, Operand and Value.
@@ -39,8 +50,10 @@ Introduced some major enhancements for functional programming.  Overhauled the i
 * Fixed doc error: `$noRebuild` option is not called `$noRefresh`
 * The `substitute` and `trim` functions now process all occurrences, not just one.
 * Fixed implementation of the `modulo` function.
-* ''Percentages produced by `%` no longer display differently.''
+* ''The `%` operator no longer affects display style.''
+** Use a format string instread.
 * ''`+`, `-`, `add` and `subtract` no longer auto-sum their operands.''
+** Use `sum` instead.
 
 -----
 

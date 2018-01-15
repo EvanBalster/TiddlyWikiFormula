@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20180114085218354
+modified: 20180115041950804
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-map(function(s):('Bought a '&s&'...'), [tag[Expenses]])
+let(x=7):(x*x)

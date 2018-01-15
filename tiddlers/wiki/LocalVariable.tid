@@ -1,0 +1,7 @@
+created: 20180114193928228
+modified: 20180114201427535
+tags: Syntax
+title: LocalVariable
+type: text/vnd.tiddlywiki
+
+A ''Local Variable'' is a variable that is declared in the enclosing expression through either a [[let assignment|LetConstruct]] or a [[function parameter|Function]].

@@ -1,0 +1,28 @@
+created: 20180114193132342
+modified: 20180114194914236
+tags: Syntax
+title: LetStatement
+type: text/vnd.tiddlywiki
+
+A ''Let Statement'' comes before an [[Expression]], and allows one or more [[local variables|LocalVariable]] to be created.  Its syntax is:
+
+`let(x=<<x>>,x2=x*x):(3*x2-2*x*x2)`
+
+```
+let(<name>=<value> [, <name>=<value> ...]):(<expression>)
+```
+
+Where `<name>` is an alphanumeric name for the new variable, `<value>` is an [[expression|Expression]] that computes the variable.  One or more variables can be defined.  Each variable can use the variables that come before it in its expression.
+
+The final expression after the `;` produces the result of the formula, and can use any of the local variables.  Local variables are //not// available inside called functions or imported formulas.
+
+Let statements may be used inside a [[Parenthesized Expression]] or [[Function]] (in the body).
+
+
+!!Examples
+
+Compute 
+
+```
+let x=<<x>>, x2=x*x; 
+```

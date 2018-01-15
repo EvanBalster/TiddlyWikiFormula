@@ -1,13 +1,13 @@
 created: 20171213015724889
-modified: 20171214034840071
+modified: 20180114203013212
 tags: Reference
 title: Operators
 type: text/vnd.tiddlywiki
 
 \define t_num() [[number|NumberValue]]
-\define t_per() [[percent|PercentageValue]]
 \define t_str() [[string|StringValue]]
 \define t_arr() [[array|ArrayValue]]
+\define t_bool() [[boolean|BooleanValue]]
 
 !Introduction
 
@@ -20,13 +20,19 @@ Evaluates to 4.
 
 !Operators
 
-|Operator|Result|Function|Sum|h
-|`+a`|<<t_num>>|Returns the argument.| yes |
-|`-a`|<<t_num>>|Negates the argument.| yes |
-|`a+b`|<<t_num>>|Adds numbers `a` and `b`.| yes |
-|`a-b`|<<t_num>>|Subtracts `b` from `a`.| yes |
-|`a*b`|<<t_num>>|Multiplies numbers `a` and `b`.| |
-|`a/b`|<<t_num>>|Divides `a` by `b`.| |
-|`a^b`|<<t_num>>|Raises base `a` to exponent `b`.| |
-|`a%` |<<t_per>>|Interprets `a` as a percentage.| |
-|`a&b`|<<t_str>>|Appends `a` and `b` as strings.| |
+|Operator|Result|Function|h
+|`+a`|<<t_num>>|Returns the argument.|
+|`-a`|<<t_num>>|Negates the argument.|
+|`a+b`|<<t_num>>|Adds numbers `a` and `b`.|
+|`a-b`|<<t_num>>|Subtracts `b` from `a`.|
+|`a*b`|<<t_num>>|Multiplies numbers `a` and `b`.|
+|`a/b`|<<t_num>>|Divides `a` by `b`.|
+|`a^b`|<<t_num>>|Raises base `a` to exponent `b`.|
+|`a=b`|<<t_bool>>|Compare `a` with `b`.|
+|`a<>b`|~|~|
+|`a>b`|~|~|
+|`a<b`|~|~|
+|`a<=b`|~|~|
+|`a>=b`|~|~|
+|`a%` |<<t_num>>|Divides `a` by 100.|
+|`a&b`|<<t_str>>|Appends `a` and `b` as strings.|

@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20180114085030394
+modified: 20180114201918793
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -158,7 +158,7 @@ Some functions have multiple names, often to help them match up with popular spr
 |  `choose`|`(n...)`| * |Return the `n`th element (after `n`).|
 |!Arrays & Filter Results|<|<|<|
 |!Function|!Args|!Result|!Summary|
-| `map`|`(f,a)`| array |Compute function `f` for every value in array `a`, producing a new array.|
+| `map`|`(f,a)`| array |Compute [[Function]] `f` for every value in array `a`, producing a new array.|
 | `count`|`(a...)`|number|Count all non-empty items. Each array item is counted.|
 | `counta`|~|~|Count empty //and// non-empty items.|
 | `nth`|`(a,n)`| * |Get the `n`th item in array `a`.|

@@ -1,5 +1,5 @@
 created: 20171221064018661
-modified: 20180110042251199
+modified: 20180114192733571
 tags: Explorable
 title: Real Projective Line
 type: text/vnd.tiddlywiki
@@ -76,7 +76,7 @@ We arrange all the "projective" numbers into a circle, then find the real number
 	n="2*tan(.5*PI+PI*{{!!orientation}}%)"
 	>
 <$formula-vars $noRebuild
-	$toFixed=1
+	$fixed=1
 	degrees="{{!!orientation}}%*180-90"
 	nshow="if(abs({{!!orientation}}-50)=50,'infinity',tan(.5*PI+PI*{{!!orientation}}%))"
 	>

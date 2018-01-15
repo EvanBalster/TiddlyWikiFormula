@@ -1,0 +1,10 @@
+bnf: ???
+created: 20180114202315432
+modified: 20180114202407429
+tags: Syntax
+title: Operator
+type: text/vnd.tiddlywiki
+
+An ''Operator'' is a symbol that goes before, after or between two [[Operands]] and performs a calculation on them.  Operators regard a special order of operations.
+
+See [[Operators]] for more information.

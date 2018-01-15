@@ -2,9 +2,9 @@ created: 20171229233125420
 interpolate: 100
 lattice-depth: 54
 minormax: 0
-modified: 20180114000317875
+modified: 20180114203408526
 noRebuild: true
-norebuild: false
+norebuild: true
 octavelist: 
 semitonelist: 
 title: Harmonic Lattice/State

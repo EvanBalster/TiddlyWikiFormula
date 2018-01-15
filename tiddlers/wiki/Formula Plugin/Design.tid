@@ -1,6 +1,6 @@
 created: 20171212015720773
-modified: 20171222230323819
-title: Plugin Design
+modified: 20180115044910079
+title: Formula Plugin/Design
 type: text/vnd.tiddlywiki
 
 These are some design decisions involved in ''Formulas''' development.
@@ -21,7 +21,7 @@ Formulas support TiddlyWiki's major mechanisms for fetching information — Vari
 
 Formulas ''do not'' support macros — yet.  This is a good candidate for later addition.
 
-Formulas ''do not'' support WikiText, because the result of WikiText processing is an HTML DOM (which is outside the scope of 
+Formulas ''do not'' support WikiText, because the result of WikiText processing is an HTML DOM (which is outside the scope of what they do).
 
 
 !!Familiarity

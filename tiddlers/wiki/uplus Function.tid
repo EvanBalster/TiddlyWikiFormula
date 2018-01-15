@@ -1,12 +1,13 @@
 categories: operators
 created: 20171228051051545
-modified: 20171229183435841
+list: 
+modified: 20180114193336620
 names: uplus
 params: (a)
 params-short: (a)
 return-type: *
 summary: Result is `a`.<br/>Equivalent to `+a`.
-tags: Function
+tags: BuiltInFunction
 title: uplus Function
 type: text/vnd.tiddlywiki
 

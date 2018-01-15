@@ -1,13 +1,14 @@
 created: 20171215181411828
-modified: 20180112063920150
+modified: 20180114203536648
 tags: 
 title: Demo: Starburst
 type: text/vnd.tiddlywiki
 
+Drag this:
+
+<$edit-text tag=Input tiddler="$:/temp/SvgSlider" field=val type=range class=full-slider/>
+
 <$tiddler tiddler="$:/temp/SvgSlider">
-
-<$edit-text tag=Input field=val type=range class=full-slider/>
-
 
 <svg viewBox="-100 -100 200 200" width=400 height=400>
 <circle cx=0 cy=0 r=<<formula "100*{{!!val}}%">> style="fill:black;"/>

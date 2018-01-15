@@ -1,5 +1,5 @@
 created: 20171212074056811
-modified: 20171228040009207
+modified: 20180114191904361
 tags: Widget
 title: FormulaWidget
 type: text/vnd.tiddlywiki
@@ -15,10 +15,10 @@ The `<$formula>` widget computes a formula and returns its result as WikiText.
 |formula|The formula string to be evaluated.|
 |outputType|ContentType of the formula result. Defaults to WikiText.|
 |outputMode|Parse mode used on the formula result: `inline` (the default) or `block`.|
-|toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
-|toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
-|toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
-|dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.  (Defaults to variable `<<formulaDateFormat>>`.)|
+|numberFormat|A format for numbers in the [[numeral.js|http://numeraljs.com/]] style.<br/>Defaults to variable `<<formulaDateFormat>>`.|
+|precision|Numbers will include this many significant digits. If no number is specified, the number will be shown at maximum precision.<br/>Defaults to variable `<<formulaPrecision>>`.|
+|fixed|Numbers will include this many digits after the decimal point.<br/>Overrides toPrecision. Defaults to variable `<<formulaFixed>>`.|
+|dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.<br/>Defaults to variable `<<formulaDateFormat>>`.|
 |debug|Whether to include debug information in the output.  (Defaults to 0.)|
 
 

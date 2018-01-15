@@ -1,13 +1,15 @@
 created: 20180103070200897
-modified: 20180114090703567
+modified: 20180114203927321
 tags: 
 title: Demo: Line Graph
 type: text/vnd.tiddlywiki
+
+This demo uses the `map` function to compute a function of the form ''y = f(x)'' and plot it as a graph.
 
 <svg viewBox="0 -50 500 100">
 <rect x=0 y=-50 width=500 height=100 stroke=black fill=none/>
 <path d=(=
 "M " & textjoin(' ', true,
-  map(function(x):(x&' '&(sin(x/10))*(x*x)/5000), [range[0,500,1]]))
+  map(function(x):(x&' '&(sin(x/10)*(x*x)/5000) ), [range[0,500,1]]))
 =) stroke=black stroke-width=1 fill=none/>
 </svg>

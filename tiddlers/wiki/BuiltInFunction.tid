@@ -1,0 +1,10 @@
+auto_prefix: <<functionTableSelf>>
+created: 20171229183445172
+modified: 20180114194350483
+tags: tag
+title: BuiltInFunction
+type: text/vnd.tiddlywiki
+
+''Built-In Functions'' are functions provided by the formula plugin and extensions to it.
+
+For a listing, see [[Functions]].

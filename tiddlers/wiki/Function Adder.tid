@@ -1,6 +1,6 @@
 caption: Add Funcs
 created: 20171228045958921
-modified: 20171228050918928
+modified: 20180114193351920
 tags: $:/tags/SideBar
 title: Function Adder
 type: text/vnd.tiddlywiki
@@ -18,7 +18,7 @@ type: text/vnd.tiddlywiki
 <$button>Create
 <$action-createtiddler
   $basetitle={{!!title-tmp}}
-  tags="Function"
+  tags="BuiltInFunction"
   names={{!!names}}
   params={{!!params}}
   params-short={{!!params-short}}

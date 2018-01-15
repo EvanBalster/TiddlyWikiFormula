@@ -1,0 +1,27 @@
+created: 20180114193132342
+modified: 20180114201420162
+tags: Syntax
+title: LetConstruct
+type: text/vnd.tiddlywiki
+
+A ''Let Expression'' allows one or more [[local variables|LocalVariable]] to be created and used inside it.  Its syntax is:
+
+
+```
+let(<name>=<value>[,<name>=<value>...]):(<body>)
+```
+
+Where `<name>` is an alphanumeric name for the new variable, `<value>` is an [[expression|Expression]] that computes the variable.  One or more variables can be defined.  Each variable can use the variables that come before it in its expression.
+
+`<body>` is an expression produces the result of the `let` construct, and can use any of the local variables.  Local variables are //not// available inside called functions or imported formulas.
+
+Let statements may be used inside a [[Parenthesized Expression]] or [[Function]] (in the body).
+
+
+!!Examples
+
+Compute x^^5^^:
+
+```
+let(x=<<x>>, x2=x*x):(x2*x2*x)
+```

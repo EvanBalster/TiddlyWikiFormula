@@ -1,5 +1,5 @@
 created: 20171216220518577
-modified: 20180110042205149
+modified: 20180114191900285
 tags: Widget
 title: FormulaVarsWidget
 type: text/vnd.tiddlywiki
@@ -15,9 +15,10 @@ This offers some advantages over using `$vars` with [[Formulas as Tag Attributes
 
 |Attribute|Description|h
 |{attributes not starting with $}|Each attribute name specifies a variable name.  The attribute value is evaluated as a formula and the result is assigned to the variable.|
-|$toPrecision|Numbers will include this many significant digits.  (Defaults to variable `<<formulaPrecision>>`.|
-|$toFixed|Numbers will include this many digits after the decimal point.  Overrides toPrecision.  (Defaults to variable `<<formulaFixed>>`.)|
-|$dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.  (Defaults to variable `<<formulaDateFormat>>`.)|
+|$numberFormat|A format for numbers in the [[numeral.js|http://numeraljs.com/]] style.<br/>Defaults to variable `<<formulaDateFormat>>`.|
+|$precision|Numbers will include this many significant digits. If no number is specified, the number will be shown at maximum precision.<br/>Defaults to variable `<<formulaPrecision>>`.|
+|$fixed|Numbers will include this many digits after the decimal point.<br/>Overrides toPrecision. Defaults to variable `<<formulaFixed>>`.|
+|$dateFormat|A format string for dates that works like the one in TiddlyWiki's `<<now>>` macro.<br/>Defaults to variable `<<formulaDateFormat>>`.|
 |$noRebuild|__Experimental__.  Prevents full DOM rebuild when variables change.  This can boost performance substantially but will cause certain elements not to refresh.|
 
 

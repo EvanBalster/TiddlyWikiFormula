@@ -1,0 +1,7 @@
+created: 20180114203018589
+modified: 20180114203230572
+tags: ValueType
+title: BooleanValue
+type: text/vnd.tiddlywiki
+
+A ''Boolean Value'' is a [[Value]] that can be ''TRUE'' or ''FALSE''.  They are typically used to test things and make decisions.

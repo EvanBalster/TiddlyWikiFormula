@@ -1,7 +1,18 @@
-auto_prefix: <<functionTableSelf>>
-created: 20171229183445172
-modified: 20171229183454018
-tags: tag
+created: 20180114194229835
+modified: 20180114201658254
 title: Function
 type: text/vnd.tiddlywiki
 
+A ''Function'' declared inside a formula uses this syntax:
+
+```
+function(<param>[,<param>...]):(<body>)
+```
+
+The function can be treated as a value and passed around normally or given a name using [[LET|LetConstruct]].  It can be called like a normal function (by putting parentheses after it).
+
+Functions must be called with the correct number of arguments and cannot be overloaded.
+
+Closures (that is, using [[local variables|LocalVariable]] from outside the function) are not currently supported.
+
+Functions defined in formulas are different from the [[built-in functions|BuiltInFunction]] provided by formulas.
