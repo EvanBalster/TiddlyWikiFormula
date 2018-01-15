@@ -2,6 +2,7 @@ created: 20180113183000431
 description: 
 modified: 20180112071139424
 module-type: library
+revision: 0
 tags: 
 title: $:/plugins/ebalster/formula/coerce.js
 type: application/javascript
