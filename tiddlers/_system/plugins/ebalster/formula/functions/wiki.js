@@ -21,7 +21,7 @@ exports.transclude = {
 // Transclude tiddler text string by name.
 exports.transclude_index = {
 	min_args: 2, max_args: 2,
-	construct: function(operands) {return new Nodes.TranscludeIndex(operands[0]);}
+	construct: function(operands) {return new Nodes.TranscludeIndex(operands[0], operands[1]);}
 };
 
 // Transclude field string by name.
