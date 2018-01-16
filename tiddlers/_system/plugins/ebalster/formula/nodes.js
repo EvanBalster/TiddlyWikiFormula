@@ -109,17 +109,17 @@ exports.CallJS = function CallJS(func, args) {
 	this.func = func;
 	this.args = args;
 	this.coerce = Coerce.GetCoerceFuncs(func, args);
-	this.n_noerce = Math.min(args.length, this.coerce.length);
+	this.n_coerce = Math.min(this.args.length, this.coerce.length);
 };
 exports.CallJS.prototype = new exports.Node();
 exports.CallJS.prototype.name = "function-builtin";
-exports.CallJS.prototype.compute = (function(ctx) {
+exports.CallJS.prototype.compute = function(ctx) {
 	var vals = [];
 	var i = 0;
 	for (; i < this.n_coerce; ++i) vals.push(this.coerce[i](this.args[i].compute(ctx), ctx));
 	for (; i < this.args.length; ++i) vals.push(this.args[i].compute(ctx));
 	return this.func.apply(ctx, vals);
-});
+};
 
 
 // Function declaration operand.

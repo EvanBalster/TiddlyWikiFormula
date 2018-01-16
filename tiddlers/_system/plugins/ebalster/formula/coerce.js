@@ -73,15 +73,15 @@ exports.ToBool = function ToBool(v,ctx) {return _ToBool[typeof v](v,ctx);};
 
 exports.ToDate = function ToDate(v,ctx) {
 	if (v instanceof Date) return v;
-	throw "Cannot auto-convert \"" + ToText(v,ctx) + "\" to a date!";
+	throw "Cannot auto-convert \"" + exports.ToText(v,ctx) + "\" to a date!";
 };
 exports.ToArray = function ToArray(v,ctx) {
 	if (v instanceof Array) return v;
-	throw "Cannot auto-convert \"" + ToText(v,ctx) + "\" to an array!";
+	throw "Cannot auto-convert \"" + exports.ToText(v,ctx) + "\" to an array!";
 };
 exports.ToFunc = function ToFunc(v,ctx) {
 	if (v instanceof Function) return v;
-	throw "Cannot convert \"" + ToText(v,ctx) + "\" to a function!";
+	throw "Cannot convert \"" + exports.ToText(v,ctx) + "\" to a function!";
 };
 // Maybe add ToRegex
 
