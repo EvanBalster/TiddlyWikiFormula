@@ -88,11 +88,9 @@ Parser.prototype.skipWhitespace = function()
 // Push a new set of local variables onto the parser's stack.
 Parser.prototype.pushLocals = function(assigns) {
 	var id;
-	this.localStack.push(this.locals);
-	this.assignStack.push(assigns);
 	var newLocals = {};
-	for (id in this.locals) newLocals[id] = 0;
-	for (id in assigns)     newLocals[id] = 0;
+	this.localStack.push(this.locals); for (id in this.locals) newLocals[id] = 0;
+	this.assignStack.push(assigns);    for (id in assigns)     newLocals[id] = 0;
 	this.locals = newLocals;
 };
 
@@ -440,7 +438,9 @@ function buildLetExpression(parser) {
 
 	if (parser.nextGlyph() !== "(") throw "Expect '(' after LET.";
 
+	// Gradually push locals.
 	var assigns = {}, id, c;
+	parser.pushLocals(assigns);
 	while (true) {
 		// Look for a name (identifier)
 		parser.skipWhitespace();
@@ -454,6 +454,7 @@ function buildLetExpression(parser) {
 
 		// Build the expression...  Each let can use the ones before it.
 		assigns[id] = buildExpression(parser, true);
+		parser.locals[id] = 0;
 
 		// Expect ) or , after argument.
 		var char = parser.nextGlyph();
@@ -465,11 +466,10 @@ function buildLetExpression(parser) {
 	if (parser.nextGlyph() !== "(") throw "Expect LET expression in parentheses after ':'.";
 
 	// Compile the body expression, with additional locals.
-	parser.pushLocals(assigns);
 	var body = buildExpression(parser, true);
 	var usage = parser.popLocals();
 
-	// TODO could examine usage.assigns to see if any values are unused.
+	// TODO could examine usage.assigns and letLocals to see if any values were unused.
 
 	if (parser.nextGlyph() !== ")") throw "Expect ')' after LET expression.";
 
