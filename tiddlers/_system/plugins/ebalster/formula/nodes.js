@@ -123,11 +123,22 @@ exports.CallJS.prototype.compute = (function(ctx) {
 
 
 // Function declaration operand.
-exports.Function = function(value) {this.value = value;};
+exports.Function = function(func, captures) {
+	this.func = func;
+	this.captures = captures;
+};
 exports.Function.prototype = new exports.Node();
 exports.Function.prototype.name = "function";
 exports.Function.prototype.is_constant = true;
-exports.Function.prototype.compute = function(ctx) {return this.value;};
+exports.Function.prototype.compute = function(ctx) {
+	this.func.captured = {};
+	if (this.captures) {
+		for (var name in this.captures) {
+			this.func.captured[name] = ctx.locals[name];
+		}
+	}
+	return this.func;
+};
 
 // String constant operand.
 exports.Text = function(value) {this.value = value;};

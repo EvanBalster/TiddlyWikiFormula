@@ -19,7 +19,7 @@ var rxOperandVariable     =     /<<([^<>]+)>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
 var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
-var rxKeyword             = /(function|let|for|foreach|if|then|else|while|do)/gi;
+var rxKeyword             = /(function|let|for|foreach|if|then|else|while|do|this|self|currentTiddler)/gi;
 
 var rxUnsignedDecimal =          /((\d+(\.\d*)?)|(\.\d+))/g;
 var rxDecimal         =     /[+-]?((\d+(\.\d*)?)|(\.\d+))/g;
@@ -45,6 +45,8 @@ function Parser(src)
 	this.pos = 0;
 	this.end = src.length;
 	this.locals = {};
+	this.localStack = [];
+	this.assignStack = [];
 }
 Parser.prototype.getChar = function()
 {
@@ -81,6 +83,38 @@ Parser.prototype.skipWhitespace = function()
 	rxSkipWhitespace.lastIndex = this.pos;
 	rxSkipWhitespace.test(this.src);
 	this.pos = Math.min(rxSkipWhitespace.lastIndex, this.end);
+};
+
+// Push a new set of local variables onto the parser's stack.
+Parser.prototype.pushLocals = function(assigns) {
+	var id;
+	this.localStack.push(this.locals);
+	this.assignStack.push(assigns);
+	var newLocals = {};
+	for (id in this.locals) newLocals[id] = 0;
+	for (id in assigns)     newLocals[id] = 0;
+	this.locals = newLocals;
+};
+
+// Pop the last set of local variables off the parser's stack and return usage-counts.
+Parser.prototype.popLocals = function() {
+	var id, count, usage = {captures: {}, assigns: {}},
+		assigns = this.assignStack.pop(),
+		oldLocals = this.localStack.pop();
+	for (id in this.locals) {
+		count = this.locals[id];
+		if (count > 0) {
+			if (assigns[id]) {
+				usage.assigns[id] = count;
+			}
+			else {
+				usage.captures[id] = count;
+				oldLocals[id] += count;
+			}
+		}
+	}
+	this.locals = oldLocals;
+	return usage;
 };
 
 var initialize = function() {
@@ -420,7 +454,6 @@ function buildLetExpression(parser) {
 
 		// Build the expression...  Each let can use the ones before it.
 		assigns[id] = buildExpression(parser, true);
-		parser.locals[id] = true;
 
 		// Expect ) or , after argument.
 		var char = parser.nextGlyph();
@@ -432,14 +465,11 @@ function buildLetExpression(parser) {
 	if (parser.nextGlyph() !== "(") throw "Expect LET expression in parentheses after ':'.";
 
 	// Compile the body expression, with additional locals.
-	var body;
-	{
-		var restoreLocals = parser.locals;
-		parser.locals = Object.assign({}, parser.locals);
-		for (var name in assigns) parser.locals[name] = true;
-		body = buildExpression(parser, true);
-		parser.locals = restoreLocals;
-	}
+	parser.pushLocals(assigns);
+	var body = buildExpression(parser, true);
+	var usage = parser.popLocals();
+
+	// TODO could examine usage.assigns to see if any values are unused.
 
 	if (parser.nextGlyph() !== ")") throw "Expect ')' after LET expression.";
 
@@ -456,7 +486,7 @@ function buildFunction(parser) {
 	parser.skipWhitespace();
 
 	// Build the parameter list, if any.
-	var params = [];
+	var params = [], assigns = {};
 	if (parser.getChar() === ")") {++parser.pos;}
 	else while (true)
 	{
@@ -466,6 +496,8 @@ function buildFunction(parser) {
 		param = param[0];
 		if (rxKeyword.test(param)) throw "Illegal parameter name: " + param;
 		params.push(param);
+		if (assigns[param]) throw "Parameter name used twice: " + param;
+		assigns[param] = true;
 
 		// Expect ) or , after argument.
 		var char = parser.nextGlyph();
@@ -477,20 +509,16 @@ function buildFunction(parser) {
 	if (parser.nextGlyph() !== "(") throw "Expect function body beginning with '(' after ':'.";
 
 	// Compile the body expression, with parameters as locals.  Closures are NOT currently supported.
-	var body;
-	{
-		var restoreLocals = parser.locals;
-		parser.locals = {};
-		for (var i = 0; i < params.length; ++i) parser.locals[params[i]] = true;
-		body = buildExpression(parser, true);
-		parser.locals = restoreLocals;
-	}
+	parser.pushLocals(assigns);
+	var body = buildExpression(parser, true);
+	var usage = parser.popLocals();
+	var captures = usage.captures;
 
 	if (parser.nextGlyph() !== ")") throw "Expect ')' after function body.";
 
 	// Create the function object (must be called with this = context)
 	var func = function() {
-		var locals = {};
+		var locals = Object.assign({}, func.captured || {});
 		for (var i = 0; i < arguments.length; ++i) locals[params[i]] = arguments[i];
 		return body.compute(this.let(locals));
 	};
@@ -498,7 +526,7 @@ function buildFunction(parser) {
 	func.min_args = params.length;
 	func.max_args = params.length;
 	func.formulaSrc = parser.src.substring(srcBegin, parser.pos);
-	return new Nodes.Function(func);
+	return new Nodes.Function(func, captures);
 }
 
 // Compile an operand into a function returning the operand value.
@@ -533,9 +561,10 @@ function buildOperand(parser) {
 		term = parser.match_here(rxIdentifier);
 		if (!term) return null;
 
-		if (parser.locals[term])
+		if (parser.locals[term] != undefined)
 		{
-			// Scoped variable.
+			// Scoped variable.  We count up references to each.
+			++parser.locals[term];
 			return new Nodes.ScopeVar(term[0]);
 		}
 
