@@ -92,6 +92,7 @@ FormulaWidget.prototype.execute = function() {
 			}
 			catch (err) {
 				this.formulaError = String(err);
+				this.formula = null;
 				return;
 			}
 		}

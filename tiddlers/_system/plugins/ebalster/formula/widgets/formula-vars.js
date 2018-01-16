@@ -87,7 +87,8 @@ FormulaVarsWidget.prototype.formula_recompute = function() {
 						self.formulaComp[key] = Compile.compileFormula(self.formulaSrc[key]);
 					}
 					catch (err) {
-						 throw "Variable " + key + ": " + String(err);
+						self.formulaSrc[key] = null;
+						throw "Variable " + key + ": " + String(err);
 					}
 				}
 				// Recompute the formula
