@@ -11,6 +11,8 @@ var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 var rxLet               = /let/gi;
 
 var rxSkipWhitespace    = /\s*/g;
+var rxComment           = /(\/\/.*?[\r\n]|\/\*.*?\*\/)/g;
+var rxSkipInert         = /(\s*|\/\/.*?([\r\n]|$)|\/\*.*?\*\/)*/g;
 var rxNotWhitespace     = /[^\s]+/g;
 var rxOperandFilter     = /\[(([^\[\]]|\[[^\[\]]*\])+(\](\s*[+-])?\s*\[)?)+\]/g;
 var rxOperandTransclusion =     /\{\{([^\{\}]+)\}\}/g;
@@ -54,7 +56,7 @@ Parser.prototype.getChar = function()
 };
 Parser.prototype.nextGlyph = function()
 {
-	this.skipWhitespace();
+	this.skipInert();
 	if (this.pos >= this.end) return '';
 	++this.pos;
 	return this.src.charAt(this.pos-1);
@@ -78,11 +80,11 @@ Parser.prototype.match_here = function(regex)
 	this.pos = regex.lastIndex;
 	return result;
 };
-Parser.prototype.skipWhitespace = function()
+Parser.prototype.skipInert = function()
 {
-	rxSkipWhitespace.lastIndex = this.pos;
-	rxSkipWhitespace.test(this.src);
-	this.pos = Math.min(rxSkipWhitespace.lastIndex, this.end);
+	rxSkipInert.lastIndex = this.pos;
+	rxSkipInert.test(this.src);
+	this.pos = Math.min(rxSkipInert.lastIndex, this.end);
 };
 
 // Push a new set of local variables onto the parser's stack.
@@ -243,7 +245,7 @@ exports.compileFormula = function(formulaString)
 function parseOperator(parser, operatorGroup) {
 
 	// Skip more whitespace
-	parser.skipWhitespace();
+	parser.skipInert();
 
 	var result = null;
 
@@ -291,7 +293,7 @@ function buildExpression(parser, nested) {
 	// Make sure math functions are initialized
 	if (!formulaFunctions) initialize();
 
-	parser.skipWhitespace();
+	parser.skipInert();
 
 	// Expression compiler state
 	var operands = [];
@@ -389,7 +391,7 @@ function buildExpression(parser, nested) {
 	// For non-nested expressions, throw if any tokens remain.
 	if (!nested)
 	{
-		parser.skipWhitespace();
+		parser.skipInert();
 
 		if (parser.pos < parser.end)
 		{
@@ -405,14 +407,14 @@ function buildExpression(parser, nested) {
 function buildArguments(parser) {
 
 	// Skip whitespace
-	parser.skipWhitespace();
+	parser.skipInert();
 
 	// Argument list present?
 	if (parser.getChar() !== "(") return null;
 	++parser.pos;
 
 	// Zero arguments?
-	parser.skipWhitespace();
+	parser.skipInert();
 	if (parser.getChar() === ")") {++parser.pos; return [];}
 	
 	var results = [];
@@ -423,7 +425,7 @@ function buildArguments(parser) {
 		results.push(buildExpression(parser, true));
 
 		// Expect ) or , after argument.
-		parser.skipWhitespace();
+		parser.skipInert();
 		var char = parser.getChar();
 		++parser.pos;
 		if (char == ")") break;
@@ -443,7 +445,7 @@ function buildLetExpression(parser) {
 	parser.pushLocals(assigns);
 	while (true) {
 		// Look for a name (identifier)
-		parser.skipWhitespace();
+		parser.skipInert();
 		id = parser.match_here(rxIdentifier);
 		if (!id) throw "Expected name in LET assignment, got '" + parser.nextToken() + "'.";
 		id = id[0];
@@ -483,7 +485,7 @@ function buildFunction(parser) {
 
 	if (parser.nextGlyph() !== "(") throw "Expect '(' after 'function'.";
 
-	parser.skipWhitespace();
+	parser.skipInert();
 
 	// Build the parameter list, if any.
 	var params = [], assigns = {};
@@ -503,6 +505,9 @@ function buildFunction(parser) {
 		var char = parser.nextGlyph();
 		if (char == ")") break;
 		if (char != ",") throw "Expect ',' or ')' after function parameter name.";
+
+		// Skip inert stuff
+		parser.skipInert();
 	}
 
 	if (parser.nextGlyph() !== ":") throw "Expect ':' after function parameter list.";
@@ -535,7 +540,7 @@ function buildOperand(parser) {
 	var term;
 	
 	// Skip whitespace
-	parser.skipWhitespace();
+	parser.skipInert();
 
 	if (parser.pos == parser.end) return null;
 
@@ -626,7 +631,7 @@ function buildOperand(parser) {
 	case "(": // Parenthesized expression
 		++parser.pos;
 		var parentheses = buildExpression(parser, true);
-		parser.skipWhitespace();
+		parser.skipInert();
 		if (parser.getChar() !== ")")
 		{
 			if (parser.pos == parser.end) throw "missing ')' at end of formula";
