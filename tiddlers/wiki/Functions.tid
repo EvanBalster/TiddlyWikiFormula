@@ -1,5 +1,5 @@
 created: 20171212025227476
-modified: 20180114201918793
+modified: 20180117065331850
 title: Functions
 type: text/vnd.tiddlywiki
 
@@ -22,7 +22,7 @@ Some functions have multiple names, often to help them match up with popular spr
 |!Function|!Args|!Result|!Summary|
 | `transclude`|`(title)`| text |Transclude a tiddler's text.|
 |~|`(t,f)`|~|Transclude a tiddler's field's text.|
-| <<small transclude_index>>|`(title)`| text |Transclude a text item from a data tiddler.|
+| <<small transclude_index>>|`(t,i)`| text |Transclude a text item from a data tiddler.|
 | `variable`|`(name)`| text |Get the text value of a variable.|
 | `datum`|`(text)`| * |Interpret some text as a [[Datum]].|
 |!Arithmetic & Operators|<|<|<|
@@ -116,7 +116,8 @@ Some functions have multiple names, often to help them match up with popular spr
 | `mid`|`(t,i,n)`|text|Get `n` characters from `t` starting at the `i`th character.|
 | `substr`|~|~|~|
 | `substitute`|`(t,a,b)`|text|Replace any `a` in `t` with `b`.|
-| `textjoin`|`(d,a..)`|text|Join arrays & values into text, with `d` inserted between each element.<br/>If `a` is FALSE, include empty values.|
+| `join`|`(d,...)`|text|Join arrays & values into text, with `d` inserted between each element.|
+| `textjoin`|`(d,a..)`|text|As `join` but if `a` is true, omit empty values.|
 | `split`|`(t,d)`|text|Split `t` into an array, starting a new element whenever `d` appears.|
 | `trim`|`(t)`|text|Remove whitespace from the beginning and end of `t`.|
 |!Regular Expressions|<|<|<|

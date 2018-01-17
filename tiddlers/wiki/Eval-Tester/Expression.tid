@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20180115041950804
+modified: 20180117065753857
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-let(x=7):(x*x)
+join(',', 1,[prefix[$:/plugins/ebalster/formula/]addprefix["]addsuffix["]],2)

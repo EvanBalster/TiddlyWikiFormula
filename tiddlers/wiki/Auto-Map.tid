@@ -1,5 +1,5 @@
 created: 20180107173851197
-modified: 20180110043546433
+modified: 20180117065042164
 tags: [[Formula Plugin]] [[Timer Plugin]] Demo
 title: Auto-Map
 type: text/vnd.tiddlywiki
@@ -10,6 +10,8 @@ type: text/vnd.tiddlywiki
 \define point_y(pointvar) regexextract1(<<$pointvar$>>,',([^,]+)','0',1) 
 
 This tiddler creates a dynamically-generated map of tiddlers in the host wiki which link directly or indirectly to the original one, [[Formula Plugin]].
+
+This program is currently defunct.
 
 Uses:
 
@@ -43,25 +45,24 @@ Organize:
 <svg width=500 viewBox="-100 -100 200 200">
 <g style="fill: white; stroke: black; stroke-width: .5;">
 <rect x=-100 y=-100 width=200 height=200/>
+<!-- Connecting Lines -->
 <$list variable=a filter="[all[current]indexes[]]">
 <$list variable=b filter="[<a>links[]] -[<a>]">
 	<$vars
 		p_a={{{[all[current]getindex<a>]}}}
 		p_b={{{[all[current]getindex<b>]}}}>
-	<$formula-vars $noRebuild
-		x_a=<<point_x p_a>> y_a=<<point_y p_a>>
-		x_b=<<point_x p_b>> y_b=<<point_y p_b>>
-		>
-		<line x1=<<x_a>> y1=<<y_a>> x2=<<x_b>> y2=<<y_b>>/>
-	</$formula-vars>
+		<line
+			x1=(= nth(split(<<p_a>>,','),1) =)
+			y1=(= nth(split(<<p_a>>,','),2) =)
+			x2=(= nth(split(<<p_b>>,','),1) =)
+			y2=(= nth(split(<<p_b>>,','),2) =)/>
 	</$vars>
 </$list>
+<!-- Nodes -->
 </$list>
 <$list variable=id filter="[all[current]indexes[]]">
 	<$vars p={{{[all[current]getindex<id>]}}}>
-	<$formula-vars $noRebuild x=<<point_x p>> y=<<point_y p>> >
-		<circle cx=<<x>> cy=<<y>> r=5/>
-	</$formula-vars>
+	<circle cx=(= nth(split(<<p>>,','),1) =) cy=(= nth(split(<<p>>,','),2) =) r=5/>
 	</$vars>
 </$list>
 </g>
@@ -73,10 +74,76 @@ Debugging info here:  [[Auto-Map Debug]] / <$link>State Tiddler</$link>
 
 <!-- Simulation logic follows -->
 
-<$if value={{!!dt}}>
+$if value={{!!dt}}>
 
-<$timer interval={{!!dt}}>
+$timer interval={{!!dt}}>
+
 <$list variable=a filter="[all[current]indexes[]]">
+<$formula-vars $fixed=2 newpos="""
+let
+(
+  // getXY grabs index 'i' and turns it into an array {x,y}.
+  getXY = function(i):(map(function(s):(value(s)),
+    split(transclude_index(<<currentTiddler>>, i),','))),
+
+  // setXY turns X and Y values into a glued string
+  setXY = function(x,y):(x&','&y),
+
+  // Unpack point A
+  a_xy = getXY(<<a>>),
+  a_x = nth(a_xy,1), a_y = nth(a_xy,2),
+
+  // Proximity function
+  proximity_rule = function(b,offset_func) :
+  (
+    let
+    (
+      // Unpack point B
+      b_xy = getXY(b),
+      b_x = nth(b_xy, 1), b_y = nth(b_xy, 2),
+
+      // Compute the distance
+      distance = ((b_x-a_x)^2+(b_y-a_y)^2)^.5,
+
+      // Compute the offset magnitude
+      offset = offset_func(distance),
+
+      // Compute the offset
+      off_x = (b_x-a_x) * offset/distance,
+      off_y = (b_y-a_y) * offset/distance
+    ):
+    (getXY(setXY(a_x+off_x,a_y+off_y)))
+  ),
+
+  // Attraction
+  repulse_step = function(dist):(min(0, -.05*(20-dist)^2)),
+  attract_step = function(dist):(max(0, dist*.05)),
+
+  attract_rule = function(b) : (proximity_rule(b, attract_step)),
+  repulse_rule = function(b) : (proximity_rule(b, repulse_step)),
+
+  attract = map(attract_rule, [<a>links[]] -[<a>]),
+  repulse = map(repulse_rule, [all[current]indexes[]] -[<a>])
+):
+(
+  repulse
+)
+""">
+<<a>> = <<newpos>>
+	<!-- <$action-setfield $index=<<a>> $value=<<newpos>> /> -->
+</$formula-vars>
+<br/>
+</$list>
+$action-setfield counter=(= {{!!counter}}+1 =)/>
+</z$timer>
+
+</$if>
+
+
+
+
+Old logic:
+```
 <$vars p_a={{{[all[current]getindex<a>]}}}>
 <$formula-vars $noRebuild x_a=<<point_x p_a>> y_a=<<point_y p_a>> >
 	<!-- Attraction -->
@@ -103,8 +170,4 @@ Debugging info here:  [[Auto-Map Debug]] / <$link>State Tiddler</$link>
 	</$list>
 </$formula-vars>
 </$vars>
-</$list>
-<$action-setfield counter=(= {{!!counter}}+1 =)/>
-</$timer>
-
-</$if>
+```

@@ -1,5 +1,5 @@
 created: 20171222192325797
-modified: 20180114203353231
+modified: 20180116213535535
 tags: 
 title: Planned Changes
 type: text/vnd.tiddlywiki
@@ -8,16 +8,31 @@ type: text/vnd.tiddlywiki
 
 Features
 
-* Support closures in functions?
+* Comments
 * Language-level foreach function or list comprehension? (as opposed to map)
 * Series computations
+** Dedicated: `series(i in [range[0,10]]):(x=2):(x=x*x+1):(x)` (too complicated?)
+** Prev access: `for(i in [range[0,10]], x in series):(if(i=0):(2):(x*x+1)))`
 * Regular expression literals (and coercion)
-* Core-friendly support for formulas as attributes
+* Hashmaps/Objects
+** Construction
+** Importing as locals?
 
 Architecture
 
+* Core-friendly support for formulas as attributes
 * Function signatures are <raw value> function(<operand>, ...)
 ** get/asX replaced by compute/computeX.
+* Less distinction between lambda and builtin functions
+** 
+** Same call mechanism
+** Coercion wrapper node?
+* Less distinction between local/widget variables
+** Use bare identifier for both locals and stack-vars (giving locals priority)
+** Add "set" in addition to "let" ?
+** `<<var>>` syntax can be non-capturing version for SETs.
+** Proper transclusion implementation
+* Proper transclusion overriding currentTiddler (context variable?)
 * Expressions may use local variables
 ** No brackets required
 ** Override TiddlyWiki variables?  (Necessary for proper transcludes)
@@ -29,3 +44,7 @@ Changes
 Formatting
 
 * Add global format settings with clear defaults
+
+Done
+
+* ~~Support closures in functions?~~

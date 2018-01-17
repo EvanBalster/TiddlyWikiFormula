@@ -1,12 +1,22 @@
 bnf: <LetStatement> ::=
 created: 20171216221810025
 list: readme settings license
-modified: 20180114201842604
+modified: 20180117070020724
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
+
+!!! 0.2.1 — January 16, 2018
+
+* Implemented `/* comments */` in the C/JavaScript style.
+* Implemented [[closures|https://en.wikipedia.org/wiki/Closure_(computer_programming)]] — functions can now "capture" local variables declared outside them.
+** Note: Variables are captured from the place a function is declared, not where it is used.
+* Added the `join` function, which is simpler than `textjoin`.
+* Fixed a major error in value conversion that caused a reversion to JavaScript behaviors.
+* Fixed the `transclude_index` function.
+
 
 !!! 0.2.0 — January 14, 2018
 
