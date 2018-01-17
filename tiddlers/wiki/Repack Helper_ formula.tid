@@ -1,13 +1,12 @@
 created: 20171213045849235
-modified: 20180106071250615
+modified: 20180117065625304
 tags: 
 title: Repack Helper: formula
 type: text/vnd.tiddlywiki
 
 Repacking command (use this in the browser console to repack the plugin)
 
-<pre><code>$tw.utils.repackPlugin("$:/plugins/ebalster/formula", (= "[" & textjoin(",",
- TRUE,
+<pre><code>$tw.utils.repackPlugin("$:/plugins/ebalster/formula", (= "[" & join(",",
  [prefix[$:/plugins/ebalster/formula/]addprefix["]addsuffix["]]) & "]" =));
 </code></pre>
 
