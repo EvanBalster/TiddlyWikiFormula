@@ -34,20 +34,14 @@ var JoinFunc = function(delimiter, ignore_empty, array, startIndex) {
 	{
 		var arg = array[i];
 		if (arg instanceof Array) {
-			for (var j = 0; j < arg.length; ++j) {
-				part = JoinFunc(delimiter, ignore_empty, arg[j]);
-				if (part.length || !ignore_empty) {
-					if (join.length) join += delimiter;
-					join += part;
-				}
-			}
+			part = JoinFunc(delimiter, ignore_empty, arg, 0);
 		}
 		else {
 			part = Coerce.ToText(arg,this);
-			if (part.length || !ignore_empty) {
-				if (join.length) join += delimiter;
-				join += part;
-			}
+		}
+		if (part.length || !ignore_empty) {
+			if (join.length) join += delimiter;
+			join += part;
 		}
 	}
 	return join;
