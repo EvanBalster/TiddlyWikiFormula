@@ -28,28 +28,41 @@ exports.value = function(a)    {return a;};
 exports.inCast = 'N';
 
 // Array to string
-exports.textjoin = function(delimiter, ignore_empty, a) {
-	var s = "";
-	var i = 1;
-	if (typeof ignore_empty === "boolean") {
-		i = 2;
-	}
-	else ignore_empty = true;
-	for (; i < arguments.length; ++i)
+var JoinFunc = function(delimiter, ignore_empty, array, startIndex) {
+	var join = "", part;
+	for (var i = startIndex; i < array.length; ++i)
 	{
-		var arg = arguments[i];
+		var arg = array[i];
 		if (arg instanceof Array) {
 			for (var j = 0; j < arg.length; ++j) {
-				if (s.length) s += delimiter;
-				s += Coerce.ToText(arg[j],this);
+				part = JoinFunc(delimiter, ignore_empty, arg[j]);
+				if (part.length || !ignore_empty) {
+					if (join.length) join += delimiter;
+					join += part;
+				}
 			}
 		}
 		else {
-			if (s.length) s += delimiter;
-			s += Coerce.ToText(arg,this);
+			part = Coerce.ToText(arg,this);
+			if (part.length || !ignore_empty) {
+				if (join.length) join += delimiter;
+				join += part;
+			}
 		}
 	}
-	return s;
+	return join;
+};
+
+// Join
+exports.join = function(delimiter) {
+	return JoinFunc.call(this, delimiter, false, arguments, 1);
+};
+exports.join.variadic = true;
+exports.join.inCast = 'T';
+
+// Textjoin
+exports.textjoin = function(delimiter, ignore_empty) {
+	return JoinFunc.call(this, delimiter, ignore_empty, arguments, 2);
 };
 exports.textjoin.variadic = true;
 exports.textjoin.inCast = 'T';
