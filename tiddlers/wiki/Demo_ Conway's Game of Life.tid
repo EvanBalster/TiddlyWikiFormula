@@ -1,0 +1,103 @@
+created: 20180119011423816
+modified: 20180119024935081
+tags: Demo
+title: Demo: Conway's Game of Life
+type: text/vnd.tiddlywiki
+
+\define width() 16
+\define height() 16
+\define x_range() [range[1,$(width)$]]
+\define y_range() [range[1,$(height)$]]
+\define cell_id() $(x)$-$(y)$
+\define cell_state() {{##$(cell_id)$}}
+
+A simple implementation of Conway's game of life with formulas.
+
+<$tiddler tiddler="$:/temp/demo-conway">
+
+Simulation: <$button>Start<$action-setfield dt=.2/></$button>
+<$button>Stop<$action-setfield dt=""/></$button>
+
+<!-- Show the table. -->
+
+<table style="border-collapse: collapse;" cellpadding=0 cellspacing=0>
+<$list variable=y filter=<<x_range>> >
+<tr style="padding:0; margin:0;">
+  <$list variable=x filter=<<y_range>> >
+  <td style="text-align: center; padding:0; margin:0; line-height:0; color: gray;">
+    <$if value=(= transclude_index(<<currentTiddler>>, <<cell_id>>) =)>
+      <$button class="tc-btn-invisible" style="width:1em; height:1em; margin:0; padding:0; background:black;">
+        <$action-setfield $index=<<cell_id>> $value=0/><<cell_state>>
+      </$button>
+    </$if>
+    <$else>
+      <$button class="tc-btn-invisible" style="width:1em; height:1em; margin:0; padding:0;">
+        <$action-setfield $index=<<cell_id>> $value=1/><<cell_state>>
+      </$button>
+    </$else>
+  </td>
+</$list>
+</tr>
+</$list>
+</table>
+
+<$link>State tiddler</$link>
+
+<$link to="$:/temp/demo-conway-next">State tiddler</$link>
+
+
+<!-- Simulation code follows... -->
+
+<$timer interval={{!!dt}} >
+<$list variable=y filter=<<x_range>> ><$list variable=x filter=<<y_range>> >
+<$action-setfield
+  $tiddler="$:/temp/demo-conway-next"
+  $index=<<cell_id>>
+  $value=(=
+
+/*
+   inline comment
+*/
+
+// This is our "Conway's game of life" rule.
+// Each step, we use it to set the NEW value of each cell,
+// based on the OLD value of the cells around it.
+let
+(
+  // Shorthand for "currentTiddler"
+  data = "$:/temp/demo-conway",
+
+  // Grab a neighbor cell's state (1 or 0).  Wrap around the edges.
+  adj = function(xo, yo):
+  (
+    if(transclude_index(data,
+      (modulo(<<x>>-1+xo, <<width>>)+1) & '-' &
+      (modulo(<<y>>-1+yo, <<height>>)+1) ), 1, 0)
+  ),
+  
+  // Sum up the eight neighboring spaces
+  neighbors = 
+    adj(-1,-1) + adj( 0,-1) + adj(+1,-1) +
+    adj(-1, 0)       +        adj(+1, 0) +
+    adj(-1,+1) + adj( 0,+1) + adj(+1,+1),
+
+  // Note this cell's state.
+  keep = if(adj(0, 0),1,0)
+):
+(
+  // Result depends on the number of neighbors...
+  switch (neighbors,
+    0, 0,    // 0 neighbors: turn off due to underpopulation.
+    1, 0,    // 1 neighbor:  turn off due to underpopulation.
+    2, keep, // 2 neighbors: no change.
+    3, 1,    // 3 neighbors: turn on due to reproduction.
+    0)       // 4 or more neighbors: turn off due to overpopulation.
+)
+
+=) />
+</$list></$list>
+<$action-setfield text={{$:/temp/demo-conway-next}} />
+</$timer>
+
+
+</$tiddler>
