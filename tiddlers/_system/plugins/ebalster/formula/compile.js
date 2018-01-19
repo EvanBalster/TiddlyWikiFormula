@@ -10,9 +10,7 @@ var rxDatumIsFalse        = /^s*FALSE\s*$/i;
 
 var rxLet               = /let/gi;
 
-var rxSkipWhitespace    = /\s*/g;
-var rxComment           = /(\/\/.*?[\r\n]|\/\*.*?\*\/)/g;
-var rxSkipInert         = /(\s*|\/\/.*?([\r\n]|$)|\/\*.*?\*\/)*/g;
+var rxSkipInert         = /(\s*|\/\/.*?([\r\n]|$)|\/\*[\s\S]*?\*\/)*/g;
 var rxNotWhitespace     = /[^\s]+/g;
 var rxOperandFilter     = /\[(([^\[\]]|\[[^\[\]]*\])+(\](\s*[+-])?\s*\[)?)+\]/g;
 var rxOperandTransclusion =     /\{\{([^\{\}]+)\}\}/g;
@@ -67,6 +65,7 @@ Parser.prototype.remaining = function()
 };
 Parser.prototype.nextToken = function()
 {
+	this.skipInert();
 	rxNotWhitespace.lastIndex = this.pos;
 	rxNotWhitespace.test(this.src);
 	return this.src.substring(this.pos, rxNotWhitespace.lastIndex);
@@ -539,7 +538,7 @@ function buildOperand(parser) {
 
 	var term;
 	
-	// Skip whitespace
+	// Skip whitespace & comments
 	parser.skipInert();
 
 	if (parser.pos == parser.end) return null;
