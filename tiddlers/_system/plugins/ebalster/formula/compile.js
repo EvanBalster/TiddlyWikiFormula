@@ -27,6 +27,8 @@ var rxDatumIsDecimal  = /^\s*[+-]?((\d+(\.\d*)?)|(\.\d+))\s*$/;
 
 var rxDate            =     /\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d+)?)?)?/g;
 var rxDatumIsDate     = /^\s*\d{2,4}-\d{2}-\d{2}(\s*\d{1,2}:\d{2}(:\d{2}(.\d{3})?)?)?\s*$/;
+var rxRegex           =     /\/((?:[^\\\/\[]|\[(?:[^\]]|\\\])*\]|\\.)+)\/([a-z]*)/g;
+var rxDatumIsRegex    = /^\s*\/((?:[^\\\/\[]|\[(?:[^\]]|\\\])*\]|\\.)+)\/([a-z]*)\s*$/;
 var rxDatumIsTwDate   = /^([0-9]{4})(1[0-2]|0[1-9])(3[01]|[12][0-9]|0[1-9])(2[0-3]|[01][0-9])([0-5][0-9])([0-5][0-9])([0-9]{3})?$/;
 var rxDateFragment    = /\d+/g;
 
@@ -676,9 +678,14 @@ function buildOperand(parser) {
 
 	case "<": // Variable operand
 		term = parser.match_here(rxOperandVariable);
-		if (term)  return new Nodes.Datum(
+		if (term) return new Nodes.Datum(
 			new Nodes.Variable(new Nodes.Text(term[1])));
 		break;
+
+	case "/": // Regular expression?
+		term = parser.match_here(rxRegex);
+		if (term) return new Nodes.Regex(new RegExp(term[1].replace("\\/", "/"), term[2]));
+			break;
 	}
 
 	// Didn't recognize the operand

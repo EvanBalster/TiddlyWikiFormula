@@ -168,6 +168,13 @@ exports.Number.prototype.name = "number";
 exports.Number.prototype.is_constant = true;
 exports.Number.prototype.compute = function(ctx) {return this.value;};
 
+// Regex constant operand.
+exports.Regex = function(value) {this.value = value;};
+exports.Regex.prototype = new exports.Node();
+exports.Regex.prototype.name = "regex";
+exports.Regex.prototype.is_constant = true;
+exports.Regex.prototype.compute = function(ctx) {return this.value;};
+
 
 var Compile = require("$:/plugins/ebalster/formula/compile.js");
 
