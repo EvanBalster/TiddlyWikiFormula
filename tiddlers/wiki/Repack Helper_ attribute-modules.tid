@@ -1,5 +1,5 @@
 created: 20171225055116250
-modified: 20171225060954775
+modified: 20180123231614314
 tags: 
 title: Repack Helper: attribute-modules
 type: text/vnd.tiddlywiki
@@ -8,7 +8,7 @@ Repacking command (use this in the browser console to repack the plugin)
 
 <pre><code>$tw.utils.repackPlugin("$:/plugins/ebalster/attribute-modules", (= "[" & textjoin(",",
  TRUE,
- [all[tiddlers]prefix[$:/core/modules/]addprefix["]addsuffix["]]) & "]" =));
+ [all[tiddlers]prefix[$:/plugins/ebalster/attribute-modules/]] +[addprefix["]addsuffix["]]) & "]" =));
 </code></pre>
 
 Version: <$edit-text tiddler="$:/plugins/ebalster/attribute-modules" field="version" />
