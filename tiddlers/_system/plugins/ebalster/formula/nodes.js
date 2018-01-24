@@ -80,7 +80,12 @@ exports.LetVars.prototype.compute = function(ctx) {
 	var locals = Object.assign({}, ctx.locals);
 	ctx = ctx.let(locals);
 	for (var id in this.assigns) {
-		locals[id] = this.assigns[id].compute(ctx);
+		try {
+			locals[id] = this.assigns[id].compute(ctx);
+		}
+		catch (err) {
+			throw "computing LET '" + id + "': " + err;
+		}
 	}
 	return this.expr.compute(ctx);
 };

@@ -461,7 +461,12 @@ function buildLetExpression(parser) {
 		if (parser.nextGlyph() !== '=') throw "Expect '=' after LET value.";
 
 		// Build the expression...  Each let can use the ones before it.
-		assigns[id] = buildExpression(parser, true);
+		try {
+			assigns[id] = buildExpression(parser, true);
+		}
+		catch (err) {
+			throw "compiling LET '" + id + "': " + err;
+		}
 		parser.locals[id] = 0;
 
 		// Expect ) or , after argument.
