@@ -5,6 +5,13 @@
 "use strict";
 
 
+// Array constructor function
+exports.array = function() {
+	return Array.prototype.slice.call(arguments);
+};
+exports.array.variadic = true;
+
+
 exports.nth = function(a, i) {
 	i = Math.floor(i);
 	if (i < 1 || i > a.length) return undefined;
