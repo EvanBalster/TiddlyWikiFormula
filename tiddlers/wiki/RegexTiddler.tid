@@ -1,0 +1,7 @@
+created: 20180124060036323
+modified: 20180124060100656
+tags: 
+title: RegexTiddler
+type: text/vnd.tiddlywiki
+
+/abcd[ef]g*/gi

@@ -1,0 +1,14 @@
+created: 20180121190933311
+modified: 20180121191001681
+tags: 
+title: Repack Helper: modloader
+type: text/vnd.tiddlywiki
+
+Repacking command (use this in the browser console to repack the plugin)
+
+<pre><code>$tw.utils.repackPlugin("$:/plugins/ebalster/modloader", (= "[" & textjoin(",",
+ TRUE,
+ [prefix[$:/plugins/ebalster/modloader/]addprefix["]addsuffix["]]) & "]" =));
+</code></pre>
+
+Version: <$edit-text tiddler="$:/plugins/ebalster/modloader" field="version" />

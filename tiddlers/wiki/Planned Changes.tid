@@ -1,5 +1,5 @@
 created: 20171222192325797
-modified: 20180116213535535
+modified: 20180124055305232
 tags: 
 title: Planned Changes
 type: text/vnd.tiddlywiki
@@ -8,23 +8,31 @@ type: text/vnd.tiddlywiki
 
 Features
 
-* Comments
+* Regular expression literals (and coercion)
 * Language-level foreach function or list comprehension? (as opposed to map)
 * Series computations
 ** Dedicated: `series(i in [range[0,10]]):(x=2):(x=x*x+1):(x)` (too complicated?)
-** Prev access: `for(i in [range[0,10]], x in series):(if(i=0):(2):(x*x+1)))`
-* Regular expression literals (and coercion)
-* Hashmaps/Objects
+** Chaining for: `for(i in [range[0,10]], x in series):(if(i=0):(2):(x*x+1)))`
+* Hashmap type ("dict"?)
 ** Construction
+*** `dict(a=1, b=2, c=3)`
+** Access
+*** `myDict.label & myDict[myString]`
 ** Importing as locals?
+* Syntactic support for arrays
+** Excel style literal `{1, 2, 3}`
+*** 2D array support?? (meh)
+** Access
+*** `myArray[1]` (1-based?)
+*** Consider conflict with filter syntax
+**** eg. `[tag[A]][otherArray[1]]`
+**** Maybe require parens in these cases.
+* Backtrace of LET definitions on error
 
 Architecture
 
 * Core-friendly support for formulas as attributes
-* Function signatures are <raw value> function(<operand>, ...)
-** get/asX replaced by compute/computeX.
 * Less distinction between lambda and builtin functions
-** 
 ** Same call mechanism
 ** Coercion wrapper node?
 * Less distinction between local/widget variables
@@ -32,7 +40,6 @@ Architecture
 ** Add "set" in addition to "let" ?
 ** `<<var>>` syntax can be non-capturing version for SETs.
 ** Proper transclusion implementation
-* Proper transclusion overriding currentTiddler (context variable?)
 * Expressions may use local variables
 ** No brackets required
 ** Override TiddlyWiki variables?  (Necessary for proper transcludes)

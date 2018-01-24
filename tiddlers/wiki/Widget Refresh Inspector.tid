@@ -1,15 +1,15 @@
 created: 20171222015158308
-modified: 20171228042022519
+modified: 20180124064427213
 tags: 
 title: Widget Refresh Inspector
 type: text/vnd.tiddlywiki
 
 \define detectImplement(method)
-(= if(regexmatch({{!!text}}, "\\.\\s*prototype\\s*\\.\\s*$method$\\s*="),"Y","n") =)
+(= if(regexmatch({{!!text}}, /\.\s*prototype\s*\.\s*$method$\s*=/g),"Y","n") =)
 \end
 
 \define countSelfCalls(method)
-(= count(regexextract({{!!text}}, "(this|self)\\s*\\.\\s*$method$\\s*\\(")) =)
+(= count(regexextract({{!!text}}, /(this|self)\s*\.\s*$method$\s*\(/g)) =)
 \end
 
 \define allTest(method)
@@ -17,7 +17,7 @@ type: text/vnd.tiddlywiki
 \end
 
 \define widgetShortName(title)
-(= mid(regexextract1("$title$", "/[a-zA-Z0-9_-]+(?=\\.)", "uunknown"), 2, 999) =)
+(= mid(regexextract1("$title$", /\/[a-zA-Z0-9_-]+(?=\.)/, "unknown"), 2, 999) =)
 \end
 
 \define inspectorRow()
@@ -34,8 +34,8 @@ type: text/vnd.tiddlywiki
 <$formula outputType="text/plain" formula="""
  textjoin("", true, regexextract(
   textjoin("", true, regexextract({{!!text}},
-   "(\\n[^\\n]*prototype\\s*\\..+\\n|[^\\n]*(this|self)\\s*\\.\\s*[a-zA-Z0-9_]+\\([^\\n]*\\n)")),
-  "\\n[^\\n]*prototype\\s*\\.[^\\n]+\\n([\\t ][^\\n]*\\n)+"))
+   /(\n[^\n]*prototype\s*\..+\n|[^\n]*(this|self)\s*\.\s*[a-zA-Z0-9_]+\([^\n]*\n)/g)),
+  /\n[^\n]*prototype\s*\.[^\n]+\n([\t ][^\n]*\n)+/))
 """/>
 </$details>
 </td>

@@ -1,0 +1,22 @@
+created: 20180120054605112
+modified: 20180120055617413
+tags: 
+title: Startup Module Inspector
+type: text/vnd.tiddlywiki
+
+<table>
+<tr>
+<th>Module</th>
+<th>Before</th>
+<th>After</th>
+<th>Sync</th>
+</tr>
+<$list filter="[all[shadows]module-type[startup]]">
+<tr>
+<td><$link>{{!!title}}</$link></td>
+<td>(= regexextract1({{!!text}}, "^.*exports\\s*\\.\\s*before(.*)$(?m)", "—", 1) =)</td>
+<td>(= regexextract1({{!!text}}, "^.*exports\\s*\\.\\s*after(.*)$(?m)", "—", 1) =)</td>
+<td>(= regexextract1({{!!text}}, "^.*exports\\s*\\.\\s*synchronous(.*)$(?m)", "—", 1) =)</td>
+</tr>
+</$list>
+</table>

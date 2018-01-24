@@ -1,5 +1,5 @@
 created: 20180115045029295
-modified: 20180115045043132
+modified: 20180121190952214
 tags: 
 title: Repack Helper: condition
 type: text/vnd.tiddlywiki
@@ -11,4 +11,4 @@ Repacking command (use this in the browser console to repack the plugin)
  [prefix[$:/plugins/ebalster/condition/]addprefix["]addsuffix["]]) & "]" =));
 </code></pre>
 
-Version: <$edit-text tiddler="$:/plugins/ebalster/timer" field="version" />
+Version: <$edit-text tiddler="$:/plugins/ebalster/condition" field="version" />

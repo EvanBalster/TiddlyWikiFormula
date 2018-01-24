@@ -1,0 +1,14 @@
+created: 20180117161323673
+modified: 20180117171130927
+tags: 
+title: Refresh Optimizations
+type: text/vnd.tiddlywiki
+
+* Add variables to selective refresh
+* Selective broadcast of refresh events (rather than all widgets)
+* Does each action widget initiate a refresh or do they accumulate?
+* Minimize calls to setAttributeNS
+
+Unrelated:
+
+* Action widget deserializer/serializer

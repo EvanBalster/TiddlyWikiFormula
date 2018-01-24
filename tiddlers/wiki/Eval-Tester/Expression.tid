@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20180117065753857
+modified: 20180124064809741
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-join(',', 1,[prefix[$:/plugins/ebalster/formula/]addprefix["]addsuffix["]],2)
+1.00001

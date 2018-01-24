@@ -1,12 +1,21 @@
 bnf: <LetStatement> ::=
 created: 20171216221810025
 list: readme settings license
-modified: 20180117070020724
+modified: 20180124061736669
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
+
+
+!!! 0.2.2
+
+* Fixed some bugs with comments
+* Implemented regular expression literals in the JavaScript style `/regex/g`
+** Also valid as datums
+** When converting strings to regex, both JavaScript and TiddlyWiki styles will be recognized.
+
 
 !!! 0.2.1 — January 16, 2018
 

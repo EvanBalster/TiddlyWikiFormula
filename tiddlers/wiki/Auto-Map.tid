@@ -1,5 +1,5 @@
 created: 20180107173851197
-modified: 20180117065042164
+modified: 20180124055727043
 tags: [[Formula Plugin]] [[Timer Plugin]] Demo
 title: Auto-Map
 type: text/vnd.tiddlywiki
@@ -83,15 +83,18 @@ $timer interval={{!!dt}}>
 let
 (
   // getXY grabs index 'i' and turns it into an array {x,y}.
-  getXY = function(i):(map(function(s):(value(s)),
+  parseVec = function(i):(map(function(s):(value(s)),
     split(transclude_index(<<currentTiddler>>, i),','))),
 
   // setXY turns X and Y values into a glued string
-  setXY = function(x,y):(x&','&y),
+  encodeVec = function(x,y):(x&','&y),
+
+  vecX = function(v):(nth(v,1)),
+  vecY = function(v):(nth(v,2)),
 
   // Unpack point A
-  a_xy = getXY(<<a>>),
-  a_x = nth(a_xy,1), a_y = nth(a_xy,2),
+  aVec = parseVec(<<a>>),
+  a_x = vecX(aVec), a_y = vecY(aVec),
 
   // Proximity function
   proximity_rule = function(b,offset_func) :
@@ -99,8 +102,8 @@ let
     let
     (
       // Unpack point B
-      b_xy = getXY(b),
-      b_x = nth(b_xy, 1), b_y = nth(b_xy, 2),
+      bVec = parseVec(b),
+      b_x = vecX(bVec), b_y = vecY(bVec),
 
       // Compute the distance
       distance = ((b_x-a_x)^2+(b_y-a_y)^2)^.5,
@@ -112,7 +115,7 @@ let
       off_x = (b_x-a_x) * offset/distance,
       off_y = (b_y-a_y) * offset/distance
     ):
-    (getXY(setXY(a_x+off_x,a_y+off_y)))
+    (array(a_x+off_x,a_y+off_y))
   ),
 
   // Attraction
@@ -123,10 +126,16 @@ let
   repulse_rule = function(b) : (proximity_rule(b, repulse_step)),
 
   attract = map(attract_rule, [<a>links[]] -[<a>]),
-  repulse = map(repulse_rule, [all[current]indexes[]] -[<a>])
+  repulse = map(repulse_rule, [all[current]indexes[]] -[<a>]),
+
+  allX = function(vec):(vecX(vec)),
+  allY = function(vec):(vecY(vec)),
+
+  move_x = sum(map(attract, allX), map(repulse, allX)),
+  move_y = sum(map(attract, allY), map(repulse, allY))
 ):
 (
-  repulse
+  encodeVec(move_x, move_y)
 )
 """>
 <<a>> = <<newpos>>
@@ -142,7 +151,7 @@ $action-setfield counter=(= {{!!counter}}+1 =)/>
 
 
 
-Old logic:
+<!-- Old logic:
 ```
 <$vars p_a={{{[all[current]getindex<a>]}}}>
 <$formula-vars $noRebuild x_a=<<point_x p_a>> y_a=<<point_y p_a>> >
@@ -170,4 +179,4 @@ Old logic:
 	</$list>
 </$formula-vars>
 </$vars>
-```
+``` -->

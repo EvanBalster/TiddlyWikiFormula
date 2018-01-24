@@ -1,22 +1,36 @@
 created: 20180119011423816
-modified: 20180119024935081
+modified: 20180120031328684
 tags: Demo
 title: Demo: Conway's Game of Life
 type: text/vnd.tiddlywiki
 
 \define width() 16
 \define height() 16
+
 \define x_range() [range[1,$(width)$]]
 \define y_range() [range[1,$(height)$]]
+
 \define cell_id() $(x)$-$(y)$
 \define cell_state() {{##$(cell_id)$}}
 
+\define alive_style() width:1em; height:1em; margin:0; padding:0; background:black; border-radius:.5em;
+\define dead_style() width:1em; height:1em; margin:0; padding:0; white;
+
+
 A simple implementation of Conway's game of life with formulas.
+
 
 <$tiddler tiddler="$:/temp/demo-conway">
 
-Simulation: <$button>Start<$action-setfield dt=.2/></$button>
+Simulation
 <$button>Stop<$action-setfield dt=""/></$button>
+<$button>Slow<$action-setfield dt=.4/></$button>
+<$button>Medium<$action-setfield dt=.2/></$button>
+<$button>Fast<$action-setfield dt=.05/></$button>
+
+<$button>Make a Glider<$action-setfield type="application/json" text="""
+{"5-5": "1", "5-6": "1", "5-7": "1", "6-5": "1", "7-6": "1"}
+"""/></$button>
 
 <!-- Show the table. -->
 
@@ -26,13 +40,13 @@ Simulation: <$button>Start<$action-setfield dt=.2/></$button>
   <$list variable=x filter=<<y_range>> >
   <td style="text-align: center; padding:0; margin:0; line-height:0; color: gray;">
     <$if value=(= transclude_index(<<currentTiddler>>, <<cell_id>>) =)>
-      <$button class="tc-btn-invisible" style="width:1em; height:1em; margin:0; padding:0; background:black;">
-        <$action-setfield $index=<<cell_id>> $value=0/><<cell_state>>
+      <$button class=tc-btn-invisible style=<<alive_style>> >
+        <$action-setfield $index=<<cell_id>> $value=0/>
       </$button>
     </$if>
     <$else>
-      <$button class="tc-btn-invisible" style="width:1em; height:1em; margin:0; padding:0;">
-        <$action-setfield $index=<<cell_id>> $value=1/><<cell_state>>
+      <$button class=tc-btn-invisible style=<<dead_style>> >
+        <$action-setfield $index=<<cell_id>> $value=1/>
       </$button>
     </$else>
   </td>
@@ -43,10 +57,10 @@ Simulation: <$button>Start<$action-setfield dt=.2/></$button>
 
 <$link>State tiddler</$link>
 
-<$link to="$:/temp/demo-conway-next">State tiddler</$link>
 
 
 <!-- Simulation code follows... -->
+
 
 <$timer interval={{!!dt}} >
 <$list variable=y filter=<<x_range>> ><$list variable=x filter=<<y_range>> >
