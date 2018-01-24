@@ -166,7 +166,7 @@ exports.compileExpression = function(expression) {
 
 exports.compileDatum = function(datum) {
 	
-	var parser;
+	var parser, term;
 
 	// Short-hand formula
 	if (datum.charAt(0) == "=") {
@@ -224,6 +224,11 @@ exports.compileDatum = function(datum) {
 				parts[0], (parts[1] || 1)-1, parts[2] || 1,
 				parts[3] || 0, parts[4] || 0, parts[5] || 0, parts[6] || 0));
 		}
+	}
+
+	// Regex?
+	if ((term = rxDatumIsRegex.exec(datum))) {
+		return new Nodes.Regex(new RegExp(term[1].replace("\\/", "/"), term[2]));
 	}
 
 	// Otherwise, treat as a string constant
