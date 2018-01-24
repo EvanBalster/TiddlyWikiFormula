@@ -75,6 +75,32 @@ exports.ToDate = function ToDate(v,ctx) {
 	if (v instanceof Date) return v;
 	throw "Cannot auto-convert \"" + exports.ToText(v,ctx) + "\" to a date!";
 };
+
+var rxJsRegex = /^\/((?:[^\\\/\[]|\[(?:[^\]]|\\\])*\]|\\.)+)\/([a-z]*)$/;
+var rxTwRegexFlags = /^\(\?[a-z]*\)|\(\?[a-z]*\)$/i;
+
+exports.ToRegex = function ToRegex(v,ctx) {
+	if (v instanceof RegExp) return v;
+	if (typeof v === "string") {
+		v = v.trim();
+		// Try JavaScript style regex
+		var match = rxJsRegex.exec(v);
+		if (match) {
+			return new RegExp(term[1].replace("\\/", "/"), term[2]);
+		}
+		// Try TiddlyWiki style regex
+		match = rxTwRegexFlags.exec(v);
+		if (match) {
+			var flagLen = match[0].length;
+			var flags = match[0].substr(2, match[0].length-3);
+			if (match.index == 0) return new RegExp(v.substr(flagLen), flags);
+			else                  return new RegExp(v.substr(0, v.length-flagLen), flags);
+		}
+		return new RegExp(v, "g");
+		
+	}
+	throw "Cannot auto-convert \"" + exports.ToText(v,ctx) + "\" to a regular expression!";
+};
 exports.ToArray = function ToArray(v,ctx) {
 	if (v instanceof Array) return v;
 	throw "Cannot auto-convert \"" + exports.ToText(v,ctx) + "\" to an array!";
@@ -93,6 +119,7 @@ var CoerceFuncs = {
 	B: exports.ToBool,
 	A: exports.ToArray,
 	D: exports.ToDate,
+	R: exports.ToRegex,
 	F: exports.ToFunc,
 	_: exports.ToSelf,
 };
