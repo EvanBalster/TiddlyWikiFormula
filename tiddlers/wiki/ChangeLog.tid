@@ -1,7 +1,7 @@
 bnf: <LetStatement> ::=
 created: 20171216221810025
 list: readme settings license
-modified: 20180124061736669
+modified: 20180204014041694
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
@@ -9,12 +9,14 @@ type: text/vnd.tiddlywiki
 Potentially destructive changes are noted in bold.
 
 
-!!! 0.2.2
+!!! 0.2.2 — February 3, 2018
 
-* Fixed some bugs with comments
-* Implemented regular expression literals in the JavaScript style `/regex/g`
-** Also valid as datums
+* Fixed a bug in the parsing of `/* block comments */`.  `// line comments` also work.
+* Implemented regular expression literals in the JavaScript style: `/regex/g`
+** May be used as a [[Datum]]
 ** When converting strings to regex, both JavaScript and TiddlyWiki styles will be recognized.
+* Formula errors now mention LET assignments they lie inside.
+* [[Formulas as Tag Attributes]] are now facilitated by a mod using the experimental [[Mod-Loader Plugin]].
 
 
 !!! 0.2.1 — January 16, 2018

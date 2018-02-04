@@ -1,5 +1,5 @@
 created: 20180114194229835
-modified: 20180114201658254
+modified: 20180204014009693
 title: Function
 type: text/vnd.tiddlywiki
 
@@ -13,6 +13,6 @@ The function can be treated as a value and passed around normally or given a nam
 
 Functions must be called with the correct number of arguments and cannot be overloaded.
 
-Closures (that is, using [[local variables|LocalVariable]] from outside the function) are not currently supported.
+When [[local variables|LocalVariable]] declared outside the function are used inside it, the values are [[captured|https://en.wikipedia.org/wiki/Closure_(computer_programming)]] and will be usable even if the function is called elsewhere.
 
 Functions defined in formulas are different from the [[built-in functions|BuiltInFunction]] provided by formulas.

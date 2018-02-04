@@ -1,11 +1,12 @@
 created: 20180114193132342
-modified: 20180114201420162
+modified: 20180204013714838
 tags: Syntax
 title: LetConstruct
 type: text/vnd.tiddlywiki
 
-A ''Let Expression'' allows one or more [[local variables|LocalVariable]] to be created and used inside it.  Its syntax is:
+A ''Let Expression'' allows one or more [[local variables|LocalVariable]] to be created and used inside it.  As a rule of thumb, this is useful when some computed value needs to be used in more than one place.
 
+Its syntax is:
 
 ```
 let(<name>=<value>[,<name>=<value>...]):(<body>)
@@ -15,7 +16,7 @@ Where `<name>` is an alphanumeric name for the new variable, `<value>` is an [[e
 
 `<body>` is an expression produces the result of the `let` construct, and can use any of the local variables.  Local variables are //not// available inside called functions or imported formulas.
 
-Let statements may be used inside a [[Parenthesized Expression]] or [[Function]] (in the body).
+LET expressions may be used in any [[Parenthesized Expression]] or [[Function]] (in the body).  Values bound by LET behave exactly like function arguments.
 
 
 !!Examples
