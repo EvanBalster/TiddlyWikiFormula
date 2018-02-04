@@ -1,0 +1,35 @@
+created: 20180204004357400
+modified: 20180204004408141
+title: Auto-Map/Logic-Old
+type: text/vnd.tiddlywiki
+
+Old logic:
+
+```
+<$vars p_a={{{[all[current]getindex<a>]}}}>
+<$formula-vars $noRebuild x_a=<<point_x p_a>> y_a=<<point_y p_a>> >
+	<!-- Attraction -->
+	<$formula-vars $noRebuild b="nth([<a>links[]]-[<a>], randbetween(1,count([<a>links[]]-[<a>])))">
+	<$vars p_b={{{[all[current]getindex<b>]}}}>
+	<$formula-vars $noRebuild x_b=<<point_x p_b>> y_b=<<point_y p_b>> >
+		<$if value=(= (<<x_b>>-<<x_a>>)^2+(<<y_b>>-<<y_a>>)^2 > 300 =)>
+			<$action-setfield $index=<<a>> $value=(= mix(<<x_a>>,<<x_b>>,.05) & ',' & mix(<<y_a>>,<<y_b>>,.05) =)/>
+		</$if>
+	</$formula-vars>
+	</$vars>
+	</$formula-vars>
+	<!-- Repulsion -->
+	<$list variable=b filter="[all[current]indexes[]] -[<a>]">
+	<$vars p_b={{{[all[current]getindex<b>]}}}>
+	<$formula-vars $noRebuild x_b=<<point_x p_b>> y_b=<<point_y p_b>> >
+	<$formula-vars $noRebuild dist2="(<<x_a>>-<<x_b>>)^2+(<<y_a>>-<<y_b>>)^2" dir="atan2(<<y_a>>-<<y_b>>,<<x_a>>-<<x_b>>)" >
+		<$if value=(= <<dist2>> < 200 =)>
+			<$action-setfield $index=<<a>> $value=(= <<x_a>>+5*cos(<<dir>>)+randbetween(-3,3) & ',' & <<y_a>>+5*sin(<<dir>>)+randbetween(-3,3) =)/>
+		</$if>
+	</$formula-vars>
+	</$formula-vars>
+	</$vars>
+	</$list>
+</$formula-vars>
+</$vars>
+```

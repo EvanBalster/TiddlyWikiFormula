@@ -1,0 +1,86 @@
+created: 20180204003908676
+modified: 20180204010453714
+title: Auto-Map/Logic
+type: text/vnd.tiddlywiki
+
+\define formulaFixed() 2
+
+<$tiddler tiddler="$:/temp/self-organizing-map">
+
+<!-- Simulation logic follows -->
+
+<$if value={{!!dt}}>
+
+<$timer interval={{!!dt}}>
+
+<$list variable=a filter="[all[current]indexes[]]">
+<$formula-vars $fixed=2 newpos="""
+let
+(
+  // getXY grabs index 'i' and turns it into an array {x,y}.
+  parseVec = function(i):(map(function(s):(value(s)),
+    split(transclude_index(<<currentTiddler>>, i),','))),
+
+  // setXY turns X and Y values into a glued string
+  encodeVec = function(x,y):(x&','&y),
+
+  vecX = function(v):(nth(v,1)),
+  vecY = function(v):(nth(v,2)),
+
+  // Unpack point A
+  aVec = parseVec(<<a>>),
+  a_x = vecX(aVec), a_y = vecY(aVec),
+
+  // Proximity function
+  proximity_rule = function(b,offset_func) :
+  (
+    let
+    (
+      // Unpack point B
+      bVec = parseVec(b),
+      b_x = vecX(bVec), b_y = vecY(bVec),
+
+      // Compute the distance
+      distance = ((b_x-a_x)^2+(b_y-a_y)^2)^.5,
+
+      // Compute the offset magnitude
+      offset = offset_func(distance),
+
+      // Compute the offset
+      off_x = (b_x-a_x) * offset/distance,
+      off_y = (b_y-a_y) * offset/distance
+    ):
+    (array(off_x,off_y))
+  ),
+
+  // Attraction
+  repulse_step = function(dist):(-5 / (1 + dist/10)^2),
+  attract_step = function(dist):(.25 * (dist/20)^2),
+
+  attract_rule = function(b) : (if(transclude_index(<<currentTiddler>>, b), proximity_rule(b, attract_step), array(0,0))),
+  repulse_rule = function(b) : (proximity_rule(b, repulse_step)),
+
+  attract = map(attract_rule, [<a>links[]] [<a>backlinks[]] -[<a>]),
+  repulse = map(repulse_rule, [all[current]indexes[]] -[<a>]),
+
+  allX = function(vec):(vecX(vec)),
+  allY = function(vec):(vecY(vec)),
+
+  move_x = sum(map(allX, attract), map(allX, repulse)),
+  move_y = sum(map(allY, attract), map(allY, repulse))
+):
+(
+  encodeVec(
+    clamp(a_x + move_x + randbetween(-1,+1), -95, +95),
+    clamp(a_y + move_y + randbetween(-1,+1), -95, +95))
+)
+""">
+<$action-setfield $index=<<a>> $value=<<newpos>> />
+</$formula-vars>
+</$list>
+<$action-setfield counter=(= {{!!counter}}+1 =)/>
+</$timer>
+
+</$if>
+
+</$tiddler>

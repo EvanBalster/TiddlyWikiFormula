@@ -1,5 +1,5 @@
 created: 20180107173851197
-modified: 20180124055727043
+modified: 20180204012007527
 tags: [[Formula Plugin]] [[Timer Plugin]] Demo
 title: Auto-Map
 type: text/vnd.tiddlywiki
@@ -11,7 +11,7 @@ type: text/vnd.tiddlywiki
 
 This tiddler creates a dynamically-generated map of tiddlers in the host wiki which link directly or indirectly to the original one, [[Formula Plugin]].
 
-This program is currently defunct.
+This program is an experiment in progress.  Its current implementation uses a large number of action-setfield to update the map each frame, which has proven too inefficient to perform well.
 
 Uses:
 
@@ -19,164 +19,18 @@ Uses:
 * [[Timer Plugin]]
 * [[Condition Plugin]]
 
-<$tiddler tiddler="$:/temp/self-organizing-map">
+{{Auto-Map/Controls}}
 
-Build:
-<$button>Set up
-	<$action-setfield indirection=0 />
-	<$action-setfield text="""{"Formula Plugin": "0,0"}""" type="application/json" />
-</$button>
-<$button>Add a level
-	<$action-setfield indirection=(= {{!!indirection}}+1 =) />
-	<$list variable=a filter="[all[current]indexes[]]">
-	<$list variable=b filter="[<a>links[]!is[system]] -[all[current]indexes[]]">
-		<$action-setfield $index=<<b>> $value=(= randbetween(-100, 100) & ',' & randbetween(-100,100) =) />
-	</$list>
-	</$list>
-</$button>
-<$if value={{!!indirection}}>
-Organize:
-<$button>Start<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(now(), .1))">> dt=.05 /></$button>
-<$button>Stop<$action-setfield next-tick="" dt=0/></$button>
-</$if>
+{{Auto-Map/Render}}
 
-(Levels of indirection: {{!!indirection}})
-
-<svg width=500 viewBox="-100 -100 200 200">
-<g style="fill: white; stroke: black; stroke-width: .5;">
-<rect x=-100 y=-100 width=200 height=200/>
-<!-- Connecting Lines -->
-<$list variable=a filter="[all[current]indexes[]]">
-<$list variable=b filter="[<a>links[]] -[<a>]">
-	<$vars
-		p_a={{{[all[current]getindex<a>]}}}
-		p_b={{{[all[current]getindex<b>]}}}>
-		<line
-			x1=(= nth(split(<<p_a>>,','),1) =)
-			y1=(= nth(split(<<p_a>>,','),2) =)
-			x2=(= nth(split(<<p_b>>,','),1) =)
-			y2=(= nth(split(<<p_b>>,','),2) =)/>
-	</$vars>
-</$list>
-<!-- Nodes -->
-</$list>
-<$list variable=id filter="[all[current]indexes[]]">
-	<$vars p={{{[all[current]getindex<id>]}}}>
-	<circle cx=(= nth(split(<<p>>,','),1) =) cy=(= nth(split(<<p>>,','),2) =) r=5/>
-	</$vars>
-</$list>
-</g>
-</svg>
+{{Auto-Map/Logic}}
 
 
-Debugging info here:  [[Auto-Map Debug]] / <$link>State Tiddler</$link>
+The moving parts:
 
-
-<!-- Simulation logic follows -->
-
-$if value={{!!dt}}>
-
-$timer interval={{!!dt}}>
-
-<$list variable=a filter="[all[current]indexes[]]">
-<$formula-vars $fixed=2 newpos="""
-let
-(
-  // getXY grabs index 'i' and turns it into an array {x,y}.
-  parseVec = function(i):(map(function(s):(value(s)),
-    split(transclude_index(<<currentTiddler>>, i),','))),
-
-  // setXY turns X and Y values into a glued string
-  encodeVec = function(x,y):(x&','&y),
-
-  vecX = function(v):(nth(v,1)),
-  vecY = function(v):(nth(v,2)),
-
-  // Unpack point A
-  aVec = parseVec(<<a>>),
-  a_x = vecX(aVec), a_y = vecY(aVec),
-
-  // Proximity function
-  proximity_rule = function(b,offset_func) :
-  (
-    let
-    (
-      // Unpack point B
-      bVec = parseVec(b),
-      b_x = vecX(bVec), b_y = vecY(bVec),
-
-      // Compute the distance
-      distance = ((b_x-a_x)^2+(b_y-a_y)^2)^.5,
-
-      // Compute the offset magnitude
-      offset = offset_func(distance),
-
-      // Compute the offset
-      off_x = (b_x-a_x) * offset/distance,
-      off_y = (b_y-a_y) * offset/distance
-    ):
-    (array(a_x+off_x,a_y+off_y))
-  ),
-
-  // Attraction
-  repulse_step = function(dist):(min(0, -.05*(20-dist)^2)),
-  attract_step = function(dist):(max(0, dist*.05)),
-
-  attract_rule = function(b) : (proximity_rule(b, attract_step)),
-  repulse_rule = function(b) : (proximity_rule(b, repulse_step)),
-
-  attract = map(attract_rule, [<a>links[]] -[<a>]),
-  repulse = map(repulse_rule, [all[current]indexes[]] -[<a>]),
-
-  allX = function(vec):(vecX(vec)),
-  allY = function(vec):(vecY(vec)),
-
-  move_x = sum(map(attract, allX), map(repulse, allX)),
-  move_y = sum(map(attract, allY), map(repulse, allY))
-):
-(
-  encodeVec(move_x, move_y)
-)
-""">
-<<a>> = <<newpos>>
-	<!-- <$action-setfield $index=<<a>> $value=<<newpos>> /> -->
-</$formula-vars>
-<br/>
-</$list>
-$action-setfield counter=(= {{!!counter}}+1 =)/>
-</z$timer>
-
-</$if>
-
-
-
-
-<!-- Old logic:
-```
-<$vars p_a={{{[all[current]getindex<a>]}}}>
-<$formula-vars $noRebuild x_a=<<point_x p_a>> y_a=<<point_y p_a>> >
-	<!-- Attraction -->
-	<$formula-vars $noRebuild b="nth([<a>links[]]-[<a>], randbetween(1,count([<a>links[]]-[<a>])))">
-	<$vars p_b={{{[all[current]getindex<b>]}}}>
-	<$formula-vars $noRebuild x_b=<<point_x p_b>> y_b=<<point_y p_b>> >
-		<$if value=(= (<<x_b>>-<<x_a>>)^2+(<<y_b>>-<<y_a>>)^2 > 300 =)>
-			<$action-setfield $index=<<a>> $value=(= mix(<<x_a>>,<<x_b>>,.05) & ',' & mix(<<y_a>>,<<y_b>>,.05) =)/>
-		</$if>
-	</$formula-vars>
-	</$vars>
-	</$formula-vars>
-	<!-- Repulsion -->
-	<$list variable=b filter="[all[current]indexes[]] -[<a>]">
-	<$vars p_b={{{[all[current]getindex<b>]}}}>
-	<$formula-vars $noRebuild x_b=<<point_x p_b>> y_b=<<point_y p_b>> >
-	<$formula-vars $noRebuild dist2="(<<x_a>>-<<x_b>>)^2+(<<y_a>>-<<y_b>>)^2" dir="atan2(<<y_a>>-<<y_b>>,<<x_a>>-<<x_b>>)" >
-		<$if value=(= <<dist2>> < 200 =)>
-			<$action-setfield $index=<<a>> $value=(= <<x_a>>+5*cos(<<dir>>)+randbetween(-3,3) & ',' & <<y_a>>+5*sin(<<dir>>)+randbetween(-3,3) =)/>
-		</$if>
-	</$formula-vars>
-	</$formula-vars>
-	</$vars>
-	</$list>
-</$formula-vars>
-</$vars>
-``` -->
+* [[State Tiddler|$:/temp/self-organizing-map]]
+* [[Auto-Map Debug]]
+* [[Auto-Map/Controls]]
+* [[Auto-Map/Render]]
+* [[Auto-Map/Logic]]
+* [[Auto-Map/Logic-Old]]

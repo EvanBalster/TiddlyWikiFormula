@@ -1,0 +1,29 @@
+created: 20180204004452051
+modified: 20180204004455591
+title: Auto-Map/Controls
+type: text/vnd.tiddlywiki
+
+<$tiddler tiddler="$:/temp/self-organizing-map">
+
+Build:
+<$button>Set up
+	<$action-setfield indirection=0 />
+	<$action-setfield text="""{"Formula Plugin": "0,0"}""" type="application/json" />
+</$button>
+<$button>Add a level
+	<$action-setfield indirection=(= {{!!indirection}}+1 =) />
+	<$list variable=a filter="[all[current]indexes[]]">
+	<$list variable=b filter="[<a>links[]!is[system]] -[all[current]indexes[]]">
+		<$action-setfield $index=<<b>> $value=(= randbetween(-100, 100) & ',' & randbetween(-100,100) =) />
+	</$list>
+	</$list>
+</$button>
+<$if value={{!!indirection}}>
+Organize:
+<$button>Start<$action-setfield next-tick=<<formula "to_tw_date(add_seconds(now(), .1))">> dt=.05 /></$button>
+<$button>Stop<$action-setfield next-tick="" dt=0/></$button>
+</$if>
+
+(Levels of indirection: {{!!indirection}})
+
+</$tiddler>
