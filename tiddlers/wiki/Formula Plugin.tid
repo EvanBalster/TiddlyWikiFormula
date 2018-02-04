@@ -1,5 +1,5 @@
 created: 20171212014005571
-modified: 20180124064755681
+modified: 20180204014302949
 tags: 
 title: Formula Plugin
 type: text/vnd.tiddlywiki
@@ -69,10 +69,11 @@ Drag-and-drop this to your wiki:
 ** [[Source Code]]
 * Demos & Fun Stuff
 ** [[Demo: Conway's Game of Life]] (naturally)
+** [[Auto-Map]]
 ** [[Demo: Starburst]]
 ** [[Harmonic Lattice]]
-** [[Demo: Tabulator]]
 ** [[Real Projective Line]]
+** [[Demo: Tabulator]]
 ** [[Spreadsheet Prototype]]
 
 
