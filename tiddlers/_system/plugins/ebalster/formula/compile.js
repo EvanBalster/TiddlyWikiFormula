@@ -17,7 +17,8 @@ var rxOperandTransclusion =     /\{\{([^\{\}]+)\}\}/g;
 var rxDatumIsTransclusion = /^\s*\{\{([^\{\}]+)\}\}\s*$/;
 var rxOperandVariable     =     /<<([^<>]+)>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
-var rxCellName            = /[a-zA-Z]{1,2}[0-9]+/g;
+var rxCellName            = /\$?([A-Z]{1,2})\$([0-9]+)/g;
+var rxCellRange           = /\$?([A-Z]{1,2})\$([0-9]+):\$?([A-Z]{1,2})\$([0-9]+)/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
 var rxKeyword             = /(function|let|for|foreach|if|then|else|while|do|this|self|currentTiddler)/gi;
 
@@ -409,7 +410,7 @@ function buildExpression(parser, nested) {
 	return operands[0];
 }
 
-// Compile a function argument list.  Error if the next 
+// Compile a function argument list.  Error if the next symbol is not an open-paren.
 function buildArguments(parser) {
 
 	// Skip whitespace
@@ -431,14 +432,38 @@ function buildArguments(parser) {
 		results.push(buildExpression(parser, true));
 
 		// Expect ) or , after argument.
-		parser.skipInert();
-		var char = parser.getChar();
-		++parser.pos;
+		var char = parser.nextGlyph();
 		if (char == ")") break;
 		if (char != ",") throw "Expect ',' or ')' after function argument";
 	}
 
 	return results;
+}
+
+// Compile an array literal.
+function buildArrayLiteral(parser) {
+
+	// Open bracket
+	if (parser.nextGlyph() !== '{') throw "Expect '{' to begin array literal.";
+
+	// Zero arguments?
+	parser.skipInert();
+	if (parser.getChar() === "}") {++parser.pos; return [];}
+	
+	var array = [];
+
+	while (true)
+	{
+		// Compile an expression.
+		array.push(buildExpression(parser, true));
+
+		// Expect } or , after argument.
+		var char = parser.nextGlyph();
+		if (char == "}") break;
+		if (char != ",") throw "Expect ',' or '}' after array element (use {{double braces}} for transclusions).";
+	}
+
+	return array;
 }
 
 // Build a let or foreach expression (parser starts after the keyword)
@@ -564,14 +589,18 @@ function buildOperand(parser) {
 		if (term) return new Nodes.Number(Number(term[0]));
 		throw "Invalid number: " + parser.nextToken();
 	}
-	else if (char.match(/[a-z_]/i))
+	else if (char.match(/[$a-z_]/i))
 	{
+		// Cell range?
+		term = parser.match_here(rxCellRange);
+		if (term) throw "Cell ranges are currently unsupported!";
+
 		// Cell name?
 		term = parser.match_here(rxCellName);
 		if (term) return new Nodes.Datum(
 			new Nodes.TranscludeIndex(
 				new Nodes.Variable(new Nodes.Text("currentTiddler")),
-				new Nodes.Text(term[0])));
+				new Nodes.Text(term[1]+term[2])));
 
 		// Identifier?
 		term = parser.match_here(rxIdentifier);
@@ -681,10 +710,17 @@ function buildOperand(parser) {
 		if (term) return new Nodes.Filter(term[0]);
 		break;
 
-	case "{": // Transclusion operand
-		term = parser.match_here(rxOperandTransclusion);
-		if (term) return new Nodes.Datum(buildTextReference(term[1]));
-		break;
+	case "{": // Transclusion or array
+		++parser.pos;
+		char = parser.getChar();
+		--parser.pos;
+		if (char == '{') {
+			// Possible transclusion operand
+			term = parser.match_here(rxOperandTransclusion);
+			if (term) return new Nodes.Datum(buildTextReference(term[1]));
+		}
+		// Array operand
+		return new Nodes.ArrayDef(buildArrayLiteral(parser));
 
 	case "<": // Variable operand
 		term = parser.match_here(rxOperandVariable);

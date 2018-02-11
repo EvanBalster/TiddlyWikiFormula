@@ -126,6 +126,19 @@ exports.CallJS.prototype.compute = function(ctx) {
 	return this.func.apply(ctx, vals);
 };
 
+// Call a function by reference.
+exports.ArrayDef = function ArrayDef(elems) {
+	this.elems = elems;
+};
+exports.ArrayDef.prototype = new exports.Node();
+exports.ArrayDef.prototype.name = "function-builtin";
+exports.ArrayDef.prototype.compute = (function(ctx) {
+	// Compute elements.
+	var elems = [];
+	for (var i = 0; i < this.elems.length; ++i) elems.push(this.elems[i].compute(ctx));
+	return elems;
+});
+
 
 // Function declaration operand.
 exports.Function = function(func, captures) {
