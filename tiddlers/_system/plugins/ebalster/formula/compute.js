@@ -63,7 +63,7 @@ exports.computeFormula = function(compiledFormula, widget, formatOptions, debug)
 	// Specify format.  These are all required!
 	var formats = {
 		number: numberFormatSelect(formatOptions),
-		date:   function(date) {$tw.utils.formatDateString(date, dateFormat);},
+		date:   function(date) {return $tw.utils.formatDateString(date, dateFormat);},
 		array:  arrayFormatTW,
 	};
 
