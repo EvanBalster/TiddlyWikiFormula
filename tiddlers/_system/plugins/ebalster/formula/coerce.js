@@ -52,7 +52,7 @@ var _ToNum = {
 	"symbol"    : function(v,ctx) {throw "Cannot convert symbol to number!";},
 	"function"  : function(v,ctx) {throw "Cannot convert function to number!";},
 	"boolean"   : function(v,ctx) {return (v ? 1 : 0);},
-	"object"    : function(v,ctx) {throw "Cannot convert \"" + CoerceText.object(v,ctx) + "\" to number!";},
+	"object"    : function(v,ctx) {throw "Cannot convert \"" + _ToText.object(v,ctx) + "\" to number!";},
 };
 
 // Value-to-boolean coercion.
