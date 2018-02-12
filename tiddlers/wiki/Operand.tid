@@ -1,6 +1,6 @@
 bnf: <Transclusion> | <Parenthesized> | <FunctionCall> | <FilterRun> | <Variable> | <NumberLiteral> | <StringLiteral>
 created: 20171210081748019
-modified: 20180204013212345
+modified: 20180211214016104
 tags: Syntax
 title: Operand
 type: text/vnd.tiddlywiki
@@ -15,6 +15,7 @@ An ''Operand'' may be:
 |[[Filter]]|`[tag[Expenses]get[value]]`|
 |[[Number Literal]]|`123.456` or `4` or `.001`|
 |[[String Literal]]|`"kittens"` or `'kittens'`|
+|[[Array Literal]]|`{1, 2, 3}`|
 |[[Regular Expression Literal]]|`/kittens/g`|
 |[[Cell Reference]]|`B3`|
 |[[Let Expression|LetConstruct]]|`let(x=2):(x+x)`|

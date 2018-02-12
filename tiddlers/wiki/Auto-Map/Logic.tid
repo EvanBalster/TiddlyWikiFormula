@@ -1,5 +1,5 @@
 created: 20180204003908676
-modified: 20180204010453714
+modified: 20180211234707847
 title: Auto-Map/Logic
 type: text/vnd.tiddlywiki
 
@@ -50,14 +50,14 @@ let
       off_x = (b_x-a_x) * offset/distance,
       off_y = (b_y-a_y) * offset/distance
     ):
-    (array(off_x,off_y))
+    ({off_x,off_y})
   ),
 
   // Attraction
   repulse_step = function(dist):(-5 / (1 + dist/10)^2),
   attract_step = function(dist):(.25 * (dist/20)^2),
 
-  attract_rule = function(b) : (if(transclude_index(<<currentTiddler>>, b), proximity_rule(b, attract_step), array(0,0))),
+  attract_rule = function(b) : (if(transclude_index(<<currentTiddler>>, b), proximity_rule(b, attract_step), {0,0})),
   repulse_rule = function(b) : (proximity_rule(b, repulse_step)),
 
   attract = map(attract_rule, [<a>links[]] [<a>backlinks[]] -[<a>]),

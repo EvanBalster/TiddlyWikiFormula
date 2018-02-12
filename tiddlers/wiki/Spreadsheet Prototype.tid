@@ -1,16 +1,16 @@
 created: 20171214072113031
-modified: 20180119011959802
+modified: 20180212024731438
 tags: 
 title: Spreadsheet Prototype
 type: text/vnd.tiddlywiki
 
-\define ss_cols() a b c d e f g h i j
+\define ss_cols() A B C D E F G H I J
 \define ss_rows() 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 \define ss_cell() $(c)$$(r)$
 
 <$tiddler tiddler="Spreadsheet/Data">
 
-Click on cells to pop up an editor.  Formulas currently need to be written in `(= =)` but cells may be referred to by their names, such as `a2`.  Ranges aren't supported yet.
+Click on cells to pop up an editor.  Formulas currently need to be written in `(= =)` but cells may be referred to by their names, such as `A2`.  Ranges aren't supported yet.
 
 <$vars popupState=<<qualify "$:/temp/spreadsheet/pop">> popupCell=<<qualify "$:/temp/spreadsheet/popcell">> >
 
@@ -49,3 +49,5 @@ Click on cells to pop up an editor.  Formulas currently need to be written in `(
 </table> -->
 
 </$tiddler>
+
+[[Data Tiddler|Spreadsheet/Data]]

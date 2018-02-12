@@ -1,5 +1,5 @@
 created: 20171222192325797
-modified: 20180124055305232
+modified: 20180211193507379
 tags: 
 title: Planned Changes
 type: text/vnd.tiddlywiki
@@ -8,7 +8,6 @@ type: text/vnd.tiddlywiki
 
 Features
 
-* Regular expression literals (and coercion)
 * Language-level foreach function or list comprehension? (as opposed to map)
 * Series computations
 ** Dedicated: `series(i in [range[0,10]]):(x=2):(x=x*x+1):(x)` (too complicated?)
@@ -52,6 +51,12 @@ Formatting
 
 * Add global format settings with clear defaults
 
+<<<
 Done
 
-* ~~Support closures in functions?~~
+* Regular expression literals (and coercion)
+* Attribute-Modules as a mod/patch plugin
+* Support closures in functions?
+* LET construct
+* Functions
+<<<

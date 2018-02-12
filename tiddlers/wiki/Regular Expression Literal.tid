@@ -1,9 +1,13 @@
 created: 20180204013220979
-modified: 20180204013418320
+modified: 20180211213809455
 tags: Syntax
 title: Regular Expression Literal
 type: text/vnd.tiddlywiki
 
 A ''Regular Expression Literal'' expresses a text-matching expression, and uses [[the same syntax as in JavaScript|https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions]].
+
+```
+/hello/ig
+```
 
 Regular expressions are a powerful way to search and capture text information, but a full explanation is outside the scope of this document.

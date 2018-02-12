@@ -1,0 +1,14 @@
+bnf: <ArrayLiteral> ::= '{' <Elements> '}'
+created: 20180211213818335
+modified: 20180211214103727
+tags: Syntax
+title: Array Literal
+type: text/vnd.tiddlywiki
+
+An ''Array Literal'' in Formulas is expressed as a pair of curly braces containing a series of [[expressions|Expression]] separated by commas.
+
+```
+{1, 2, 3, "fork"}
+```
+
+The syntax is similar to the one used in popular spreadsheet software.  2D arrays with `;` are not currently supported, however.
