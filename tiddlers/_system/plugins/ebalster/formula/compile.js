@@ -17,8 +17,8 @@ var rxOperandTransclusion =     /\{\{([^\{\}]+)\}\}/g;
 var rxDatumIsTransclusion = /^\s*\{\{([^\{\}]+)\}\}\s*$/;
 var rxOperandVariable     =     /<<([^<>]+)>>/g;
 var rxDatumIsVariable     = /^\s*<<[^<>]+>>\s*$/;
-var rxCellName            = /\$?([A-Z]{1,2})\$([0-9]+)/g;
-var rxCellRange           = /\$?([A-Z]{1,2})\$([0-9]+):\$?([A-Z]{1,2})\$([0-9]+)/g;
+var rxCellName            = /\$?([A-Z]{1,2})\$?([0-9]+)/g;
+var rxCellRange           = /\$?([A-Z]{1,2})\$?([0-9]+):\$?([A-Z]{1,2})\$?([0-9]+)/g;
 var rxIdentifier          = /[_a-zA-Z][_a-zA-Z0-9]*/g;
 var rxKeyword             = /(function|let|for|foreach|if|then|else|while|do|this|self|currentTiddler)/gi;
 
@@ -410,59 +410,43 @@ function buildExpression(parser, nested) {
 	return operands[0];
 }
 
-// Compile a function argument list.  Error if the next symbol is not an open-paren.
-function buildArguments(parser) {
+// Compile a list expression, which could be function arguments or an array...
+function buildCommaList(parser, braces, afterHint) {
 
-	// Skip whitespace
+	// Is an open-brace present?
 	parser.skipInert();
-
-	// Argument list present?
-	if (parser.getChar() !== "(") return null;
+	if (parser.getChar() !== braces[0]) return null;
 	++parser.pos;
 
 	// Zero arguments?
 	parser.skipInert();
-	if (parser.getChar() === ")") {++parser.pos; return [];}
+	if (parser.getChar() === braces[1]) {++parser.pos; return [];}
 	
-	var results = [];
+	var nodeList = [];
 
 	while (true)
 	{
 		// Compile an expression.
-		results.push(buildExpression(parser, true));
+		nodeList.push(buildExpression(parser, true));
 
-		// Expect ) or , after argument.
+		// Expect close-brace or , after argument.
 		var char = parser.nextGlyph();
-		if (char == ")") break;
-		if (char != ",") throw "Expect ',' or ')' after function argument";
+		if (char === braces[1]) break;
+		if (char !== ",") throw "Expect ',' or '" + braces[1] + "' after " + afterHint;
 	}
 
-	return results;
+	return nodeList;
 }
 
-// Compile an array literal.
+// Build an argument list.
+function buildArguments(parser) {
+	return buildCommaList(parser, "()", "function argument.");
+}
+
+// Build an array literal.
 function buildArrayLiteral(parser) {
-
-	// Open bracket
-	if (parser.nextGlyph() !== '{') throw "Expect '{' to begin array literal.";
-
-	// Zero arguments?
-	parser.skipInert();
-	if (parser.getChar() === "}") {++parser.pos; return [];}
-	
-	var array = [];
-
-	while (true)
-	{
-		// Compile an expression.
-		array.push(buildExpression(parser, true));
-
-		// Expect } or , after argument.
-		var char = parser.nextGlyph();
-		if (char == "}") break;
-		if (char != ",") throw "Expect ',' or '}' after array element (use {{double braces}} for transclusions).";
-	}
-
+	var array = buildCommaList(parser, "{}", "array element (use {{double braces}} for transclusions).");
+	if (!array) throw "Expect '{' to begin array literal.";
 	return array;
 }
 
