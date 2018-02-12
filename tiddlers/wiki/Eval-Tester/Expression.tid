@@ -1,6 +1,6 @@
 created: 20171211021239925
-modified: 20180211215121146
+modified: 20180212025317014
 title: Eval-Tester/Expression
 type: text/vnd.tiddlywiki
 
-'`' & {0, "bald head"} & '`'
+"That'll be " & {{Soda-Pop!!value}} * 2 & ", please"
