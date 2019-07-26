@@ -1,0 +1,32 @@
+created: 20190725225737511
+modified: 20190725231616700
+tags: 
+title: Unpack a Plugin
+
+The following code will unpack a plugin by making 'regular' tiddlers out of each shadow tiddler contained in the plugin.
+
+<$wikify name="state" text="""<$macrocall $name="qualify" title="$:/state/controlpanel/unpackplugin" />""" >
+<$select tiddler=<<state>> field="target">
+<$list filter='[all[]type[application/json]has[plugin-type]sort[title]] -[[$:/core]]'>
+<option value=<<currentTiddler>>><$view field='title'/></option>
+</$list>
+</$select><br/><br/>
+
+''Target'': {{{[<state>get[target]]}}} <br/>
+<$button class="tc-btn-invisible tc-tiddlylink">
+<$list filter="[<state>get[target]plugintiddlers[]]">
+<$action-deletefield jhsfjh/>
+</$list>
+Unpack!
+</$button><br/>
+''[{{{[<state>get[target]]}}}]plugintiddlers[]'':<br/>
+<$reveal type="nomatch" state=<<state>> text="show">
+ <$button set=<<state>> setTo="show" class="tc-btn-invisible tc-tiddlylink">Show Plugin Tiddlers</$button>
+</$reveal>
+<$reveal type="match" state=<<state>> text="show">
+<$button set=<<state>> setTo="hide" class="tc-btn-invisible tc-tiddlylink">Hide Plugin Tidders</$button>
+<ul><$list filter="[<state>get[target]plugintiddlers[]]">
+<li><$link>{{!!title}}</$link></li>
+</$list></ul>
+</$reveal>
+</$wikify>
