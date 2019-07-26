@@ -5,9 +5,11 @@ A TiddlyWiki plugin for functional formulas, combining the power of Excel and Go
 Created by Evan Balster <evan@imitone.com>
 
 * [Source on GitHub](https://github.com/EvanBalster/TiddlyWikiFormula).
-* [Demonstration Wiki](http://evanbalster.com/tiddlywiki/formulas.html).
+* <s>[Demonstration Wiki](http://evanbalster.com/tiddlywiki/formulas.html).</s> Old version
 
-Get Formulas by opening the Demonstration Wiki and navigating to the plugin there.
+* [Temprorary Demonstration Wiki] https://joshuafontany.github.io/TiddlyWikiFormula/ TW v5.1.20-prerelease
+
+Get Formulas by opening the Demonstration Wiki and navigating to the plugins there.
 
 
 ## Examples
