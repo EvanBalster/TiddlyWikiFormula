@@ -6,7 +6,7 @@ tags:
 title: $:/plugins/ebalster/formula/readme
 type: text/vnd.tiddlywiki
 
-''Formula'' for TiddlyWiki, version {{$:/plugins/ebalster/formula!!version}}, by Evan Balster.
+''Formula'' for TiddlyWiki, version {{$:/plugins/ebalster/formula!!version}}, by Evan Balster. Updated by [[Joshua Fontany|https://github.com/joshuafontany]]
 
 Formulas are written between `(=` mushroom brackets `=)`.  Where possible, their functions and syntax are designed to emulate popular spreadsheet software (Microsoft Excel and Google Sheets).  They //also// support WikiText-like syntax for `{{`transclusion`}}`, `[`filters`]`, `<<`variables`>>`, and a large number of functions.
 
