@@ -1,9 +1,9 @@
 {
     "description": "Basic client-server edition",
     "plugins": [
-        "tiddlywiki/tiddlyweb",
-        "tiddlywiki/filesystem",
-        "tiddlywiki/highlight"
+        "ebalster/modloader",
+        "ebalster/formula",
+        "ebalster/attribute-modules"
     ],
     "themes": [
         "tiddlywiki/vanilla",

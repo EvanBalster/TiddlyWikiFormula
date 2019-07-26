@@ -1,0 +1,105 @@
+created: 20171225054846674
+modified: 20180123231627977
+plugin-type: plugin
+revision: 0
+tags: 
+title: $:/plugins/ebalster/attribute-modules
+type: application/json
+version: 0.0.4
+
+{
+    "tiddlers": {
+        "$:/core/modules/parsers/wikiparser/attributes/filtered.js": {
+            "text": "(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\"use strict\";\n\nexports.filtered = function(source, pos, node) {\n\t// Is it a filtered value?\n\tvar reFilteredValue = /\\{\\{\\{(.+?)\\}\\}\\}/g;\n\n\tvar value = $tw.utils.parseTokenRegExp(source,pos,reFilteredValue);\n\tif (!value) return null;\n\n\tnode.type = \"filtered\";\n\tnode.filter = value.match[1];\n\tnode.end = value.end;\n\treturn node;\n};\n\n})();\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "application/javascript",
+            "title": "$:/core/modules/parsers/wikiparser/attributes/filtered.js",
+            "tags": "",
+            "module-type": "attributerule",
+            "modified": "20171224215155435",
+            "description": "Tag attribute rule for filtered values, eg. {{{[all[shadows]]}}}.",
+            "created": "20171224215126050"
+        },
+        "$:/core/modules/parsers/wikiparser/attributes/indirect.js": {
+            "text": "(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\"use strict\";\n\nexports.indirect = function(source, pos, node) {\n\t// Is it an indirect (transcluded) value?\n\tvar reIndirectValue = /\\{\\{([^\\{\\}]+)\\}\\}/g;\n\n\tvar value = $tw.utils.parseTokenRegExp(source,pos,reIndirectValue);\n\tif (!value) return null;\n\n\tnode.type = \"indirect\";\n\tnode.textReference = value.match[1];\n\tnode.end = value.end;\n\treturn node;\n};\n\n})();\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "application/javascript",
+            "title": "$:/core/modules/parsers/wikiparser/attributes/indirect.js",
+            "tags": "",
+            "module-type": "attributerule",
+            "modified": "20171224215110965",
+            "description": "Tag attribute rule for transcluded values, eg. {{Layout!!height}}.",
+            "created": "20171224214929513"
+        },
+        "$:/core/modules/parsers/wikiparser/attributes/macro.js": {
+            "text": "(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\"use strict\";\n\nexports.macro = function(source, pos, node) {\n\t// Is it a macro invocation?\n\tvar macroInvocation = $tw.utils.parseMacroInvocation(source,pos);\n\tif (!macroInvocation) return null;\n\n\tnode.type = \"macro\";\n\tnode.value = macroInvocation;\n\tnode.end = macroInvocation.end;\n\treturn node;\n};\n\n})();\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "application/javascript",
+            "title": "$:/core/modules/parsers/wikiparser/attributes/macro.js",
+            "tags": "",
+            "module-type": "attributerule",
+            "modified": "20171224215427368",
+            "description": "Tag attribute rule for macros and variables, eg. <<currentTiddler>>.",
+            "created": "20171224215158051"
+        },
+        "$:/core/modules/widgets/attributes/filtered.js": {
+            "text": "(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\"use strict\";\n\n\nvar FilteredAttribute = function(widget, node) {\n\tthis.widget = widget;\n\tthis.filter = node.filter;\n\tthis.compiledFilter = this.widget.wiki.compileFilter(this.filter);\n\tthis.value = this.compute();\n};\n\n/*\nInherit from the base ??? class\n*/\n//FormulaAttribute.prototype = new Attribute();\n\nFilteredAttribute.prototype.compute = function() {\n\tthis.results = this.compiledFilter.call(this.widget.wiki, undefined, this.widget);\n\n\t// TODO why only one result?  Can we return a list??\n\treturn this.results[0] || \"\";\n\t//return $tw.wiki.filterTiddlers(this.filter,this.widget)[0] || \"\";\n};\n\nFilteredAttribute.prototype.refresh = function(changedTiddlers) {\n\t// TODO can filters be selectively refreshed in the future?\n\tthis.value = this.compute();\n\treturn this.value;\n};\n\n\nexports.filtered = FilteredAttribute;\n\n})();\n\t",
+            "bag": "default",
+            "revision": "0",
+            "type": "application/javascript",
+            "title": "$:/core/modules/widgets/attributes/filtered.js",
+            "tags": "",
+            "module-type": "attributevalue",
+            "modified": "20171225042338300",
+            "description": "An attribute value acquired via text reference.",
+            "created": "20171225042329213"
+        },
+        "$:/core/modules/widgets/attributes/indirect.js": {
+            "text": "(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\"use strict\";\n\nvar IndirectAttribute = function(widget, node) {\n\tthis.widget = widget;\n\tthis.textReference = $tw.utils.parseTextReference(node.textReference);\n\tif (!this.textReference.title) this.currentTiddler = this.widget.getVariable(\"currentTiddler\");\n\tthis.value = this.compute();\n};\n\n/*\nInherit from the base ??? class\n*/\n//FormulaAttribute.prototype = new Attribute();\n\nIndirectAttribute.prototype.compute = function() {\n\tvar tr = this.textReference,\n\t\ttitle = tr.title || this.currentTiddler,\n\t\twiki = this.widget.wiki;\n\tif(tr.field) {\n\t\tvar tiddler = wiki.getTiddler(title);\n\t\tif(tr.field === \"title\") { // Special case so we can return the title of a non-existent tiddler\n\t\t\treturn title;\n\t\t} else if(tiddler && $tw.utils.hop(tiddler.fields,tr.field)) {\n\t\t\treturn tiddler.getFieldString(tr.field);\n\t\t} else {\n\t\t\treturn \"\";\n\t\t}\n\t} else if(tr.index) {\n\t\treturn wiki.extractTiddlerDataItem(title,tr.index,\"\");\n\t} else {\n\t\treturn wiki.getTiddlerText(title,\"\");\n\t}\n};\n\nIndirectAttribute.prototype.refresh = function(changedTiddlers) {\n\tif (this.textReference.title) {\n\t\t// Recompute if the title tiddler changed.\n\t\tif (changedTiddlers[this.textReference.title])\n\t\t\tthis.value = this.compute();\n\t}\n\telse {\n\t\t// Did currentTiddler change?\n\t\tvar newTiddler = this.widget.getVariable(\"currentTiddler\");\n\t\tif (newTiddler != this.currentTiddler) {\n\t\t\tthis.currentTiddler = newTiddler;\n\t\t\tthis.value = this.compute();\n\t\t}\n\t\telse if (changedTiddlers[this.currentTiddler]) {\n\t\t\t// Recompute if the tiddler changed.\n\t\t\tthis.value = this.compute();\n\t\t}\n\t}\n\t// Return the latest value.\n\treturn this.value;\n};\n\n\nexports.indirect = IndirectAttribute;\n\n})();\n\t",
+            "bag": "default",
+            "revision": "0",
+            "type": "application/javascript",
+            "title": "$:/core/modules/widgets/attributes/indirect.js",
+            "tags": "",
+            "module-type": "attributevalue",
+            "modified": "20171225042325491",
+            "description": "An attribute value acquired via text reference.",
+            "created": "20171225042213912"
+        },
+        "$:/core/modules/widgets/attributes/macro.js": {
+            "text": "/*\\\ntitle: $:/core/modules/widgets/attributes/macro.js\ntype: application/javascript\nmodule-type: attributevalue\n\nAn attribute value acquired via macro expansion.\n\n\\*/\n(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\"use strict\";\n\n\nvar MacroAttribute = function(widget, node) {\n\tthis.widget = widget;\n\tthis.macro = node.value;\n\tthis.value = this.compute();\n};\n\n/*\nInherit from the base ??? class\n*/\n//FormulaAttribute.prototype = new Widget();\n\nMacroAttribute.prototype.compute = function() {\n\tvar val = this.widget.getVariable(this.macro.name, {params: this.macro.params});\n\tif (val == null) val = \"\";\n\treturn val;\n};\n\nMacroAttribute.prototype.refresh = function(changedTiddlers) {\n\tthis.value = this.compute();\n\treturn this.value;\n};\n\n\nexports.macro = MacroAttribute;\n\n})();",
+            "bag": "default",
+            "revision": "0",
+            "type": "application/javascript",
+            "title": "$:/core/modules/widgets/attributes/macro.js",
+            "tags": "",
+            "module-type": "attributevalue",
+            "modified": "20171225042346461",
+            "description": "An attribute value acquired via text reference.",
+            "created": "20171225042340029"
+        },
+        "$:/plugins/ebalster/attribute-modules/patch/core/modules/utils/parseutils.js": {
+            "created": "20180123231354320",
+            "text": "@@ -5688,32 +5688,60 @@\n art:, end:,%7D%0A*/%0A\n+var AttributeRules = null;%0A%0A\n exports.parseAtt\n@@ -6597,44 +6597,16 @@\n eral) %7B%0A\n-%09%09%09pos = stringLiteral.end;%0A\n %09%09%09node.\n@@ -6661,272 +6661,220 @@\n alue;%0A%09%09\n-%7D else %7B%0A%09%09%09// Look for a filtered value%0A%09%09%09var filteredValue = $tw.utils.parseTokenRegExp(source,pos,reFilteredValue);\n+%09node.end = stringLiteral.end;%0A%09%09%09return node;%0A%09%09%7D%0A%09%09// Load attribute rules if needed\n %0A%09%09\n-%09\n if\n-(filteredValue) %7B%0A%09%09%09%09pos = filteredValue.end;%0A%09%09%09%09node.type = %22filtered%22;%0A%09%09%09%09node.filter = filteredValue.match%5B1%5D;%0A%09%09%09%7D else %7B%0A%09%09\n+ (!AttributeRules)%0A%09%09%7B%0A%09%09%09AttributeRules = %7B%7D;%0A%09%09%09$tw.modules.applyMethods(%22attributerule%22, AttributeRules);%0A%09%09%7D%0A\n %09%09// Loo\n@@ -6882,260 +6882,186 @@\n  for an \n-indirect valu\n+attribute rul\n e%0A%09%09\n-%09\n-%09\n var \n-indirectValue = $tw.utils.parseTokenRegExp(source,pos,reIndirectValue);%0A%09%09%09%09if(indirectValue) %7B%0A%09%09%09%09%09pos = indirectValue.end;%0A%09%09%09%09%09node.type = %22indirect%22;%0A%09%09%09%09%09node.textReference = indirectValue.match%5B1%5D;%0A%09%09%09%09%7D else %7B%0A%09%09%09\n+match = null;%0A%09%09$tw.utils.each(AttributeRules, function(rule) %7B%0A%09%09%09match = rule(source,pos,node);%0A%09%09%09return !match;%0A%09%09%7D);%0A%09%09if (match) return match;%0A\n %09%09// Loo\n@@ -7075,35 +7075,32 @@\n  unquoted value%0A\n-%09%09%09\n %09%09var unquotedVa\n@@ -7157,35 +7157,32 @@\n otedAttribute);%0A\n-%09%09%09\n %09%09if(unquotedVal\n@@ -7187,50 +7187,16 @@\n alue) %7B%0A\n-%09%09%09%09%09%09pos = unquotedValue.end;%0A%09%09%09\n %09%09%09node.\n@@ -7204,35 +7204,32 @@\n ype = %22string%22;%0A\n-%09%09%09\n %09%09%09node.value = \n@@ -7255,288 +7255,73 @@\n %5B1%5D;%0A%09%09%09\n-%09%09%7D else %7B%0A%09%09%09%09%09%09// Look for a macro invocation value%0A%09%09%09%09%09%09var macroInvocation = $tw.utils.parseMacroInvocation(source,pos);%0A%09%09%09%09%09%09if(macroInvocation) %7B%0A%09%09%09%09%09%09%09pos = macroInvocation.end;%0A%09%09%09%09%09%09%09node.type = %22macro%22;%0A%09%09%09%09%09%09%09node.value = macroInvocation;%0A%09%09%09%09\n+node.end = unquotedValue.end;%0A%09%09%09return node;%0A\n %09%09%7D else %7B%0A\n-%09%09%09%09\n %09%09%09node.\n@@ -7329,36 +7329,32 @@\n ype = %22string%22;%0A\n-%09%09%09%09\n %09%09%09node.value = \n@@ -7363,43 +7363,24 @@\n rue%22;%0A%09%09\n-%09%09%09%09%7D%0A%09%09%09%09%09%7D%0A%09%09%09%09%7D%0A%09%09%09%7D%0A%09%09%7D\n+%7D%0A%09%09//*/\n %0A%09%7D else\n",
+            "type": "text/x-patch",
+            "modloader-target": "$:/core/modules/utils/parseutils.js",
+            "modloader-source": "$:/core",
+            "modified": "20180123231524074",
+            "title": "$:/plugins/ebalster/attribute-modules/patch/core/modules/utils/parseutils.js"
+        },
+        "$:/plugins/ebalster/attribute-modules/patch/core/modules/widgets/widget.js": {
+            "created": "20180123183046630",
+            "text": "@@ -1479,32 +1479,184 @@\n s(%22widget%22);%0A%09%7D%0A\n+%09// Hashmap of the attribute classes%0A%09if(!this.attributeClasses) %7B%0A%09%09Widget.prototype.attributeClasses = $tw.modules.applyMethods(%22attributevalue%22);%0A%09%7D%0A\n %7D;%0A%0A/*%0ARender th\n@@ -7283,32 +7283,130 @@\n  this,%0A%09%09value;%0A\n+%09if (!this.attributeGizmos) %7B%0A%09%09// First-time attribute preparation%0A%09%09this.attributeGizmos = %7B%7D;%0A%09\n %09$tw.utils.each(\n@@ -7464,501 +7464,1462 @@\n me) %7B%0A%09%09\n-if(\n+%09// Does the \n attribute\n-.\n+ \n type \n-=== %22filtered%22) %7B%0A%09%09%09value = self.wiki.filterTiddlers(attribute.filter,self)%5B0%5D %7C%7C %22%22;%0A%09%09%7D else if(attribute.type === %22indirect%22) %7B\n+have a known module?%0A%09%09%09var AttributeClass = self.attributeClasses%5Battribute.type%5D;%0A%09%09%09if (AttributeClass) %7B%0A%09%09%09%09// Instantiate an attribute object.%0A%09%09%09%09self.attributeGizmos%5Bname%5D = new AttributeClass(self,attribute);\n %0A%09%09%09\n+%09\n value = self.\n-wiki.getTextReference(attribute.textReference,%22%22,self.getVariable(%22currentTiddler%22)\n+attributeGizmos%5Bname%5D.value;%0A%09%09%09%7D%0A%09%09%09else %7B%0A%09%09%09%09// Unknown attribute types are treated as strings.%0A%09%09%09%09// String attributes don't change after the first computeAttributes().%0A%09%09%09%09value = attribute.value;%0A%09%09%09%7D%0A%09%09%09// Is the value changed?%0A%09%09%09if (self.attributes%5Bname%5D !== value) %7B%0A%09%09%09%09self.attributes%5Bname%5D = value;%0A%09%09%09%09changedAttributes%5Bname%5D = true;%0A%09%09%09%7D%0A%09%09%09return true;%0A%09%09%7D\n );%0A\n-%09\n %09%7D\n- \n+%0A%09\n else \n-if(attribute.type === %22macro%22) %7B%0A%09%09%09value = self.getVariable(attribute.value.name,%7Bparams: attribute.value.params%7D);%0A%09%09%7D else %7B // String attribute%0A%09%09%09value = attribute.value;%0A%09%09%7D%0A%09%09// Check whether the attribute has changed\n+%7B%0A%09%09// Fully recompute all dynamic attributes (no selectivity is available)%0A%09%09$tw.utils.each(this.attributeGizmos,function(gizmo,name) %7B%0A%09%09%09value = gizmo.compute();%0A%09%09%09if(self.attributes%5Bname%5D !== value) %7B%0A%09%09%09%09self.attributes%5Bname%5D = value;%0A%09%09%09%09changedAttributes%5Bname%5D = true;%0A%09%09%09%7D%0A%09%09%7D);%0A%09%7D%0A%09return changedAttributes;%0A%7D;%0A%0A/*%0ASelectively re-compute previously computed attributes. Returns a hashmap of the names of the attributes that have changed%0A*/%0AWidget.prototype.refreshAttributes = function(changedTiddlers) %7B%0A%09if (!this.attributeGizmos) return computeAttributes();%0A%09var changedAttributes = %7B%7D,%0A%09%09self = this,%0A%09%09value;%0A%09// Fully recompute all dynamic attributes (no selectivity is available)%0A%09$tw.utils.each(this.attributeGizmos,function(gizmo,name) %7B%0A%09%09value = gizmo.refresh(changedTiddlers);\n %0A%09%09if(se\n",
+            "bag": "default",
+            "revision": "0",
+            "type": "text/x-patch",
+            "title": "$:/plugins/ebalster/attribute-modules/patch/core/modules/widgets/widget.js",
+            "modloader-target": "$:/core/modules/widgets/widget.js",
+            "modloader-source": "$:/core",
+            "modified": "20180123231539164"
+        }
+    }
+}
