@@ -32,6 +32,6 @@ concatenation	|	`(= '$' & 45.23*12 & " cost" =)` |	$542.76 cost
 
 ## Contributing
 
-This plugin is currently under development.  I've written compilers before, but this is my first in-depth project in JavaScript.  Please report any bugs you encounter, or any problems you spot in the code.
+"This plugin is currently under development.  I've written compilers before, but this is my first in-depth project in JavaScript.  Please report any bugs you encounter, or any problems you spot in the code." - Evan Balster
 
-The Formula plugin has not been tested under IE, Edge or other mobile browsers.
+The Formula plugin has not been fully tested under IE, Edge or other mobile browsers.
