@@ -1,10 +1,27 @@
+created: 20171225042213912
+description: An attribute value acquired via text reference.
+modified: 20171225042325491
+module-type: attributevalue
+revision: 0
+tags: 
+title: $:/core/modules/widgets/attributes/indirect.js
+type: application/javascript
+
+/*\
+title: $:/core/modules/widgets/attributes/indirect.js
+type: application/javascript
+module-type: attributevalue
+
+An attribute value acquired via filter expression.
+
+\*/
 (function(){
 
 /*jslint node: true, browser: true */
 /*global $tw: false */
 "use strict";
 
-var IndirectAttribute = function(widget, node) {
+var IndirectAttribute = function(widget,node) {
 	this.widget = widget;
 	this.textReference = $tw.utils.parseTextReference(node.textReference);
 	if (!this.textReference.title) this.currentTiddler = this.widget.getVariable("currentTiddler");
@@ -14,7 +31,7 @@ var IndirectAttribute = function(widget, node) {
 /*
 Inherit from the base ??? class
 */
-//FormulaAttribute.prototype = new Attribute();
+//FormulaAttribute.prototype = new AttributeGizmo();
 
 IndirectAttribute.prototype.compute = function() {
 	var tr = this.textReference,

@@ -1,0 +1,1793 @@
+created: 20190810062712336
+modified: 20190810062712336
+modloader-source: $:/core
+modloader-target: $:/core/modules/widgets/widget.js
+tags: 
+title: $:/plugins/ebalster/attribute-modules/patch/core/modules/widgets/widget.js
+type: text/x-patch
+
+@@ -78,33 +78,35 @@
+ ule-type: widget
+-%0A
++%0D%0A%0D
+ %0AWidget base cla
+@@ -99,33 +99,35 @@
+ idget base class
+-%0A
++%0D%0A%0D
+ %0A%5C*/%0A(function()
+@@ -119,34 +119,37 @@
+ %5C*/%0A(function()%7B
+-%0A%0A
++%0D%0A%0D%0A%09
+ /*jslint node: t
+@@ -162,32 +162,33 @@
+ rowser: true */%0A
++%09
+ /*global $tw: fa
+@@ -194,34 +194,38 @@
+ alse */%0A
++%09
+ %22use strict%22;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Create a
+@@ -253,32 +253,33 @@
+ parse tree node%0A
++%09
+ %09parseTreeNode: 
+@@ -318,32 +318,33 @@
+  to be rendered%0A
++%09
+ %09options: see be
+@@ -339,32 +339,33 @@
+ ions: see below%0A
++%09
+ Options include:
+@@ -357,32 +357,33 @@
+ ptions include:%0A
++%09
+ %09wiki: mandatory
+@@ -426,32 +426,33 @@
+ his render tree%0A
++%09
+ %09parentWidget: o
+@@ -509,32 +509,33 @@
+ e context chain%0A
++%09
+ %09document: optio
+@@ -580,35 +580,37 @@
+ global document%0A
++%09
+ */%0A
++%09
+ var Widget = fun
+@@ -632,32 +632,34 @@
+ Node,options) %7B%0A
++%09%09
+ %09this.initialise
+@@ -675,39 +675,43 @@
+ eNode,options);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Initialise widge
+@@ -802,35 +802,37 @@
+ m in subclasses%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -871,32 +871,33 @@
+ Node,options) %7B%0A
++%09
+ %09// Bail if pars
+@@ -1011,32 +1011,33 @@
+ n be subclassed%0A
++%09
+ %09if(parseTreeNod
+@@ -1057,27 +1057,30 @@
+ ed) %7B%0A%09%09
++%09
+ return;%0A
++%09
+ %09%7D%0A
++%09
+ %09options
+@@ -1089,32 +1089,33 @@
+  options %7C%7C %7B%7D;%0A
++%09
+ %09// Save widget 
+@@ -1111,32 +1111,33 @@
+ ave widget info%0A
++%09
+ %09this.parseTreeN
+@@ -1149,32 +1149,33 @@
+  parseTreeNode;%0A
++%09
+ %09this.wiki = opt
+@@ -1177,32 +1177,33 @@
+ = options.wiki;%0A
++%09
+ %09this.parentWidg
+@@ -1221,32 +1221,33 @@
+ s.parentWidget;%0A
++%09
+ %09this.variablesC
+@@ -1266,32 +1266,33 @@
+  function() %7B%7D;%0A
++%09
+ %09this.variablesC
+@@ -1360,32 +1360,33 @@
+ variables : %7B%7D;%0A
++%09
+ %09this.variables 
+@@ -1412,32 +1412,33 @@
+ sConstructor();%0A
++%09
+ %09this.document =
+@@ -1448,32 +1448,33 @@
+ tions.document;%0A
++%09
+ %09this.attributes
+@@ -1472,32 +1472,33 @@
+ ttributes = %7B%7D;%0A
++%09
+ %09this.children =
+@@ -1494,32 +1494,33 @@
+ .children = %5B%5D;%0A
++%09
+ %09this.domNodes =
+@@ -1516,32 +1516,33 @@
+ .domNodes = %5B%5D;%0A
++%09
+ %09this.eventListe
+@@ -1544,32 +1544,33 @@
+ Listeners = %7B%7D;%0A
++%09
+ %09// Hashmap of t
+@@ -1579,32 +1579,33 @@
+  widget classes%0A
++%09
+ %09if(!this.widget
+@@ -1609,32 +1609,33 @@
+ getClasses) %7B%0A%09%09
++%09
+ // Get widget cl
+@@ -1632,32 +1632,33 @@
+  widget classes%0A
++%09
+ %09%09Widget.prototy
+@@ -1706,32 +1706,33 @@
+ ds(%22widget%22);%0A%09%09
++%09
+ // Process any s
+@@ -1733,32 +1733,33 @@
+  any subclasses%0A
++%09
+ %09%09$tw.modules.fo
+@@ -1814,32 +1814,33 @@
+ le,module) %7B%0A%09%09%09
++%09
+ if(module.baseCl
+@@ -1838,32 +1838,33 @@
+ le.baseClass) %7B%0A
++%09
+ %09%09%09%09var baseClas
+@@ -1913,32 +1913,33 @@
+ baseClass%5D;%0A%09%09%09%09
++%09
+ if(!baseClass) %7B
+@@ -1931,32 +1931,33 @@
+ f(!baseClass) %7B%0A
++%09
+ %09%09%09%09%09throw %22Modu
+@@ -2049,34 +2049,36 @@
+ lass + %22'%22;%0A%09%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%09%09var subClass
+@@ -2092,32 +2092,33 @@
+ le.constructor;%0A
++%09
+ %09%09%09%09subClass.pro
+@@ -2139,32 +2139,33 @@
+ aseClass();%0A%09%09%09%09
++%09
+ $tw.utils.extend
+@@ -2195,32 +2195,33 @@
+ ule.prototype);%0A
++%09
+ %09%09%09%09Widget.proto
+@@ -2287,34 +2287,197 @@
+ ass;%0A%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%7D);%0A
++%09
+ %09%7D%0A
+-%7D;%0A%0A
++%09%09// Hashmap of the attribute classes%0A%09%09if(!this.attributeClasses) %7B%0A%09%09%09Widget.prototype.attributeClasses = $tw.modules.applyMethods(%22attributevalue%22);%0A%09%09%7D%0A%09%7D;%0A%09%0A%09
+ /*%0A
++%09
+ Render t
+@@ -2492,35 +2492,37 @@
+ et into the DOM%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -2554,32 +2554,33 @@
+ ,nextSibling) %7B%0A
++%09
+ %09this.parentDomN
+@@ -2585,32 +2585,33 @@
+ mNode = parent;%0A
++%09
+ %09this.execute();
+@@ -2603,32 +2603,33 @@
+ this.execute();%0A
++%09
+ %09this.renderChil
+@@ -2646,39 +2646,43 @@
+ t,nextSibling);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Compute the inte
+@@ -2698,35 +2698,37 @@
+ e of the widget%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -2743,32 +2743,33 @@
+  = function() %7B%0A
++%09
+ %09this.makeChildW
+@@ -2770,39 +2770,43 @@
+ ChildWidgets();%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Set the value of
+@@ -2817,32 +2817,33 @@
+ ontext variable%0A
++%09
+ name: name of th
+@@ -2845,32 +2845,33 @@
+ of the variable%0A
++%09
+ value: value of 
+@@ -2875,32 +2875,33 @@
+ of the variable%0A
++%09
+ params: array of
+@@ -2930,32 +2930,33 @@
+  each parameter%0A
++%09
+ isMacroDefinitio
+@@ -3061,35 +3061,37 @@
+ tion performed)%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -3145,32 +3145,33 @@
+ roDefinition) %7B%0A
++%09
+ %09this.variables%5B
+@@ -3242,39 +3242,43 @@
+ croDefinition%7D;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Get the prevaili
+@@ -3300,32 +3300,33 @@
+ ontext variable%0A
++%09
+ name: name of va
+@@ -3324,32 +3324,33 @@
+ ame of variable%0A
++%09
+ options: see bel
+@@ -3352,32 +3352,34 @@
+ e below%0A
++%09
+ Options include%0A
++%09
+ params: 
+@@ -3414,32 +3414,33 @@
+  each parameter%0A
++%09
+ defaultValue: de
+@@ -3474,33 +3474,35 @@
+  is not defined%0A
+-%0A
++%09%0A%09
+ Returns an objec
+@@ -3522,33 +3522,35 @@
+ llowing fields:%0A
+-%0A
++%09%0A%09
+ params: array of
+@@ -3600,32 +3600,33 @@
+ itext variables%0A
++%09
+ text: text of va
+@@ -3662,35 +3662,37 @@
+ rly substituted%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -3727,32 +3727,33 @@
+ name,options) %7B%0A
++%09
+ %09options = optio
+@@ -3754,32 +3754,33 @@
+  options %7C%7C %7B%7D;%0A
++%09
+ %09var actualParam
+@@ -3799,32 +3799,33 @@
+ params %7C%7C %5B%5D,%0A%09%09
++%09
+ parentWidget = t
+@@ -3834,32 +3834,33 @@
+ s.parentWidget;%0A
++%09
+ %09// Check for th
+@@ -3931,32 +3931,33 @@
+ rototype chain)%0A
++%09
+ %09if(parentWidget
+@@ -3986,32 +3986,33 @@
+ et.variables) %7B%0A
++%09
+ %09%09var variable =
+@@ -4037,32 +4037,33 @@
+ ables%5Bname%5D,%0A%09%09%09
++%09
+ value = variable
+@@ -4062,32 +4062,33 @@
+ variable.value,%0A
++%09
+ %09%09%09params = this
+@@ -4139,32 +4139,33 @@
+ ctualParams);%0A%09%09
++%09
+ // Substitute an
+@@ -4197,32 +4197,33 @@
+  the definition%0A
++%09
+ %09%09$tw.utils.each
+@@ -4243,32 +4243,33 @@
+ ion(param) %7B%0A%09%09%09
++%09
+ value = $tw.util
+@@ -4366,36 +4366,38 @@
+ param.value);%0A%09%09
++%09
+ %7D);%0A
++%09
+ %09%09// Only substi
+@@ -4468,32 +4468,33 @@
+ define pragma%0A%09%09
++%09
+ if(variable.isMa
+@@ -4502,32 +4502,33 @@
+ roDefinition) %7B%0A
++%09
+ %09%09%09value = this.
+@@ -4569,45 +4569,49 @@
+ );%09%09%09%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09return %7B%0A%09%09%09
++%09
+ text: value,%0A
++%09
+ %09%09%09param
+@@ -4614,38 +4614,41 @@
+ arams: params%0A%09%09
++%09
+ %7D;%0A
++%09
+ %09%7D%0A
++%09
+ %09// If the varia
+@@ -4707,42 +4707,44 @@
+  a macro module%0A
++%09
+ %09return %7B%0A
++%09
+ %09%09text: this.eva
+@@ -4792,43 +4792,48 @@
+ s.defaultValue)%0A
++%09
+ %09%7D;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Simplified versi
+@@ -4875,35 +4875,37 @@
+ eturns the text%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -4936,32 +4936,33 @@
+ name,options) %7B%0A
++%09
+ %09return this.get
+@@ -4986,36 +4986,39 @@
+ ,options).text;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ Widget.prototype
+@@ -5076,32 +5076,33 @@
+ actualParams) %7B%0A
++%09
+ %09formalParams = 
+@@ -5113,32 +5113,33 @@
+ alParams %7C%7C %5B%5D;%0A
++%09
+ %09actualParams = 
+@@ -5150,32 +5150,33 @@
+ alParams %7C%7C %5B%5D;%0A
++%09
+ %09var nextAnonPar
+@@ -5233,32 +5233,33 @@
+ in macro call%0A%09%09
++%09
+ paramInfo, param
+@@ -5267,30 +5267,32 @@
+ alue,%0A%09%09
++%09
+ results = %5B%5D;%0A
++%09
+ %09// Step
+@@ -5339,32 +5339,33 @@
+ acro definition%0A
++%09
+ %09for(var p=0; p%3C
+@@ -5384,32 +5384,33 @@
+ .length; p++) %7B%0A
++%09
+ %09%09// Check if we
+@@ -5453,32 +5453,33 @@
+ the same name%0A%09%09
++%09
+ paramInfo = form
+@@ -5483,32 +5483,33 @@
+ ormalParams%5Bp%5D;%0A
++%09
+ %09%09paramValue = u
+@@ -5512,32 +5512,33 @@
+  = undefined;%0A%09%09
++%09
+ for(var m=0; m%3Ca
+@@ -5556,32 +5556,33 @@
+ .length; m++) %7B%0A
++%09
+ %09%09%09if(actualPara
+@@ -5610,32 +5610,33 @@
+ nfo.name) %7B%0A%09%09%09%09
++%09
+ paramValue = act
+@@ -5650,38 +5650,41 @@
+ ms%5Bm%5D.value;%0A%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%7D%0A
++%09
+ %09%09// If not, use
+@@ -5726,32 +5726,33 @@
+  call parameter%0A
++%09
+ %09%09while(nextAnon
+@@ -5821,32 +5821,33 @@
+ ter%5D.name) %7B%0A%09%09%09
++%09
+ nextAnonParamete
+@@ -5845,34 +5845,36 @@
+ nParameter++;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09if(paramValue 
+@@ -5925,32 +5925,33 @@
+ arams.length) %7B%0A
++%09
+ %09%09%09paramValue = 
+@@ -5985,34 +5985,36 @@
+ ter++%5D.value;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09// If we've st
+@@ -6050,32 +6050,33 @@
+ default, if any%0A
++%09
+ %09%09paramValue = p
+@@ -6110,32 +6110,33 @@
+ ault%22%5D %7C%7C %22%22;%0A%09%09
++%09
+ // Store the par
+@@ -6149,32 +6149,33 @@
+  name and value%0A
++%09
+ %09%09results.push(%7B
+@@ -6209,35 +6209,37 @@
+ : paramValue%7D);%0A
++%09
+ %09%7D%0A
++%09
+ %09return results;
+@@ -6231,36 +6231,39 @@
+ return results;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ Widget.prototype
+@@ -6303,32 +6303,33 @@
+ unction(text) %7B%0A
++%09
+ %09var self = this
+@@ -6322,32 +6322,33 @@
+ ar self = this;%0A
++%09
+ %09return (text %7C%7C
+@@ -6411,32 +6411,33 @@
+ set,string) %7B%0A%09%09
++%09
+ return self.getV
+@@ -6460,41 +6460,45 @@
+ ultValue: %22%22%7D);%0A
++%09
+ %09%7D);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ Widget.prototype
+@@ -6555,32 +6555,33 @@
+ defaultValue) %7B%0A
++%09
+ %09if($tw.utils.ho
+@@ -6596,32 +6596,33 @@
+ cros,name)) %7B%0A%09%09
++%09
+ var macro = $tw.
+@@ -6635,32 +6635,34 @@
+ %5Bname%5D,%0A
++%09
+ %09%09%09args = %5B%5D;%0A%09%09
++%09
+ if(macro
+@@ -6675,32 +6675,33 @@
+ s.length %3E 0) %7B%0A
++%09
+ %09%09%09var nextAnonP
+@@ -6758,32 +6758,33 @@
+ r in macro call%0A
++%09
+ %09%09%09%09paramInfo, p
+@@ -6789,32 +6789,33 @@
+  paramValue;%0A%09%09%09
++%09
+ // Step through 
+@@ -6853,32 +6853,33 @@
+ acro definition%0A
++%09
+ %09%09%09for(var p=0; 
+@@ -6904,32 +6904,33 @@
+ gth; p++) %7B%0A%09%09%09%09
++%09
+ // Check if we'v
+@@ -6969,32 +6969,33 @@
+ h the same name%0A
++%09
+ %09%09%09%09paramInfo = 
+@@ -7007,32 +7007,33 @@
+ .params%5Bp%5D;%0A%09%09%09%09
++%09
+ paramValue = und
+@@ -7032,32 +7032,33 @@
+ ue = undefined;%0A
++%09
+ %09%09%09%09for(var m=0;
+@@ -7080,32 +7080,33 @@
+ .length; m++) %7B%0A
++%09
+ %09%09%09%09%09if(actualPa
+@@ -7138,32 +7138,33 @@
+ o.name) %7B%0A%09%09%09%09%09%09
++%09
+ paramValue = act
+@@ -7183,29 +7183,32 @@
+ .value;%0A
++%09
+ %09%09%09%09%09%7D%0A%09%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%09%09// I
+@@ -7260,32 +7260,33 @@
+  call parameter%0A
++%09
+ %09%09%09%09while(nextAn
+@@ -7354,32 +7354,33 @@
+ ameter%5D.name) %7B%0A
++%09
+ %09%09%09%09%09nextAnonPar
+@@ -7385,34 +7385,36 @@
+ arameter++;%0A%09%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%09%09if(paramValu
+@@ -7472,32 +7472,33 @@
+ .length) %7B%0A%09%09%09%09%09
++%09
+ paramValue = act
+@@ -7531,34 +7531,36 @@
+ r++%5D.value;%0A%09%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%09%09// If we've 
+@@ -7602,32 +7602,33 @@
+ ult, if any%0A%09%09%09%09
++%09
+ paramValue = par
+@@ -7662,32 +7662,33 @@
+ lt%22%5D %7C%7C %22%22;%0A%09%09%09%09
++%09
+ // Save the para
+@@ -7685,32 +7685,33 @@
+ e the parameter%0A
++%09
+ %09%09%09%09args.push(pa
+@@ -7713,41 +7713,44 @@
+ sh(paramValue);%0A
++%09
+ %09%09%09%7D%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09else for(var i
+@@ -7778,32 +7778,33 @@
+ ngth; ++i) %7B%0A%09%09%09
++%09
+ args.push(actual
+@@ -7815,34 +7815,36 @@
+ ms%5Bi%5D.value);%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09return (macro.
+@@ -7875,42 +7875,44 @@
+ %22%22).toString();%0A
++%09
+ %09%7D else %7B%0A
++%09
+ %09%09return default
+@@ -7910,42 +7910,47 @@
+ n defaultValue;%0A
++%09
+ %09%7D%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Check whether a 
+@@ -7997,35 +7997,37 @@
+ he parent chain%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -8056,32 +8056,33 @@
+ n(name,value) %7B%0A
++%09
+ %09var node = this
+@@ -8083,31 +8083,33 @@
+ = this;%0A
++%09
+ %09while(node) %7B%0A
++%09
+ %09%09if($tw
+@@ -8175,32 +8175,33 @@
+ ue === value) %7B%0A
++%09
+ %09%09%09return true;%0A
+@@ -8194,34 +8194,36 @@
+ %09return true;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09node = node.pa
+@@ -8234,41 +8234,47 @@
+ Widget;%0A
++%09
+ %09%7D%0A
++%09
+ %09return false;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Construc
+@@ -8371,35 +8371,37 @@
+ he parent chain%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -8430,32 +8430,33 @@
+ unction(name) %7B%0A
++%09
+ %09this.qualifiers
+@@ -8490,32 +8490,33 @@
+ t.create(null);%0A
++%09
+ %09name = name %7C%7C 
+@@ -8523,32 +8523,33 @@
+ %22transclusion%22;%0A
++%09
+ %09if(this.qualifi
+@@ -8553,32 +8553,33 @@
+ ifiers%5Bname%5D) %7B%0A
++%09
+ %09%09return this.qu
+@@ -8586,42 +8586,44 @@
+ alifiers%5Bname%5D;%0A
++%09
+ %09%7D else %7B%0A
++%09
+ %09%09var output = %5B
+@@ -8620,45 +8620,47 @@
+ output = %5B%5D,%0A%09%09%09
++%09
+ node = this;%0A
++%09
+ %09%09while(node && 
+@@ -8675,32 +8675,33 @@
+ entWidget) %7B%0A%09%09%09
++%09
+ if($tw.utils.hop
+@@ -8734,32 +8734,33 @@
+ es,name)) %7B%0A%09%09%09%09
++%09
+ output.push(node
+@@ -8772,40 +8772,42 @@
+ ariable(name));%0A
++%09
+ %09%09%09%7D%0A%09%09%09
++%09
+ node = node.pare
+@@ -8808,38 +8808,40 @@
+ e.parentWidget;%0A
++%09
+ %09%09%7D%0A%09%09
++%09
+ var value = $tw.
+@@ -8869,32 +8869,33 @@
+ ut.join(%22%22));%0A%09%09
++%09
+ this.qualifiers%5B
+@@ -8911,40 +8911,46 @@
+ alue;%0A%09%09
++%09
+ return value;%0A
++%09
+ %09%7D%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Compute 
+@@ -9060,35 +9060,37 @@
+ at have changed%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -9115,32 +9115,33 @@
+  = function() %7B%0A
++%09
+ %09var changedAttr
+@@ -9155,38 +9155,142 @@
+ = %7B%7D,%0A%09%09
++%09
+ self = this,%0A
++%09
+ %09%09value;%0A
++%09%09if (!this.attributeGizmos) %7B%0A%09%09%09// First-time attribute preparation%0A%09%09%09this.attributeGizmos = %7B%7D;%0A%09%09
+ %09$tw.uti
+@@ -9356,502 +9356,1505 @@
+ me) %7B%0A%09%09
+-if(
++%09%09// Does the 
+ attribute
+-.
++ 
+ type 
+-=== %22filtered%22) %7B%0A%09%09%09value = self.wiki.filterTiddlers(attribute.filter,self)%5B0%5D %7C%7C %22%22;%0A%09%09%7D else if(attribute.type === %22indirect%22) %7B
++have a known module?%0A%09%09%09%09var AttributeClass = self.attributeClasses%5Battribute.type%5D;%0A%09%09%09%09if (AttributeClass) %7B%0A%09%09%09%09%09// Instantiate an attribute object.%0A%09%09%09%09%09self.attributeGizmos%5Bname%5D = new AttributeClass(self,attribute);
+ %0A%09%09%09
++%09%09
+ value = self.
+-wiki.getTextReference(attribute.textReference,%22%22,self.getVariable(%22currentTiddler%22)
++attributeGizmos%5Bname%5D.value;%0A%09%09%09%09%7D%0A%09%09%09%09else %7B%0A%09%09%09%09%09// Unknown attribute types are treated as strings.%0A%09%09%09%09%09// String attributes don't change after the first computeAttributes().%0A%09%09%09%09%09value = attribute.value;%0A%09%09%09%09%7D%0A%09%09%09%09// Is the value changed?%0A%09%09%09%09if (self.attributes%5Bname%5D !== value) %7B%0A%09%09%09%09%09self.attributes%5Bname%5D = value;%0A%09%09%09%09%09changedAttributes%5Bname%5D = true;%0A%09%09%09%09%7D%0A%09%09%09%09return true;%0A%09%09%09%7D
+ );%0A%09%09%7D
+- 
+ else 
+-if(attribute.type === %22macro%22
++%7B%0A%09%09%09// Fully recompute all dynamic attributes (no selectivity is available)%0A%09%09%09$tw.utils.each(this.attributeGizmos,function(gizmo,name
+ ) %7B%0A
++%09
+ %09%09%09value = 
+-self.getVariable(attribute.value.name,%7Bparams: attribute.value.params%7D);%0A%09%09%7D else %7B // String a
++gizmo.compute();%0A%09%09%09%09if(self.attributes%5Bname%5D !== value) %7B%0A%09%09%09%09%09self.attributes%5Bname%5D = value;%0A%09%09%09%09%09changedAttributes%5Bname%5D = true;%0A%09%09%09%09%7D%0A%09%09%09%7D);%0A%09%09%7D%0A%09%09return changedAttributes;%0A%09%7D;%0A%09%0A%09/*%0A%09Selectively re-compute previously computed attributes. Returns a hashmap of the names of the attributes that have changed%0A%09*/%0A%09Widget.prototype.refreshAttributes = function(changedTiddlers) %7B%0A%09%09if (!this.attributeGizmos) return computeA
+ ttribute
++s();
+ %0A%09%09
+-%09
+ va
+-lue = attribute.value;%0A%09%09%7D%0A%09%09// Check whether the attribute has changed%0A
++r changedAttributes = %7B%7D,%0A%09%09%09self = this,%0A%09%09%09value;%0A%09%09// Fully recompute all dynamic attributes (no selectivity is available)%0A%09%09$tw.utils.each(this.attributeGizmos,function(gizmo,name) %7B%0A%09%09%09value = gizmo.refresh(changedTiddlers);%0A%09
+ %09%09if(sel
+@@ -10880,32 +10880,33 @@
+ !== value) %7B%0A%09%09%09
++%09
+ self.attributes%5B
+@@ -10912,32 +10912,33 @@
+ %5Bname%5D = value;%0A
++%09
+ %09%09%09changedAttrib
+@@ -10950,39 +10950,42 @@
+ name%5D = true;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%7D);%0A
++%09
+ %09return changedA
+@@ -10987,39 +10987,43 @@
+ ngedAttributes;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Check for the pr
+@@ -11037,35 +11037,37 @@
+ of an attribute%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -11091,32 +11091,33 @@
+ unction(name) %7B%0A
++%09
+ %09return $tw.util
+@@ -11137,39 +11137,43 @@
+ tributes,name);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Get the value of
+@@ -11178,35 +11178,37 @@
+ of an attribute%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -11244,32 +11244,33 @@
+ ,defaultText) %7B%0A
++%09
+ %09if($tw.utils.ho
+@@ -11290,32 +11290,33 @@
+ utes,name)) %7B%0A%09%09
++%09
+ return this.attr
+@@ -11321,42 +11321,44 @@
+ tributes%5Bname%5D;%0A
++%09
+ %09%7D else %7B%0A
++%09
+ %09%09return default
+@@ -11355,42 +11355,47 @@
+ rn defaultText;%0A
++%09
+ %09%7D%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Assign the compu
+@@ -11428,32 +11428,33 @@
+ et to a domNode%0A
++%09
+ options include:
+@@ -11446,32 +11446,33 @@
+ ptions include:%0A
++%09
+ excludeEventAttr
+@@ -11518,35 +11518,37 @@
+ egins with %22on%22%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -11587,32 +11587,33 @@
+ Node,options) %7B%0A
++%09
+ %09options = optio
+@@ -11614,32 +11614,33 @@
+  options %7C%7C %7B%7D;%0A
++%09
+ %09var self = this
+@@ -11633,32 +11633,33 @@
+ ar self = this;%0A
++%09
+ %09$tw.utils.each(
+@@ -11684,32 +11684,33 @@
+ nction(v,a) %7B%0A%09%09
++%09
+ // Check exclusi
+@@ -11705,32 +11705,33 @@
+ heck exclusions%0A
++%09
+ %09%09if(options.exc
+@@ -11774,32 +11774,33 @@
+  === %22on%22) %7B%0A%09%09%09
++%09
+ v = undefined;%0A%09
+@@ -11792,34 +11792,36 @@
+  = undefined;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09if(v !== undef
+@@ -11820,32 +11820,33 @@
+ == undefined) %7B%0A
++%09
+ %09%09%09var b = a.spl
+@@ -11849,32 +11849,33 @@
+ .split(%22:%22);%0A%09%09%09
++%09
+ // Setting certa
+@@ -11943,22 +11943,24 @@
+ ent)%0A%09%09%09
++%09
+ try %7B%0A
++%09
+ %09%09%09%09if (
+@@ -11991,32 +11991,33 @@
+  %22xlink%22)%7B%0A%09%09%09%09%09
++%09
+ domNode.setAttri
+@@ -12055,32 +12055,33 @@
+ xlink%22,b%5B1%5D,v);%0A
++%09
+ %09%09%09%09%7D else %7B%0A%09%09%09
+@@ -12074,32 +12074,33 @@
+ %09%09%7D else %7B%0A%09%09%09%09%09
++%09
+ domNode.setAttri
+@@ -12121,55 +12121,64 @@
+ v);%0A%09%09%09%09
++%09
+ %7D%0A
++%09
+ %09%09%09%7D catch(e) %7B%0A
++%09
+ %09%09%09%7D%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%7D);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Make chi
+@@ -12221,35 +12221,37 @@
+  parseTreeNodes%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -12289,32 +12289,33 @@
+ rseTreeNodes) %7B%0A
++%09
+ %09this.children =
+@@ -12311,32 +12311,33 @@
+ .children = %5B%5D;%0A
++%09
+ %09var self = this
+@@ -12330,32 +12330,33 @@
+ ar self = this;%0A
++%09
+ %09$tw.utils.each(
+@@ -12441,32 +12441,33 @@
+ (childNode) %7B%0A%09%09
++%09
+ self.children.pu
+@@ -12495,44 +12495,49 @@
+ et(childNode));%0A
++%09
+ %09%7D);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Construct the wi
+@@ -12562,35 +12562,37 @@
+ parse tree node%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -12628,32 +12628,33 @@
+ arseTreeNode) %7B%0A
++%09
+ %09var WidgetClass
+@@ -12688,32 +12688,33 @@
+ TreeNode.type%5D;%0A
++%09
+ %09if(!WidgetClass
+@@ -12711,32 +12711,33 @@
+ idgetClass) %7B%0A%09%09
++%09
+ WidgetClass = th
+@@ -12751,32 +12751,33 @@
+ etClasses.text;%0A
++%09
+ %09%09parseTreeNode 
+@@ -12841,35 +12841,37 @@
+ de.type + %22'%22%7D;%0A
++%09
+ %09%7D%0A
++%09
+ %09return new Widg
+@@ -12888,32 +12888,33 @@
+ rseTreeNode,%7B%0A%09%09
++%09
+ wiki: this.wiki,
+@@ -12906,32 +12906,33 @@
+ iki: this.wiki,%0A
++%09
+ %09%09variables: %7B%7D,
+@@ -12926,32 +12926,33 @@
+ ariables: %7B%7D,%0A%09%09
++%09
+ parentWidget: th
+@@ -12947,32 +12947,33 @@
+ ntWidget: this,%0A
++%09
+ %09%09document: this
+@@ -12974,44 +12974,49 @@
+ : this.document%0A
++%09
+ %09%7D);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Get the next sib
+@@ -13027,35 +13027,37 @@
+  of this widget%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -13076,32 +13076,33 @@
+  = function() %7B%0A
++%09
+ %09if(this.parentW
+@@ -13102,32 +13102,33 @@
+ parentWidget) %7B%0A
++%09
+ %09%09var index = th
+@@ -13159,32 +13159,33 @@
+ .indexOf(this);%0A
++%09
+ %09%09if(index !== -
+@@ -13231,32 +13231,33 @@
+ .length-1) %7B%0A%09%09%09
++%09
+ return this.pare
+@@ -13284,44 +13284,51 @@
+ dex+1%5D;%0A
++%09
+ %09%09%7D%0A
++%09
+ %09%7D%0A
++%09
+ %09return null;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Get the 
+@@ -13351,35 +13351,37 @@
+  of this widget%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -13404,32 +13404,33 @@
+  = function() %7B%0A
++%09
+ %09if(this.parentW
+@@ -13432,32 +13432,33 @@
+ rentWidget) %7B%0A%09%09
++%09
+ var index = this
+@@ -13487,32 +13487,33 @@
+ .indexOf(this);%0A
++%09
+ %09%09if(index !== -
+@@ -13525,32 +13525,33 @@
+ index %3E 0) %7B%0A%09%09%09
++%09
+ return this.pare
+@@ -13578,44 +13578,51 @@
+ dex-1%5D;%0A
++%09
+ %09%09%7D%0A
++%09
+ %09%7D%0A
++%09
+ %09return null;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Render t
+@@ -13653,35 +13653,37 @@
+ et into the DOM%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -13732,103 +13732,84 @@
+ ing) %7B%0A%09
+-var children = this.children;%0A%09for(var i = 0; i %3C children.length; i++
++%09$tw.utils.each(this.children,function(childWidget
+ ) %7B%0A
++%09
+ %09%09child
+-ren%5Bi%5D
++Widget
+ .render(
+@@ -13830,26 +13830,32 @@
+ ling);%0A%09
+-%7D
++%09%7D)
+ ;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Add a li
+@@ -13905,35 +13905,37 @@
+ ,handler:%7D,...%5D%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -13969,32 +13969,33 @@
+ on(listeners) %7B%0A
++%09
+ %09var self = this
+@@ -13988,32 +13988,33 @@
+ ar self = this;%0A
++%09
+ %09$tw.utils.each(
+@@ -14040,32 +14040,33 @@
+ listenerInfo) %7B%0A
++%09
+ %09%09self.addEventL
+@@ -14114,28 +14114,33 @@
+ ndler);%0A
++%09
+ %09%7D);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Add an e
+@@ -14145,35 +14145,37 @@
+  event listener%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -14211,32 +14211,33 @@
+ type,handler) %7B%0A
++%09
+ %09var self = this
+@@ -14230,32 +14230,33 @@
+ ar self = this;%0A
++%09
+ %09if(typeof handl
+@@ -14315,32 +14315,33 @@
+ n this widget%0A%09%09
++%09
+ this.eventListen
+@@ -14362,32 +14362,33 @@
+ nction(event) %7B%0A
++%09
+ %09%09%09return self%5Bh
+@@ -14407,35 +14407,37 @@
+ (self,event);%0A%09%09
++%09
+ %7D;%0A
++%09
+ %09%7D else %7B // The
+@@ -14451,32 +14451,33 @@
+ r is a function%0A
++%09
+ %09%09this.eventList
+@@ -14503,32 +14503,33 @@
+ ion(event) %7B%0A%09%09%09
++%09
+ return handler.c
+@@ -14545,31 +14545,37 @@
+ event);%0A
++%09
+ %09%09%7D;%0A
++%09
+ %09%7D%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Dispatch
+@@ -14676,35 +14676,37 @@
+ e parent widget%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -14732,32 +14732,33 @@
+ nction(event) %7B%0A
++%09
+ %09// Dispatch the
+@@ -14782,32 +14782,33 @@
+ dget handles it%0A
++%09
+ %09var listener = 
+@@ -14840,32 +14840,34 @@
+ .type%5D;%0A
++%09
+ %09if(listener) %7B%0A
++%09
+ %09%09// Don
+@@ -14914,32 +14914,33 @@
+ eturned false%0A%09%09
++%09
+ if(!listener(eve
+@@ -14938,32 +14938,33 @@
+ tener(event)) %7B%0A
++%09
+ %09%09%09return false;
+@@ -14958,37 +14958,40 @@
+ return false;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%7D%0A
++%09
+ %09// Dispatch the
+@@ -15010,32 +15010,33 @@
+ e parent widget%0A
++%09
+ %09if(this.parentW
+@@ -15036,32 +15036,33 @@
+ parentWidget) %7B%0A
++%09
+ %09%09return this.pa
+@@ -15094,40 +15094,46 @@
+ event);%0A
++%09
+ %09%7D%0A
++%09
+ %09return true;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Selectiv
+@@ -15230,35 +15230,37 @@
+ ed re-rendering%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -15290,32 +15290,33 @@
+ ngedTiddlers) %7B%0A
++%09
+ %09return this.ref
+@@ -15338,39 +15338,43 @@
+ angedTiddlers);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Rebuild a previo
+@@ -15386,35 +15386,37 @@
+ rendered widget%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -15435,32 +15435,33 @@
+  = function() %7B%0A
++%09
+ %09var nextSibling
+@@ -15486,32 +15486,33 @@
+ blingDomNode();%0A
++%09
+ %09this.removeChil
+@@ -15516,32 +15516,33 @@
+ hildDomNodes();%0A
++%09
+ %09this.render(thi
+@@ -15563,39 +15563,43 @@
+ e,nextSibling);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Refresh all the 
+@@ -15611,35 +15611,37 @@
+ ren of a widget%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -15687,47 +15687,36 @@
+ lers) %7B%0A
++%09
+ %09var 
+-children = this.children
++self = this
+ ,%0A
++%09
+ %09%09refres
+@@ -15729,60 +15729,71 @@
+ false;%0A%09
+-for (var i = 0; i %3C children.length; i++
++%09$tw.utils.each(this.children,function(childWidget
+ ) %7B%0A
++%09
+ %09%09refres
+@@ -15803,22 +15803,22 @@
+  = child
+-ren%5Bi%5D
++Widget
+ .refresh
+@@ -15842,34 +15842,38 @@
+  %7C%7C refreshed;%0A%09
+-%7D
++%09%7D);
+ %0A
++%09
+ %09return refreshe
+@@ -15867,39 +15867,43 @@
+ turn refreshed;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Find the next si
+@@ -16052,35 +16052,37 @@
+ parent DOM node%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -16122,32 +16122,33 @@
+ n(startIndex) %7B%0A
++%09
+ %09// Refer to thi
+@@ -16189,32 +16189,33 @@
+ arents children%0A
++%09
+ %09var parent = th
+@@ -16225,32 +16225,33 @@
+ parentWidget,%0A%09%09
++%09
+ index = startInd
+@@ -16305,32 +16305,33 @@
+ .indexOf(this);%0A
++%09
+ if(index === -1)
+@@ -16325,32 +16325,33 @@
+ index === -1) %7B%0A
++%09
+ %09throw %22node not
+@@ -16371,34 +16371,36 @@
+ ents children%22;%0A
++%09
+ %7D%0A
++%09
+ %09// Look for a D
+@@ -16421,32 +16421,33 @@
+  later siblings%0A
++%09
+ %09while(++index %3C
+@@ -16465,32 +16465,33 @@
+ ldren.length) %7B%0A
++%09
+ %09%09var domNode = 
+@@ -16527,46 +16527,48 @@
+ rstDomNode();%0A%09%09
++%09
+ if(domNode) %7B%0A
++%09
+ %09%09%09return domNod
+@@ -16564,37 +16564,40 @@
+ turn domNode;%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%7D%0A
++%09
+ %09// Go back and 
+@@ -16661,32 +16661,33 @@
+ parent dom node%0A
++%09
+ %09var grandParent
+@@ -16702,32 +16702,33 @@
+ t.parentWidget;%0A
++%09
+ %09if(grandParent 
+@@ -16771,32 +16771,33 @@
+ entDomNode) %7B%0A%09%09
++%09
+ index = grandPar
+@@ -16818,32 +16818,33 @@
+ ndexOf(parent);%0A
++%09
+ %09%09if(index !== -
+@@ -16843,32 +16843,33 @@
+ ex !== -1) %7B%0A%09%09%09
++%09
+ return parent.fi
+@@ -16897,44 +16897,51 @@
+ index);%0A
++%09
+ %09%09%7D%0A
++%09
+ %09%7D%0A
++%09
+ %09return null;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Find the
+@@ -16986,35 +16986,37 @@
+ or its children%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -17040,32 +17040,33 @@
+  = function() %7B%0A
++%09
+ %09// Return the f
+@@ -17104,32 +17104,33 @@
+ f we've got one%0A
++%09
+ %09if(this.domNode
+@@ -17139,32 +17139,33 @@
+ length %3E 0) %7B%0A%09%09
++%09
+ return this.domN
+@@ -17165,35 +17165,37 @@
+ is.domNodes%5B0%5D;%0A
++%09
+ %09%7D%0A
++%09
+ %09// Otherwise, r
+@@ -17215,32 +17215,33 @@
+ ll our children%0A
++%09
+ %09for(var t=0; t%3C
+@@ -17263,32 +17263,33 @@
+ ength; t++) %7B%0A%09%09
++%09
+ var domNode = th
+@@ -17317,46 +17317,48 @@
+ rstDomNode();%0A%09%09
++%09
+ if(domNode) %7B%0A
++%09
+ %09%09%09return domNod
+@@ -17360,44 +17360,51 @@
+ omNode;%0A
++%09
+ %09%09%7D%0A
++%09
+ %09%7D%0A
++%09
+ %09return null;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Remove a
+@@ -17447,35 +17447,37 @@
+ or its children%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -17504,32 +17504,33 @@
+  = function() %7B%0A
++%09
+ %09// If this widg
+@@ -17691,32 +17691,33 @@
+ lly be the case%0A
++%09
+ %09if(this.domNode
+@@ -17724,32 +17724,33 @@
+ s.length %3E 0) %7B%0A
++%09
+ %09%09$tw.utils.each
+@@ -17776,32 +17776,33 @@
+ tion(domNode) %7B%0A
++%09
+ %09%09%09domNode.paren
+@@ -17823,36 +17823,38 @@
+ ild(domNode);%0A%09%09
++%09
+ %7D);%0A
++%09
+ %09%09this.domNodes 
+@@ -17851,42 +17851,44 @@
+ .domNodes = %5B%5D;%0A
++%09
+ %09%7D else %7B%0A
++%09
+ %09%09// Otherwise, 
+@@ -17929,32 +17929,33 @@
+ eir DOM nodes%0A%09%09
++%09
+ $tw.utils.each(t
+@@ -17983,32 +17983,33 @@
+ (childWidget) %7B%0A
++%09
+ %09%09%09childWidget.r
+@@ -18032,30 +18032,36 @@
+ es();%0A%09%09
++%09
+ %7D);%0A
++%09
+ %09%7D%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Invoke t
+@@ -18114,35 +18114,37 @@
+ current widget.%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -18187,32 +18187,33 @@
+ Widget,event) %7B%0A
++%09
+ %09var handled = f
+@@ -18210,32 +18210,33 @@
+ andled = false;%0A
++%09
+ %09// For each chi
+@@ -18237,32 +18237,33 @@
+ ch child widget%0A
++%09
+ %09for(var t=0; t%3C
+@@ -18283,32 +18283,33 @@
+ .length; t++) %7B%0A
++%09
+ %09%09var child = th
+@@ -18318,32 +18318,33 @@
+ .children%5Bt%5D;%0A%09%09
++%09
+ // Invoke the ch
+@@ -18365,32 +18365,33 @@
+ n action widget%0A
++%09
+ %09%09if(child.invok
+@@ -18396,32 +18396,33 @@
+ okeAction) %7B%0A%09%09%09
++%09
+ child.refreshSel
+@@ -18418,32 +18418,33 @@
+ .refreshSelf();%0A
++%09
+ %09%09%09if(child.invo
+@@ -18483,41 +18483,45 @@
+ ) %7B%0A%09%09%09%09
++%09
+ handled = true;%0A
++%09
+ %09%09%09%7D%0A%09%09
++%09
+ %7D%0A
++%09
+ %09%09// Pro
+@@ -18562,32 +18562,33 @@
+ f it permits it%0A
++%09
+ %09%09if(child.allow
+@@ -18660,39 +18660,43 @@
+ )) %7B%0A%09%09%09
++%09
+ handled = true;%0A
++%09
+ %09%09%7D%0A
++%09
+ %09%7D%0A
++%09
+ %09return 
+@@ -18704,23 +18704,27 @@
+ andled;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ /*%0A
++%09
+ Invoke t
+@@ -18753,35 +18753,37 @@
+ ned in a string%0A
++%09
+ */%0A
++%09
+ Widget.prototype
+@@ -18849,32 +18849,33 @@
+ nt,variables) %7B%0A
++%09
+ %09actions = actio
+@@ -18876,32 +18876,33 @@
+  actions %7C%7C %22%22;%0A
++%09
+ %09var parser = th
+@@ -18946,32 +18946,33 @@
+ i%22,actions,%7B%0A%09%09%09
++%09
+ parentWidget: th
+@@ -18967,32 +18967,33 @@
+ ntWidget: this,%0A
++%09
+ %09%09%09document: thi
+@@ -19003,24 +19003,26 @@
+ ocument%0A
++%09
+ %09%09%7D),%0A%09%09
++%09
+ widgetNo
+@@ -19051,32 +19051,33 @@
+ get(parser,%7B%0A%09%09%09
++%09
+ parentWidget: th
+@@ -19072,32 +19072,33 @@
+ ntWidget: this,%0A
++%09
+ %09%09%09document: thi
+@@ -19104,32 +19104,33 @@
+ is.document,%0A%09%09%09
++%09
+ variables: varia
+@@ -19126,38 +19126,40 @@
+ bles: variables%0A
++%09
+ %09%09%7D);%0A
++%09
+ %09var container =
+@@ -19187,32 +19187,33 @@
+ Element(%22div%22);%0A
++%09
+ %09widgetNode.rend
+@@ -19224,32 +19224,33 @@
+ ontainer,null);%0A
++%09
+ %09return widgetNo
+@@ -19271,36 +19271,39 @@
+ ns(this,event);%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ Widget.prototype
+@@ -19341,34 +19341,38 @@
+ ion() %7B%0A
++%09
+ %09return true;%0A
++%09
+ %7D;%0A
+-%0A
++%09%0A%09
+ exports.
+@@ -19388,15 +19388,18 @@
+ Widget;%0A
+-%0A
++%09%0A%09
+ %7D)();%0A
++%09

@@ -1,0 +1,9 @@
+{
+  "title": "$:/plugins/ebalster/attribute-modules",
+  "created": "2017-12-25T05:48:46.674Z",
+  "modified": "2019-07-03T00:00:01Z",
+  "plugin-type": "plugin",
+  "revision": "0",
+  "version": "0.0.6",
+  "core-version": ">=5.1.20"
+}
