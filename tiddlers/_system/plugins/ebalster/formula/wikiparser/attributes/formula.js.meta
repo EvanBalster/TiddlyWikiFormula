@@ -1,8 +1,0 @@
-created: 20171224060415431
-description: Tag attribute rule for formulas.  Ex. `(= 2+2 =)`
-modified: 20171225042523039
-module-type: attributerule
-revision: 0
-tags: 
-title: $:/plugins/ebalster/formula/wikiparser/attributes/formula.js
-type: application/javascript

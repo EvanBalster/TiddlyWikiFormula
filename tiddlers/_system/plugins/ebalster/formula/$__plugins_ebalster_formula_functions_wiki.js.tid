@@ -1,0 +1,48 @@
+created: 20180108011928370
+modified: 20180108012007186
+module-type: formula-function
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/functions/wiki.js
+type: application/javascript
+
+(function(){
+
+/*jslint node: true, browser: true */
+/*global $tw: false */
+"use strict";
+
+var Nodes = require("$:/plugins/ebalster/formula/nodes.js");
+
+
+// Get variable string by name.
+exports.transclude = {
+	min_args: 1, max_args: 2,
+	construct: function(operands) {
+		switch (operands.length) {
+			case 1: return new Nodes.TranscludeText(operands[0]);
+			case 2: return new Nodes.TranscludeField(operands[0], operands[1]);
+		}
+	}
+};
+
+// Transclude tiddler text string by name.
+exports.transclude_index = {
+	min_args: 2, max_args: 2,
+	construct: function(operands) {return new Nodes.TranscludeIndex(operands[0], operands[1]);}
+};
+
+// Transclude field string by name.
+exports.variable = {
+	min_args: 1, max_args: 1,
+	construct: function(operands) {return new Nodes.Variable(operands[0]);}
+};
+
+// Interpret value as a datum.
+exports.datum = {
+	min_args: 1, max_args: 1,
+	construct: function(operands) {return new Nodes.Datum(operands[0]);}
+};
+
+
+})();

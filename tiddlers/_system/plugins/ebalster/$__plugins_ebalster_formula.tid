@@ -7,7 +7,6 @@ modified: NaNNaNNaNNaNNaNNaNNaN
 name: TiddlyFormula
 plugin-type: plugin
 revision: 0
-tags: 
 title: $:/plugins/ebalster/formula
 type: application/json
 version: 0.2.4
@@ -225,7 +224,7 @@ version: 0.2.4
             "revision": "0",
             "tags": "",
             "type": "text/vnd.tiddlywiki",
-            "text": "''Formula'' for TiddlyWiki, version {{$:/plugins/ebalster/formula!!version}}, by Evan Balster. Updated by [[Joshua Fontany|https://github.com/joshuafontany]]\n\nFormulas are written between `(=` mushroom brackets `=)`.  Where possible, their functions and syntax are designed to emulate popular spreadsheet software (Microsoft Excel and Google Sheets).  They //also// support WikiText-like syntax for `{{`transclusion`}}`, `[`filters`]`, `<<`variables`>>`, and a large number of functions.\n\nFormulas can also be evaluated by the `$formula` widget, the `$formula-vars` widget and the `<<formula>>` macro.\n\nFurther documentation is available here: [[https://evanbalster.com/tiddlywiki/formulas.html]].\n\nThis plugin is a work in progress; please report any issues on GitHub: [[https://github.com/EvanBalster/TiddlyWikiFormula/issues]]."
+            "text": "''Formula'' for TiddlyWiki, version {{$:/plugins/ebalster/formula!!version}}, by Evan Balster. Updated by [[Joshua Fontany||https://joshuafontany.github.com/]]\n\nFormulas are written between `(=` mushroom brackets `=)`.  Where possible, their functions and syntax are designed to emulate popular spreadsheet software (Microsoft Excel and Google Sheets).  They //also// support WikiText-like syntax for `{{`transclusion`}}`, `[`filters`]`, `<<`variables`>>`, and a large number of functions.\n\nFormulas can also be evaluated by the `$formula` widget, the `$formula-vars` widget and the `<<formula>>` macro.\n\nFurther documentation is available here: [[https://evanbalster.com/tiddlywiki/formulas.html]].\n\nThis plugin is a work in progress; please report any issues on GitHub: [[https://github.com/EvanBalster/TiddlyWikiFormula/issues]]."
         },
         "$:/plugins/ebalster/formula/settings": {
             "title": "$:/plugins/ebalster/formula/settings",

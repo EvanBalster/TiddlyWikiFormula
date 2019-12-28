@@ -1,0 +1,64 @@
+created: 20171225035721011
+description: Evaluates a formula as an attribute value string.
+modified: 20171225035808674
+module-type: attributevalue
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/widgets/attributes/formula.js
+type: application/javascript
+
+(function(){
+
+/*jslint node: true, browser: true */
+/*global $tw: false */
+"use strict";
+
+var Compile = require("$:/plugins/ebalster/formula/compile.js");
+var Compute = require("$:/plugins/ebalster/formula/compute.js");
+var Nodes   = require("$:/plugins/ebalster/formula/nodes.js");
+
+var FormulaAttribute = function(widget, node) {
+	this.widget = widget;
+	this.formula = node.formula;
+	try {
+		this.compiledFormula = Compile.compileFormula(this.formula);
+	}
+	catch (err) {
+		this.compiledFormula = new Nodes.ThrowError(err);
+	}
+	this.value = this.compute();
+};
+
+/*
+Inherit from the base ??? class
+*/
+//FormulaAttribute.prototype = new Attribute();
+
+FormulaAttribute.prototype.compute = function() {
+	// Compute options
+	this.formatOptions =
+	{
+		fixed:        (this.widget.getVariable("formulaFixed")),
+		precision:    (this.widget.getVariable("formulaPrecision")),
+		numberFormat: (this.widget.getVariable("formulaNumberFormat")),
+		dateFormat:   (this.widget.getVariable("formulaDateFormat")),
+	};
+	// Execute the formula.
+	try {
+		return Compute.computeFormula(this.compiledFormula, this.widget, this.formatOptions);
+	}
+	catch (err) {
+		return "";
+	}
+};
+
+FormulaAttribute.prototype.refresh = function(changedTiddlers) {
+	this.value = this.compute();
+	return this.value;
+};
+
+
+exports.formula = FormulaAttribute;
+
+})();
+	

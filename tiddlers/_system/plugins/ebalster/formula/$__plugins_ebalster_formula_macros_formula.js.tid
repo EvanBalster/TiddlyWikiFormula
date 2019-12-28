@@ -1,0 +1,37 @@
+created: 20171210215758530
+modified: 20171212194124031
+module-type: macro
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/macros/formula.js
+type: application/javascript
+
+(function(){
+
+/*jslint node: true, browser: true */
+/*global $tw: false */
+"use strict";
+
+var Compute = require("$:/plugins/ebalster/formula/compute.js");
+
+/*
+	Information about this macro
+*/
+
+exports.name = "formula";
+exports.params = [{"name": "formula"}];
+
+/*
+Run the macro
+*/
+exports.run = function(formula) {
+
+	try {
+		return Compute.evalFormula(formula, this);
+	}
+	catch (err) {
+		return "`" + String(err) + "`";
+	}
+};
+
+})();
