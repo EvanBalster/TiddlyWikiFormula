@@ -1,6 +1,7 @@
 {
     "description": "Basic client-server edition",
     "plugins": [
+        "OokTech/Bob"
     ],
     "themes": [
         "tiddlywiki/vanilla",
