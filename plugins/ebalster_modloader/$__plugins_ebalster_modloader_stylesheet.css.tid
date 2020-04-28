@@ -1,0 +1,24 @@
+created: 20180123160859840
+modified: 20190301000537294
+revision: 0
+tags: $:/tags/Stylesheet
+title: $:/plugins/ebalster/modloader/stylesheet.css
+type: text/css
+
+.modloader-patch span {
+  font-weight: bold;
+  color: #555555;
+}
+
+.modloader-patch ins {
+  text-decoration: none;
+  font-weight: bold;
+  color: #009900;
+  background: #EEFFEE;
+}
+
+.modloader-patch del {
+  text-decoration: strikethrough;
+  color: #DD0000;
+  background: #FFBBBB;
+}

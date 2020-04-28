@@ -1,0 +1,6 @@
+created: 20200428232337462
+modified: 20200428232337487
+modloader-source: $:/core
+modloader-target: $:/core/modules/utils/parseutils.js
+title: $:/plugins/ebalster/attribute-modules/patch/core/modules/utils/parseutils.js
+type: text/x-patch
