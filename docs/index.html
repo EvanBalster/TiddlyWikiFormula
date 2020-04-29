@@ -189,12 +189,6 @@ Error message and password prompt
 
 <li>$:/SiteTitle</li>
 
-<li>$:/state/tab--2112689675</li>
-
-<li>$:/state/tab-1749438307</li>
-
-<li>$:/state/tab-2065006209</li>
-
 <li>$:/status/IsAnonymous</li>
 
 <li>$:/status/IsLoggedIn</li>
@@ -10213,7 +10207,7 @@ tc-page-container tc-page-view-$(storyviewTitle)$ tc-language-$(languageTitle)$
     }
 }</pre>
 </div>
-<div core-version="&gt;=5.1.20" created="NaNNaNNaNNaNNaNNaNNaN" dependents="" description="Spreadsheet-like formulas in TiddlyWiki." list="readme settings license" modified="NaNNaNNaNNaNNaNNaNNaN" name="TiddlyFormula" plugin-type="plugin" title="$:/plugins/ebalster/formula" type="application/json" version="0.2.4" revision="0" bag="default">
+<div core-version="&gt;=5.1.20" created="NaNNaNNaNNaNNaNNaNNaN" dependents="" description="Spreadsheet-like formulas in TiddlyWiki." list="readme settings license" modified="NaNNaNNaNNaNNaNNaNNaN" name="TiddlyFormula" plugin-type="plugin" title="$:/plugins/ebalster/formula" type="application/json" version="0.2.5" revision="0" bag="default">
 <pre>{
     &quot;tiddlers&quot;: {
         &quot;$:/plugins/ebalster/formula/coerce.js&quot;: {
@@ -10248,16 +10242,6 @@ tc-page-container tc-page-view-$(storyviewTitle)$ tc-language-$(languageTitle)$
             &quot;tags&quot;: &quot;&quot;,
             &quot;type&quot;: &quot;application/javascript&quot;,
             &quot;text&quot;: &quot;(function(){\n\n\&quot;use strict\&quot;;\n\nvar Nodes    = require(\&quot;$:/plugins/ebalster/formula/nodes.js\&quot;);\nvar Compiler = require(\&quot;$:/plugins/ebalster/formula/compile.js\&quot;);\nvar Coerce   = require(\&quot;$:/plugins/ebalster/formula/coerce.js\&quot;);\n\nvar Numeral  = require(\&quot;$:/plugins/ebalster/formula/lib/numeral.js\&quot;);\n\n// TiddlyWiki array format\nfunction arrayFormatTW(arr,ctx) {\n\tvar result = \&quot;\&quot;;\n\tfor (var i = 0; i &lt; arr.length; ++i) {\n\t\tvar part = Coerce.ToText(arr[i],ctx);\n\t\tif (i &amp;&amp; part.length) result += \&quot; \&quot;;\n\t\tif (part.indexOf(/\\s/g) &gt;= 0) result += \&quot;[[\&quot; + part + \&quot;]]\&quot;;\n\t\telse result += part;\n\t}\n\treturn result;\n}\n\n// Number format functions...\n\n// SANE number formatting: if we find five consecutive 9s or 0s after the decimal point, round them off.\nfunction NumberStringSane(n) {\n\tvar s = String(n);\n\tvar parse = /^(0\\.0*[1-9]\\d*?|\\d*\\.\\d*?)(0{5}\\d*|9{5}\\d*)(|e[+-]\\d*)$/.exec(s);\n\tif (!parse) return s;\n\tvar kept = parse[1], exp = parse[3];\n\tvar end = kept.slice(-1);\n\tif (parse[2][0] === '0') return ((end === '.') ? kept.substr(0,kept.length-1) : kept) + exp;\n\tif (end === '.') return (Number(kept.substr(0,kept.length-1))+1) + exp;\n\treturn kept.substr(0,kept.length-1) + (Number(end)+1) + exp;\n}\nvar numeralFormat      = function(fmt)      {return function(num) {return Numeral(num).format(fmt);};};\nvar numeralFormatPrec  = function(fmt,digs) {return function(num) {return Numeral(num.toPrecision(digs)).format(fmt);};};\nvar numberFormatFixed  = function(prec)     {return function(num) {return num.toFixed    (prec);};};\nvar numberFormatPrec   = function(digs)     {return function(num) {return num.toPrecision(digs);};};\nvar numberFormatSelect = function(settings)\n{\n\tif (settings.precision == \&quot;true\&quot; || settings.precision &gt; 100) return String;\n\tif (typeof settings.numberFormat == \&quot;string\&quot;) {\n\t\t// Use numeral\n\t\treturn isNaN(settings.precision) ?\n\t\t\tnumeralFormat    (settings.numberFormat) :\n\t\t\tnumeralFormatPrec(settings.numberFormat, settings.precision);\n\t}\n\tif (!isNaN(settings.fixed))     return numberFormatFixed(settings.fixed);\n\tif (!isNaN(settings.precision)) return numberFormatPrec (settings.precision);\n\treturn NumberStringSane;\n\t// return String;\n};\n\nexports.computeFormula = function(compiledFormula, widget, formatOptions, debug) {\n\t\n\tvar value, context;\n\t\n\tformatOptions = formatOptions || {};\n\n\tvar dateFormat = formatOptions.dateFormat || \&quot;0hh:0mm, DDth MMM YYYY\&quot;;\n\n\t// Specify format.  These are all required!\n\tvar formats = {\n\t\tnumber: numberFormatSelect(formatOptions),\n\t\tdate:   function(date) {return $tw.utils.formatDateString(date, dateFormat);},\n\t\tarray:  arrayFormatTW,\n\t};\n\n\tcontext = new Nodes.Context(widget, formats);\n\n\t// Compute a value from the root node of the compiled formula.\n\ttry {\n\t\tvalue = compiledFormula.computeText(context);\n\t}\n\tcatch (err) {\n\t\tthrow \&quot;ComputeError: \&quot; + String(err) + (err.fileName || \&quot;\&quot;) + (err.lineNumber || \&quot;\&quot;)\n\t\t\t+ (debug ? \&quot;\\nNodes: \&quot; + JSON.stringify(compiledFormula) : \&quot;\&quot;);\n\t}\n\n\t// Format the root node as a string.\n\tif (debug) return value + \&quot;\\n - Val:\&quot; + String(value) + \&quot;, Op:\&quot; + compiledFormula.name;\n\telse       return value;\n};\n\nexports.evalFormula = function(formulaString, widget, formatOptions, debug) {\n\t\n\tvar compiledFormula;\n\n\t// Compile the formula\n\ttry {\n\t\tcompiledFormula = Compiler.compileExpression(formulaString);\n\t}\n\tcatch (err) {\n\t\tthrow \&quot;CompileError: \&quot; + String(err);\n\t}\n\n\t// Compute the formula\n\treturn exports.computeFormula(compiledFormula, widget, formatOptions, debug);\n};\n\n})();\n&quot;
-        },
-        &quot;$:/plugins/ebalster/formula/filters/range.js&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/ebalster/formula/filters/range.js&quot;,
-            &quot;created&quot;: &quot;20171221181646560&quot;,
-            &quot;modified&quot;: &quot;20171221181907646&quot;,
-            &quot;module-type&quot;: &quot;filteroperator&quot;,
-            &quot;revision&quot;: &quot;0&quot;,
-            &quot;tags&quot;: &quot;&quot;,
-            &quot;type&quot;: &quot;application/javascript&quot;,
-            &quot;text&quot;: &quot;/*\\\ntitle: $:/plugins/ebalster/formula/filters/range.js\ntype: application/javascript\nmodule-type: filteroperator\n\nFilter operator for generating a numeric range.\n\n\\*/\n(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\&quot;use strict\&quot;;\n\n/*\nExport our filter function\n*/\nexports.range = function(source,operator,options) {\n\tvar results = [];\n\n\t// Split the operand into numbers delimited by these symbols\n\tvar parts = operator.operand.split(/[,:;]/g), beg, end, inc, i, fixed = 0;\n\n\tfor (i = 0; i &lt; parts.length; ++i) {\n\t\t// Validate real number\n\t\tif (!/^\\s*[+-]?((\\d+(\\.\\d*)?)|(\\.\\d+))\\s*$/.test(parts[i]))\n\t\t\treturn [\&quot;range: bad number \\\&quot;\&quot;+parts[i]+\&quot;\\\&quot;\&quot;];\n\n\t\t// Count digits; the most precise number determines decimal places in output.\n\t\tvar frac = /\\.\\d+/.exec(parts[i]);\n\t\tif (frac) fixed = Math.max(fixed, frac[0].length-1);\n\t\t\n\t\tparts[i] = parseFloat(parts[i]);\n\t}\n\n\tswitch (parts.length) {\n\t\tcase 1:\n\t\t\tbeg = 0;\n\t\t\tend = parts[0];\n\t\t\tinc = 1;\n\t\t\tbreak;\n\t\tcase 2:\n\t\t\tbeg = parts[0];\n\t\t\tend = parts[1];\n\t\t\tinc = 1;\n\t\t\tbreak;\n\t\tcase 3:\n\t\t\tbeg = parts[0];\n\t\t\tend = parts[1];\n\t\t\tinc = Math.abs(parts[2]);\n\t\t\tbreak;\n\t}\n\n\tif (inc === 0) return [\&quot;range: increment 0 causes infinite loop\&quot;];\n\n\t// May need to count backwards\n\tvar direction = ((end&lt;beg) ? -1 : 1);\n\tinc *= direction;\n\n\t// Estimate number of resulting elements\n\tif ((end-beg)/inc &gt; 10000) return [\&quot;range: too many steps (over 10K)\&quot;];\n\n\t// Avoid rounding error on last step\n\tend += direction * 0.5 * Math.pow(0.1, fixed);\n\n\tvar safety = 10010;\n\n\t// Enumerate the range\n\tif (end&lt;beg) {for (i = beg; i &gt; end; i += inc) {results.push(i.toFixed(fixed)); if (--safety&lt;0) break;}}\n\telse         {for (i = beg; i &lt; end; i += inc) {results.push(i.toFixed(fixed)); if (--safety&lt;0) break;}}\n\n\tif (safety&lt;0) return [\&quot;range: unexpectedly large output\&quot;];\n\n\t// Reverse?\n\tif (operator.prefix === \&quot;!\&quot;) results.reverse();\n\n\treturn results;\n};\n\n})();\n&quot;
         },
         &quot;$:/plugins/ebalster/formula/functions/arithmetic.js&quot;: {
             &quot;title&quot;: &quot;$:/plugins/ebalster/formula/functions/arithmetic.js&quot;,
@@ -10713,15 +10697,6 @@ tc-page-container tc-page-view-$(storyviewTitle)$ tc-language-$(languageTitle)$
 <div created="20180121085648391" modified="20180121085650599" title="$:/SiteTitle" type="text/vnd.tiddlywiki" revision="0" bag="default">
 <pre>Formulas for TiddlyWiki</pre>
 </div>
-<div created="20200429001134171" modified="20200429001135803" title="$:/state/tab--2112689675" revision="2" bag="default">
-<pre>$:/core/ui/ControlPanel/Basics</pre>
-</div>
-<div created="20200429001137054" modified="20200429001138414" title="$:/state/tab-1749438307" revision="2" bag="default">
-<pre>$:/core/ui/ControlPanel/Saving</pre>
-</div>
-<div created="20200429001139818" modified="20200429001153374" title="$:/state/tab-2065006209" revision="6" bag="default">
-<pre>$:/core/ui/ControlPanel/Saving/General</pre>
-</div>
 <div title="$:/status/IsAnonymous" revision="1" bag="default">
 <pre>yes</pre>
 </div>
@@ -10737,7 +10712,7 @@ tc-page-container tc-page-view-$(storyviewTitle)$ tc-language-$(languageTitle)$
 <div title="$:/status/UserName" revision="1" bag="default">
 <pre></pre>
 </div>
-<div created="20200429001111332" list="$:/ControlPanel [[Formula Plugin]] [[Formulas as Tag Attributes]]" modified="20200429001144281" title="$:/StoryList" revision="5" bag="default">
+<div list="[[Formula Plugin]]" title="$:/StoryList" revision="1" bag="default">
 <pre></pre>
 </div>
 <div author="JeremyRuston" core-version="&gt;=5.0.0" dependents="$:/themes/tiddlywiki/vanilla" description="Emphasises individual tiddlers" name="Snow White" plugin-priority="0" plugin-type="theme" title="$:/themes/tiddlywiki/snowwhite" type="application/json" version="5.1.22" revision="0" bag="default">
@@ -11138,9 +11113,16 @@ For a listing, see [[Functions]].</pre>
 
 This is an advanced feature meant to help other developers implement spreadsheets using the Formulas plugin.  Currently, the `&lt;$tiddler&gt;` widget is necessary to make this feature work.</pre>
 </div>
-<div bnf="&lt;LetStatement&gt; ::=" created="20171216221810025" list="readme settings license" modified="20180212024436738" tags="" title="ChangeLog" type="text/vnd.tiddlywiki" revision="0" bag="default">
+<div bnf="&lt;LetStatement&gt; ::=" created="20171216221810025" list="readme settings license" modified="20200429022357177" tags="" title="ChangeLog" type="text/vnd.tiddlywiki" revision="0" bag="default">
 <pre>Potentially destructive changes are noted in bold.
 
+!!! 0.2.5 — April 28, 2020
+
+* Removed the `range Operator` as a version of it has been adopted into the core.
+
+!!! 0.2.4 — April 28, 2020
+
+* Updated the `attribute-modules` plugin to be compatible with TiddlyWiki5.1.22.
 
 !!! 0.2.3 — February 11, 2018
 
@@ -11343,7 +11325,7 @@ Drag-and-drop this to your wiki:
 
 Date literals can be used in a [[Datum]] but not in a [[Formula]].  Use the DATE function to create dates in formulas.</pre>
 </div>
-<div bnf="&lt;Datum&gt; ::= &lt;DatumFormula&gt; | &lt;Transclusion&gt; | &lt;Variable&gt; | &lt;Date&gt; | &lt;Number&gt; | &lt;RawValue&gt;" created="20171211224412729" modified="20180113011731684" tags="Syntax" title="Datum" type="text/vnd.tiddlywiki" revision="0" bag="default">
+<div bnf="&lt;Datum&gt; ::= &lt;DatumFormula&gt; | &lt;Transclusion&gt; | &lt;Variable&gt; | &lt;Date&gt; | &lt;Number&gt; | &lt;RawValue&gt;" created="20171211224412729" modified="20200429022557322" tags="Syntax" title="Datum" type="text/vnd.tiddlywiki" revision="0" bag="default">
 <pre>A ''Datum'' is some text that may be included into a formula by a [[Transclusion]], [[Filter]] or [[Variable]].  It can be:
 
 * A [[Formula]] starting with an equals sign `=` (spreadsheet style).
@@ -11356,7 +11338,7 @@ Date literals can be used in a [[Datum]] but not in a [[Formula]].  Use the DATE
 ** A TiddlyWiki date as used in the created and modified fields.
 ** Any other text
 
-|!&lt;div style=&quot;width:30px;&quot;&gt;{{$:/core/images/warning}}&lt;/div&gt;|A 14- or 17-digit number may be interpreted as a TiddlyWiki date, but only if the month, day, hour, minute and second are within acceptable ranges.  The chance of this happening randomly is about &lt;$formula formula=100*.12*.31*.24*.60*.60 toPrecision=3/&gt;%.|
+|!&lt;div style=&quot;width:30px;&quot;&gt;{{$:/core/images/warning}}&lt;/div&gt;|A 14- or 17-digit number may be interpreted as a TiddlyWiki date, but only if the month, day, hour, minute and second are within acceptable ranges.  The chance of this happening randomly is about &lt;$formula formula=100*.12*.31*.24*.60*.60 precision=3/&gt;%.|
 
 A ''Datum'' is analog to a cell in spreadsheet software.</pre>
 </div>
@@ -12418,7 +12400,7 @@ Meet the &quot;harmonic lattice&quot;.
 &lt;/g&gt;
 &lt;/svg&gt;</pre>
 </div>
-<div created="20171229233125420" interpolate="100" lattice-depth="58" minormax="0" modified="20180211234802274" norebuild="true" octavelist="[range[-60,60,12]]" semitonelist="[range[-60,60,1]]" title="Harmonic Lattice/State" type="text/vnd.tiddlywiki" revision="0" bag="default">
+<div created="20171229233125420" interpolate="96" lattice-depth="58" minormax="0" modified="20200429023347826" norebuild="true" octavelist="[range[-60,60,12]]" semitonelist="[range[-60,60,1]]" title="Harmonic Lattice/State" type="text/vnd.tiddlywiki" revision="0" bag="default">
 <pre></pre>
 </div>
 <div created="20180113235712368" modified="20180113235951840" tags="" title="HTML Render Checker" type="text/vnd.tiddlywiki" revision="0" bag="default">
@@ -12665,54 +12647,10 @@ Pomodoros logged: {{!!block-count}}
 &lt;/$timer&gt;
 &lt;/$if&gt;</pre>
 </div>
-<div created="20171221184734665" modified="20171229211834620" tags="[[Filter Operators]] [[Negatable Operators]]" title="range Operator" type="text/vnd.tiddlywiki" revision="0" bag="default">
-<pre>\define range_example(range)
-```
-[range[$range$]]
-```
+<div created="20171221184734665" modified="20200429022121272" tags="[[Filter Operators]] [[Negatable Operators]]" title="range Operator" type="text/vnd.tiddlywiki" revision="0" bag="default">
+<pre>The `range Operator` in this plugin has been removed in preference to the one in the TW core.
 
-&lt;$list variable=n filter=&quot;[range[$range$]]&quot;&gt;&lt;&lt;n&gt;&gt; &lt;/$list&gt;
-\end
-
-The `range` operator allows a range of numbers to be enumerated, similar to a `for` loop in other programming languages.  It's useful in combination with the [[Formula Plugin]].
-
-|!Purpose|produce a range of numbers|
-|!Input|ignored.|
-|!Parameter|1-3 numbers separated by `,` or `;`.|
-|!Output|A range of numbers starting with |
-|!`!` Output|As ''Output'', but with order reversed.|
-
-The parameter has three forms:
-
-* `&lt;end&gt;`
-* `&lt;begin&gt;,&lt;end&gt;`
-* `&lt;begin&gt;,&lt;end&gt;,&lt;step&gt;`
-
-Each part must be a number, and works as follows:
-
-* `&lt;begin&gt;`: start counting at this number.  Defaults to 0.
-* `&lt;end&gt;`: stop counting at this number.
-** It will be included unless it falls between two steps.
-* `&lt;step&gt;`: count up (or down) by this amount.
-** It may be negated so it counts in the right direction.
-** It cannot be zero.
-
-The number of decimal points in the output is fixed, and based on the parameter with the //most// decimal points.
-
-To prevent the browser from freezing, `range` is currently limited to 10,000 values.
-
-
-!!Examples
-
-&lt;&lt;range_example &quot;7&quot;&gt;&gt;
-
-&lt;&lt;range_example &quot;1, 10&quot;&gt;&gt;
-
-&lt;&lt;range_example &quot;17,13&quot;&gt;&gt;
-
-&lt;&lt;range_example &quot;1.001, 5, 1&quot;&gt;&gt;
-
-&lt;&lt;range_example &quot;.5,1.4,.004&quot;&gt;&gt;</pre>
+See: https://tiddlywiki.com/#range%20Operator</pre>
 </div>
 <div created="20171221064018661" modified="20180114192733571" tags="Explorable" title="Real Projective Line" type="text/vnd.tiddlywiki" revision="0" bag="default">
 <pre>&lt;$importvariables filter=&quot;[[Real Projective Line/Macros]]&quot;&gt;
@@ -12888,7 +12826,7 @@ By turning the projective circle into a sphere, we can model vectors in higher d
 
 \define slider(field) &lt;$edit-text field=&quot;$field$&quot; class=&quot;full-slider&quot; type=range/&gt;</pre>
 </div>
-<div created="20171229225120154" modified="20180211234816639" orientation="50" title="Real Projective Line/State" type="text/vnd.tiddlywiki" unfold="0" revision="0" bag="default">
+<div created="20171229225120154" modified="20200429023310688" orientation="50" title="Real Projective Line/State" type="text/vnd.tiddlywiki" unfold="100" revision="0" bag="default">
 <pre></pre>
 </div>
 <div created="20180117161323673" modified="20180117171130927" tags="" title="Refresh Optimizations" type="text/vnd.tiddlywiki" revision="0" bag="default">

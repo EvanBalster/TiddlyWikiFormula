@@ -11,6 +11,6 @@
   "name": "TiddlyFormula",
   "plugin-type": "plugin",
   "revision": "0",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "core-version": ">=5.1.20"
 }
