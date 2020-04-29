@@ -1,0 +1,17 @@
+caption: readme
+created: 20171220042006170
+modified: 20171220212520970
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/readme
+type: text/vnd.tiddlywiki
+
+''Formula'' for TiddlyWiki, version {{$:/plugins/ebalster/formula!!version}}, by Evan Balster. Updated by [[Joshua Fontany||https://joshuafontany.github.com/]]
+
+Formulas are written between `(=` mushroom brackets `=)`.  Where possible, their functions and syntax are designed to emulate popular spreadsheet software (Microsoft Excel and Google Sheets).  They //also// support WikiText-like syntax for `{{`transclusion`}}`, `[`filters`]`, `<<`variables`>>`, and a large number of functions.
+
+Formulas can also be evaluated by the `$formula` widget, the `$formula-vars` widget and the `<<formula>>` macro.
+
+Further documentation is available here: [[https://evanbalster.com/tiddlywiki/formulas.html]].
+
+This plugin is a work in progress; please report any issues on GitHub: [[https://github.com/EvanBalster/TiddlyWikiFormula/issues]].

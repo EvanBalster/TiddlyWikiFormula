@@ -1,0 +1,36 @@
+tags: 
+title: $:/Bob/AvailableLanguageList
+type: application/json
+
+{
+  "ca-ES": "Catalan (Spain)",
+  "cs-CZ": "Česky (Czech Republic)",
+  "da-DK": "Danish (Denmark)",
+  "de-AT": "Deutsch (Österreich)",
+  "de-CH": "Deutsch (Schweiz)",
+  "de-DE": "Deutsch (Deutschland)",
+  "el-GR": "Greek (Greece)",
+  "en-US": "English (US)",
+  "es-ES": "Castellano. (Spain)",
+  "fa-IR": "Persian (Iran)",
+  "fr-FR": "Français (France)",
+  "he-IL": "Hebrew (Israel)",
+  "hi-IN": "Hindi (India)",
+  "ia-IA": "Interlingua (Interlingua)",
+  "it-IT": "Italian (Italy)",
+  "ja-JP": "Japanese (Japan)",
+  "ko-KR": "Korean (Korea Republic)",
+  "nl-NL": "Dutch (The Netherlands)",
+  "pa-IN": "Punjabi (India)",
+  "pt-BR": "Português (Brasil)",
+  "pt-PT": "Portuguese (Portugal)",
+  "ru-RU": "Russian (Russia)",
+  "sk-SK": "Slovak (Slovakia)",
+  "sl-SI": "Solvenian (Slovenia)",
+  "sv-SE": "Swedish (Sweden)",
+  "zh-CN": "Chinese (China)",
+  "zh-Hans": "Chinese (Simplified)",
+  "zh-Hant": "Chinese (Traditional)",
+  "zh-HK": "Chinese (Hong Kong)",
+  "zh-TW": "Chinese (Taiwan)"
+}

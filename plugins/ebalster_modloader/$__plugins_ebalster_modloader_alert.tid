@@ -1,0 +1,13 @@
+created: 20180120194658741
+header: Mod Loader alert!
+modified: 20190301000537293
+revision: 0
+tags: 
+title: $:/plugins/ebalster/modloader/alert
+type: text/vnd.tiddlywiki
+
+!!{{!!header}}
+
+{{!!notices}}
+
+[[See Mod Loader Log|$:/temp/mod-plugin/status]].

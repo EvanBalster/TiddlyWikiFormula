@@ -1,0 +1,236 @@
+created: 20180120055013558
+modified: 20190301000537293
+module-type: startup
+revision: 0
+tags: 
+title: $:/plugins/ebalster/modloader/loader.js
+type: application/javascript
+
+/*\
+title: $:/plugins/ebalster/modloader/loader.js
+type: application/javascript
+module-type: startup
+
+A TiddlyWiki modloader that makes last-minute adjustments to shadow tiddlers during the startup process.  Use this at risk of __INDESCRIBABLE PERIL__.
+
+\*/
+(function(){
+
+/*jslint node: true, browser: true */
+/*global $tw: true */
+"use strict";
+
+var modutil = require("$:/plugins/ebalster/modloader/utils.js");
+var diff    = modutil.diff;
+
+// Modloader log text.
+var modLog = "Mod loader has not run.";
+
+var modNotices = "";
+
+
+// Export name and synchronous status
+exports.name = "eb-modloader";
+exports.before = ["load-modules"];
+exports.after = [];
+exports.synchronous = true;
+
+/*
+	Check if a module has been loaded (that is, executed).
+		It's unsafe to patch modules whose code has already run.
+*/
+function isTiddlerLoadedModule(tiddler, title) {
+
+	var module = $tw.modules.titles[title];
+
+	/*var moduleType = tiddler.fields["module-type"];
+	if (!moduleType) return false;
+	var typeGroup = $tw.modules.types[moduleType];
+	if (!typeGroup) return false;
+	var module = typeGroup[title || tiddler.fields.title];*/
+
+	if (!module) return false;
+
+	// If there are exports, it has been loaded.
+	return Boolean(module.exports);
+}
+
+function generatePatchedFields(tiddler, title, patchList) {
+	// Log
+	modLog += "\n* [[" + tiddler.fields.title + "]]";
+
+	// Check if the tiddler is a previously loaded module.
+	//  Currently this is treated as a critical error.
+	if (isTiddlerLoadedModule(tiddler, title)) {
+		modLog += "\n** ''ERROR, too late to patch.'' (see below)";
+		return false;
+	}
+
+	// The text we'll be applying patches to.
+	var patchedText = tiddler.fields.text;
+
+	// Find the actual source for the shadow.
+	var srcPlugin = $tw.wiki.getShadowSource(title);
+	
+	// Apply the patches one by one.
+	for (var i = 0; i < patchList.length; ++i) {
+		var patchTid = patchList[i];
+		modLog += "\n** Apply [[" + patchTid.fields.title + "]]";
+
+		try {
+			// Parse and appy the patch.
+			var patch = diff.patch_fromText(patchTid.fields.text || "");
+			var patchResult = diff.patch_apply(patch, patchedText);
+
+			// Check for any patch conflicts
+			for (var j = 0; j < patchResult[1].length; ++j) {
+				if (!patchResult[1])
+					throw "Conflict in patch #" + j + "/" + patchResult[1].length;
+			}
+
+			// Store
+			patchedText = patchResult[0];
+			modLog += ": " + patchResult[1].length + " changes";
+		}
+		catch (err) {
+			modNotices += "* ''" + String(err) +
+				"'' applying [[" + patchTid.fields.title + "]]" +
+				" to [[" + title + "]]\n";
+			modLog += "\n*** ''" + String(err) + "''";
+			return false;
+		}
+
+		// Display a warning if this patch expected a different source
+		var srcExpect = patchTid.fields['modloader-source'];
+		if (srcExpect && srcPlugin != srcExpect) {
+			modNotices += "* ''Warning:'' expected [[" +
+				title + "]] to have source plugin [[" +
+				srcExpect + "]], instead is [[" + srcPlugin + "]].\n";
+			modLog += "\n*** ''WARNING: unexpected source'' [[" + srcPlugin + "]]";
+		}
+	}
+
+	// Possibly re-assign a module's definition
+	var module = $tw.modules.titles[title];
+	if (module) module.definition = patchedText;
+
+	// Return the patched fields.
+	return Object.assign({}, tiddler.fields, {text: patchedText});
+}
+
+exports.startup = function() {
+	
+	modLog = "Running Mod Loader...\n\n";
+
+	// Accumulate unpatchables
+	var unpatchables = [];
+	$tw.utils.each($tw.modules.titles, function(module, title) {
+		if (typeof module.definition === "string" && module.exports) unpatchables.push(title);
+	});
+	
+	var displayStatus = false;
+
+	var patchPlan = Object.create(null),
+		patchCount = 0, target, srcPlugin,
+		abort = false;
+
+	/*
+		Accumulate patch tiddlers from the wiki.
+			Patches are only applied if the 
+	*/
+	$tw.wiki.eachTiddlerPlusShadows(function(patchTiddler,title) {
+		if (patchTiddler.fields.type != 'text/x-patch') return;
+		target = patchTiddler.fields['modloader-target'];
+		if (target) {
+			if (patchPlan[target]) patchPlan[target].push(tiddler);
+			else patchPlan[target] = [patchTiddler];
+			++patchCount;
+		}
+	});
+
+	// Log
+	if (patchCount) {
+		modLog += patchCount + " patches found.  Applying:\n\n";
+	}
+	else modLog += "no patches found.\n\nPatches must define field modloader-target and set type to `text/x-patch`.";
+
+	// Compute a mod plugin that patches shadow tiddlers.
+	//   Non-shadows are unaffected by the modloader.
+	var modTiddlers = {};
+	$tw.wiki.eachShadow(function(tiddler,title) {
+		// Any patches for this target?
+		var patches = patchPlan[title];
+		if (abort || !patches) return;
+
+		// Try to generate patched tiddler.
+		var patchedFields = generatePatchedFields(tiddler, title, patches);
+
+		if (patchedFields) {
+			// Store the unmodded tiddler as a backup.
+			modutil.modBackupTiddlers[title] = tiddler;
+			patchedFields["modloader-source"] = tiddler.source;
+			modTiddlers[title] = patchedFields;
+		}
+		else {
+			abort = true;
+		}
+	});
+
+	// Generate warnings for non-existent targets.
+	if (!abort) for (target in patchPlan) {
+		if (modTiddlers[target] === undefined) {
+			modNotices += "* ''Warning:'' can't apply [[" +
+				patchPlan[target][0].fields.title + "]] to non-existent target `" +
+				target + "`, skipped\n";
+			modLog += "\n* `" + target + "`: ''WARNING: target not found!''";
+			displayStatus = true;
+		}
+	}
+
+	// Possibly abort all mods.  We do this to avoid partial code changes.
+	if (abort) {
+		modLog += "\n\nPatch aborted completely due to errors.";
+		modTiddlers = {};
+	}
+	else {
+		// We could forcefully patch other startup modules, if support was needed.
+		//   This would be done by discarding and re-executing the module.  A bit crass.
+		//   $tw.modules.types["startup"][modified-startup] = ...
+	}
+
+	// Display note about unpatchables
+	if (unpatchables.length) {
+		modLog += "\n\n''NOTE'': it's too late for the modloader to patch these modules:\n\n";
+		$tw.utils.each(unpatchables, function(title) {
+			modLog += "* `" + $tw.modules.titles[title].moduleType + "` [[" + title + "]]\n";
+		});
+		modLog += "\n";
+	}
+
+	// Generate status report.
+	modTiddlers[modutil.PATH_MOD_STATUS] = {text: modLog};
+
+	// Possibly generate an alert popup with the modloader log.
+	if (abort || displayStatus)
+	{
+		modutil.showModLoaderAlert({
+			header: (abort ? "Mod Loader Failed!" : "Mod Loader Warning!"),
+			notices: modNotices,
+		});
+	}
+
+	// Bake the info tiddlers into a plugin
+	var modloaderPlugin = {
+		title: modutil.PATH_MOD_PLUGIN,
+		type: "application/json",
+		"plugin-type": "modloader",
+		"plugin-priority": 100,
+		text: JSON.stringify({tiddlers: modTiddlers},null,1)
+	};
+	$tw.wiki.addTiddler(new $tw.Tiddler(modloaderPlugin));
+	$tw.wiki.readPluginInfo();
+	$tw.wiki.registerPluginTiddlers("modloader");
+	$tw.wiki.unpackPluginTiddlers();
+};
+
+})();

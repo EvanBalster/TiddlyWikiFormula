@@ -1,0 +1,6 @@
+created: 20200428232236680
+modified: 20200428232236753
+modloader-source: $:/core
+modloader-target: $:/core/modules/widgets/widget.js
+title: $:/plugins/ebalster/attribute-modules/patch/core/modules/widgets/widget.js
+type: text/x-patch

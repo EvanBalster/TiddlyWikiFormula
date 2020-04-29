@@ -4,6 +4,6 @@ tags:
 title: $:/config/FileSystemPaths
 type: text/plain
 
-[is[system]!title[$:/StoryList]removeprefix[$:/]addprefix[_system/]]
+[is[system]removeprefix[$:/]addprefix[_system/]]
 [has[draft.of]addprefix[drafts/]]
 [!is[system]!has[draft.of]addprefix[wiki/]]

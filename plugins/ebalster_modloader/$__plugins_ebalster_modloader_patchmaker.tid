@@ -1,0 +1,93 @@
+created: 20180121081336699
+modified: 20190301000537294
+revision: 0
+tags: 
+title: $:/plugins/ebalster/modloader/patchmaker
+type: text/vnd.tiddlywiki
+
+\define test_hint(filter)
+<$list filter="$filter$" emptyMessage="✘">
+✔
+</$list>
+\end
+
+\define replace_hint(filter)
+<$list filter="$filter$">
+Warning: This tiddler exists and will be replaced!
+</$list>
+\end
+
+Use this utility to generate patches, or examine its source to learn about the `action-createpatch` widget.
+
+If ''destination'' is not specified it will be set to ''source''.  The mod-maker always uses a shadow tiddler for ''source'' even if there is a real tiddler replacing it.  The ''destination'' will always be selected as a real tiddler.
+
+
+<$tiddler tiddler="$:/temp/modloader/modmaker">
+
+<table>
+<tr>
+  <th>Source</th>
+  <td>
+  </td>
+    <$edit-text
+      field="patch-source"
+      placeholder="Title of shadow tiddler to be modded."
+      size=45/>
+  <td>
+    <<test_hint [title{!!patch-source}is[shadow]]>>
+  </td>
+</tr>
+<tr>
+  <th>Source Plugin</th>
+  <td>
+  </td>
+    <$edit-text
+      field="patch-source-plugin"
+      placeholder="Title of plugin containing source. Defaults to auto."
+      size=45/>
+  <td>
+    <<test_hint [title{!!patch-source-plugin}is[plugin]]>>
+  </td>
+</tr>
+<tr>
+  <th>Destination</th>
+  <td>
+  </td>
+    <$edit-text
+      field="patch-destination"
+      placeholder="Title of modified tiddler. Defaults to target."
+      size=45/>
+  <td>
+    <<test_hint [title{!!patch-destination}is[tiddler]]>>
+  </td>
+</tr>
+<tr>
+  <th>Output</th>
+  <td>
+  </td>
+    <$edit-text
+      field="patch-output"
+      placeholder="Title of patch tiddler to create. (Replaces existing)"
+      size=45/>
+      <br/>
+      <<replace_hint [title{!!patch-output}is[tiddler]]>>
+  <td>
+    <<test_hint [title{!!patch-output}minlength[1]]>>
+  </td>
+</tr>
+</table>
+
+<$button>Compute Patch
+<$action-createpatch
+   source={{!!patch-source}}
+   source-plugin={{!!patch-source-plugin}}
+   destination={{!!patch-destination}}
+   output={{!!patch-output}}
+   savetitle="!!patch-made" />
+</$button>
+
+<$list filter="[{!!patch-made}is[tiddler]]">
+<$link>Open your patch: {{!!title}}</$link>
+</$list>
+
+</$tiddler>

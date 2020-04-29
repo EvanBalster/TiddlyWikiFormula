@@ -1,0 +1,19 @@
+created: 20171213003246267
+modified: 20171213003346943
+module-type: formula-operator
+revision: 0
+tags: 
+title: $:/plugins/ebalster/formula/operators/strings.js
+type: application/javascript
+
+(function(){
+
+/*jslint node: true, browser: true */
+/*global $tw: false */
+"use strict";
+
+
+// Concatenate
+exports.concatenate = {arity: 2, precedence: 4, operator: "&", function: "cat"};
+
+})();

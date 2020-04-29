@@ -1,0 +1,16 @@
+created: 20180121175357975
+modified: 20190301000537294
+revision: 0
+tags: 
+title: $:/plugins/ebalster/modloader/status
+type: text/vnd.tiddlywiki
+
+!Modloader Status Report
+
+<$transclude tiddler="$:/temp/mod-plugin/status">
+
+Not found.
+
+It appears the modloader did not run at startup.
+
+</$transclude>

@@ -1,0 +1,16 @@
+created: 20180123225257337
+modified: 20190301000537294
+modloader-source: $:/core
+revision: 0
+tags: 
+title: $:/plugins/ebalster/modloader/patches/core/modules/startup.js
+type: text/x-patch
+
+@@ -500,32 +500,49 @@
+ trumentation%22;%0A%0A
++// MODLOADER FIX 
+ var widget = req
+@@ -608,32 +608,109 @@
+  = function() %7B%0A
++%09var widget = require(%22$:/core/modules/widgets/widget.js%22); // MODLOADER FIX%0A
+ %09var modules,n,m
