@@ -4,6 +4,6 @@
   "modified": "2020-04-17T00:00:01Z",
   "plugin-type": "plugin",
   "revision": "0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "core-version": ">=5.1.22"
 }
