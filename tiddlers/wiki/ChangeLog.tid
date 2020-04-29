@@ -1,13 +1,20 @@
 bnf: <LetStatement> ::=
 created: 20171216221810025
 list: readme settings license
-modified: 20180212024436738
+modified: 20200429022357177
 tags: 
 title: ChangeLog
 type: text/vnd.tiddlywiki
 
 Potentially destructive changes are noted in bold.
 
+!!! 0.2.5 — April 28, 2020
+
+* Removed the `range Operator` as a version of it has been adopted into the core.
+
+!!! 0.2.4 — April 28, 2020
+
+* Updated the `attribute-modules` plugin to be compatible with TiddlyWiki5.1.22.
 
 !!! 0.2.3 — February 11, 2018
 
