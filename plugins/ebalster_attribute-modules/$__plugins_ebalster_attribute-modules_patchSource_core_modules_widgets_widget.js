@@ -22,7 +22,7 @@ Options include:
 	document: optional document object to use instead of global document
 */
 var Widget = function(parseTreeNode,options) {
-		this.initialise(parseTreeNode,options);
+	this.initialise(parseTreeNode,options);
 };
 
 /*
@@ -117,7 +117,8 @@ Widget.prototype.getVariableInfo = function(name,options) {
 	// Check for the variable defined in the parent widget (or an ancestor in the prototype chain)
 	if(parentWidget && name in parentWidget.variables) {
 		var variable = parentWidget.variables[name],
-			value = variable.value,
+			originalValue = variable.value,
+			value = originalValue,
 			params = this.resolveVariableParameters(variable.params,actualParams);
 		// Substitute any parameters specified in the definition
 		$tw.utils.each(params,function(param) {
@@ -129,7 +130,9 @@ Widget.prototype.getVariableInfo = function(name,options) {
 		}
 		return {
 			text: value,
-			params: params
+			params: params,
+			srcVariable: variable,
+			isCacheable: originalValue === value
 		};
 	}
 	// If the variable doesn't exist in the parent widget then look for a macro module
@@ -425,9 +428,10 @@ Widget.prototype.previousSibling = function() {
 Render the children of this widget into the DOM
 */
 Widget.prototype.renderChildren = function(parent,nextSibling) {
-	$tw.utils.each(this.children,function(childWidget) {
-		childWidget.render(parent,nextSibling);
-	});
+	var children = this.children;
+	for(var i = 0; i < children.length; i++) {
+		children[i].render(parent,nextSibling);
+	};
 };
 
 /*
@@ -460,6 +464,7 @@ Widget.prototype.addEventListener = function(type,handler) {
 Dispatch an event to a widget. If the widget doesn't handle the event then it is also dispatched to the parent widget
 */
 Widget.prototype.dispatchEvent = function(event) {
+	event.widget = event.widget || this;
 	// Dispatch the event if this widget handles it
 	var listener = this.eventListeners[event.type];
 	if(listener) {
@@ -495,11 +500,11 @@ Widget.prototype.refreshSelf = function() {
 Refresh all the children of a widget
 */
 Widget.prototype.refreshChildren = function(changedTiddlers) {
-	var self = this,
+	var children = this.children,
 		refreshed = false;
-	$tw.utils.each(this.children,function(childWidget) {
-		refreshed = childWidget.refresh(changedTiddlers) || refreshed;
-	});
+	for (var i = 0; i < children.length; i++) {
+		refreshed = children[i].refresh(changedTiddlers) || refreshed;
+	}
 	return refreshed;
 };
 
@@ -607,6 +612,16 @@ Widget.prototype.invokeActionString = function(actions,triggeringWidget,event,va
 	var container = this.document.createElement("div");
 	widgetNode.render(container,null);
 	return widgetNode.invokeActions(this,event);
+};
+
+/*
+Execute action tiddlers by tag
+*/
+Widget.prototype.invokeActionsByTag = function(tag,event,variables) {
+	var self = this;
+	$tw.utils.each(self.wiki.filterTiddlers("[all[shadows+tiddlers]tag[" + tag + "]!has[draft.of]]"),function(title) {
+		self.invokeActionString(self.wiki.getTiddlerText(title),self,event,variables);
+	});
 };
 
 Widget.prototype.allowActionPropagation = function() {

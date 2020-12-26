@@ -108,7 +108,7 @@ CreatePatchWidget.prototype.invokeAction = function(triggeringWidget,event) {
 	}
 
 	//
-	var sourceData = sourceTiddler.fields.text || "";
+	var sourceData = sourceTiddler.fields.text.replace(/(\n)(\n)/g, "\r$1\r$2") || "";
 	var destData = destTiddler.fields.text.replace(/(\n)(\n)/g, "\r$1\r$2") || "";
 	//var destData = destTiddler.fields.text || "";
 
